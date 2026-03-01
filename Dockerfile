@@ -1,5 +1,5 @@
 # Base image
-FROM node:20-alpine AS builder
+FROM node:lts-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -21,7 +21,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # Production image
-FROM node:20-alpine AS runner
+FROM node:lts-alpine AS runner
 
 # Set working directory
 WORKDIR /app
