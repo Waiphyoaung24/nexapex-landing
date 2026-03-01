@@ -28,7 +28,7 @@ WORKDIR /app
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=3002
+ENV PORT=3004
 ENV HOSTNAME="0.0.0.0"
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -38,11 +38,11 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 # Expose port
-EXPOSE 3002
+EXPOSE 3004
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3002/ || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3004/ || exit 1
 
 # Run the application
 CMD ["node", "server.js"]
