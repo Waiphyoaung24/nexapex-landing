@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface HeroSectionProps {
     id: string;
@@ -32,14 +33,19 @@ export default function HeroSection({
             <div className="relative z-10 text-center flex flex-col items-center max-w-4xl mx-auto px-6">
 
                 {logoSrc && (
-                    <img
-                        src={logoSrc}
-                        alt="Hero Logo"
-                        className="w-48 h-48 object-contain mb-12 animate-float filter drop-shadow-[0_0_60px_var(--color-cyan-glow)] drop-shadow-[0_0_120px_var(--color-cyan-subtle)]"
-                    />
+                    <div className="relative w-48 h-48 mb-12 animate-float filter drop-shadow-[0_0_60px_var(--color-cyan-glow)] drop-shadow-[0_0_120px_var(--color-cyan-subtle)]">
+                        <Image
+                            src={logoSrc}
+                            alt="NexApex"
+                            fill
+                            sizes="192px"
+                            className="object-contain"
+                            priority
+                        />
+                    </div>
                 )}
 
-                {/* Eyebrow/Pre-title if needed */}
+                {/* Eyebrow/Pre-title */}
                 <div className="font-m text-[11px] tracking-[6px] uppercase text-silver-dark mb-5 opacity-0 animate-fade-up [animation-delay:300ms]">
                     NexApex Experience
                 </div>
