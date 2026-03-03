@@ -7,5 +7,8 @@ export default defineConfig({
     css: {
       postcss: './postcss.config.mjs',
     },
+    server: {
+      allowedHosts: true,
+    },
   },
 });

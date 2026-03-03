@@ -5,36 +5,36 @@ export default function LandingSections() {
   return (
     <>
       {/* ─── 2. WHAT WE DO ─── */}
-      <section id="services" className="py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
+      <section id="services" className="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
         <div className="max-w-[1400px] mx-auto">
-          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">What We Do</p>
-          <h2 className="font-d font-bold tracking-wider text-gradient mb-20"
-            style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', letterSpacing: '1px' }}
+          <p className="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4">What We Do</p>
+          <h2 className="font-d font-bold tracking-wider text-gradient mb-10 md:mb-20"
+            style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', letterSpacing: '1px' }}
           >
             OUR SOLUTIONS
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-8">
             {/* AI Strategy & Development */}
-            <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
+            <div className="group relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
-              <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3" />
                   <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">AI Strategy & Development</h3>
-              <p className="font-b text-dim text-base leading-relaxed">
+              <h3 className="font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">AI Strategy & Development</h3>
+              <p className="font-b text-dim text-sm md:text-base leading-relaxed">
                 End-to-end design and deployment of intelligent systems — from feasibility analysis to production-grade AI solutions tailored to your business.
               </p>
             </div>
 
             {/* Systems Integration */}
-            <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
+            <div className="group relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
-              <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 7h3a1 1 0 001-1V4" />
                   <path d="M20 7h-3a1 1 0 01-1-1V4" />
                   <path d="M4 17h3a1 1 0 001 1v2" />
@@ -42,23 +42,23 @@ export default function LandingSections() {
                   <rect x="8" y="8" width="8" height="8" rx="1" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Systems Integration</h3>
-              <p className="font-b text-dim text-base leading-relaxed">
+              <h3 className="font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">Systems Integration</h3>
+              <p className="font-b text-dim text-sm md:text-base leading-relaxed">
                 Bridging software with physical infrastructure — connecting sensors, machinery, and data pipelines into unified, automated workflows.
               </p>
             </div>
 
             {/* Data Intelligence */}
-            <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
+            <div className="group relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
-              <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 3v18h18" />
                   <path d="M7 16l4-8 4 5 4-10" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Data Intelligence</h3>
-              <p className="font-b text-dim text-base leading-relaxed">
+              <h3 className="font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">Data Intelligence</h3>
+              <p className="font-b text-dim text-sm md:text-base leading-relaxed">
                 Turning raw operational data into real-time insights and automated decisions — powering smarter pricing, forecasting, and resource allocation.
               </p>
             </div>
@@ -67,11 +67,11 @@ export default function LandingSections() {
       </section>
 
       {/* ─── 3. HOW WE WORK ─── */}
-      <section id="process" className="py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
+      <section id="process" className="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
         <div className="max-w-[1400px] mx-auto">
-          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">How We Work</p>
-          <h2 className="font-d font-bold tracking-wider text-gradient mb-20"
-            style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', letterSpacing: '1px' }}
+          <p className="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4">How We Work</p>
+          <h2 className="font-d font-bold tracking-wider text-gradient mb-10 md:mb-20"
+            style={{ fontSize: 'clamp(24px, 3.5vw, 44px)', letterSpacing: '1px' }}
           >
             OUR PROCESS
           </h2>
@@ -82,7 +82,7 @@ export default function LandingSections() {
               { step: '02', title: 'Build', desc: 'Rapid iteration with weekly demos. From RAG pipelines to hardware integration — no black-box development.' },
               { step: '03', title: 'Deploy', desc: 'Production-hardened launch with 24/7 automated decision-making, monitoring, and continuous optimization.' },
             ].map((item, i) => (
-              <div key={item.step} className="relative flex flex-col items-center text-center px-8 py-10">
+              <div key={item.step} className="relative flex flex-col items-center text-center px-6 md:px-8 py-8 md:py-10">
                 {i < 2 && (
                   <div className="hidden md:block absolute top-16 right-0 w-1/2 h-px bg-gradient-to-r from-cyan/30 to-transparent" />
                 )}
@@ -90,9 +90,9 @@ export default function LandingSections() {
                   <div className="hidden md:block absolute top-16 left-0 w-1/2 h-px bg-gradient-to-l from-cyan/30 to-transparent" />
                 )}
 
-                <span className="font-d text-4xl font-bold text-cyan/20 mb-4">{item.step}</span>
-                <h3 className="font-d text-xl font-semibold tracking-wider text-white mb-3">{item.title}</h3>
-                <p className="font-b text-dim text-base leading-relaxed max-w-xs">{item.desc}</p>
+                <span className="font-d text-3xl md:text-4xl font-bold text-cyan/20 mb-3 md:mb-4">{item.step}</span>
+                <h3 className="font-d text-lg md:text-xl font-semibold tracking-wider text-white mb-2 md:mb-3">{item.title}</h3>
+                <p className="font-b text-dim text-sm md:text-base leading-relaxed max-w-xs">{item.desc}</p>
               </div>
             ))}
           </div>

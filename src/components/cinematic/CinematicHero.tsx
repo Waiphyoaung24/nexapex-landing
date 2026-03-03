@@ -37,25 +37,44 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-/** Mobile static fallback — no WebGL */
+/** Mobile static fallback — no WebGL, typography-driven hero */
 function MobileFallback() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current || prefersReducedMotion()) return;
 
-    const texts = containerRef.current.querySelectorAll('.mobile-text');
     const triggers: ScrollTrigger[] = [];
 
+    // Fade out the hero heading on scroll
+    if (heroRef.current) {
+      const st = ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: '5% top',
+        end: '20% top',
+        scrub: 0.5,
+        onUpdate: (self) => {
+          if (!heroRef.current) return;
+          const opacity = 1 - self.progress;
+          const y = self.progress * -30;
+          heroRef.current.style.opacity = String(opacity);
+          heroRef.current.style.transform = `translateY(${y}px)`;
+        },
+      });
+      triggers.push(st);
+    }
+
+    // Scroll-triggered secondary messages
+    const texts = containerRef.current.querySelectorAll('.mobile-text');
     texts.forEach((el, i) => {
       const st = ScrollTrigger.create({
         trigger: containerRef.current!,
-        start: `${i * 25}% top`,
-        end: `${(i + 1) * 25}% top`,
+        start: `${20 + i * 25}% top`,
+        end: `${40 + i * 25}% top`,
         scrub: 0.5,
         onUpdate: (self) => {
           const progress = self.progress;
-          // Fade in first 30%, hold middle 40%, fade out last 30%
           let opacity = 0;
           if (progress < 0.3) opacity = progress / 0.3;
           else if (progress < 0.7) opacity = 1;
@@ -70,29 +89,43 @@ function MobileFallback() {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ height: '200vh' }} className="relative">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
+    <div ref={containerRef} style={{ height: '250vh' }} className="relative">
+      <div className="sticky top-0 h-screen h-dvh flex flex-col items-center justify-center overflow-hidden"
         style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%)' }}
       >
-        <div className="relative w-32 h-32 mb-8 animate-float"
-          style={{ filter: 'drop-shadow(0 0 50px rgba(148,252,255,0.1))' }}
-        >
-          <img src="/full_color_logo.png" alt="NexApex" className="w-full h-full object-contain" />
+        {/* Hero content — visible immediately */}
+        <div ref={heroRef} className="flex flex-col items-center text-center px-6">
+          <div className="relative w-16 h-16 mb-8"
+            style={{ filter: 'drop-shadow(0 0 30px rgba(148,252,255,0.08))' }}
+          >
+            <img src="/full_color_logo.png" alt="NexApex" className="w-full h-full object-contain" />
+          </div>
+          <p className="font-m text-[11px] font-normal tracking-[0.45em] text-dim mb-5">NEXAPEX</p>
+          <h1 className="font-d font-bold leading-[1.1] tracking-[0.02em] text-gradient-hero"
+            style={{ fontSize: 'clamp(32px, 10vw, 52px)' }}
+          >
+            THE APEX OF<br />INTELLIGENCE
+          </h1>
         </div>
 
-        {['THE APEX OF INTELLIGENCE', 'INTELLIGENCE \u00B7 INTEGRATION \u00B7 OPTIMIZATION', 'SCALABLE AI FOR REAL-WORLD OPERATIONS', 'REACH THE PEAK'].map(
+        {/* Scroll-triggered secondary messages */}
+        {['INTELLIGENCE \u00B7 INTEGRATION \u00B7 OPTIMIZATION', 'SCALABLE AI FOR REAL-WORLD OPERATIONS', 'REACH THE PEAK'].map(
           (text, i) => (
             <p
               key={i}
-              className={`mobile-text absolute font-bold text-center px-6 opacity-0 ${i === 0 ? 'font-d text-3xl tracking-wide text-gradient-hero' : 'font-d text-2xl tracking-tight text-white'}`}
-              style={{ top: '60%' }}
+              className="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0"
+              style={{ top: '58%' }}
             >
               {text}
             </p>
           ),
         )}
 
-        <div className="absolute bottom-10 left-1/2 w-px h-20 bg-gradient-to-b from-cyan to-transparent animate-pulse-line -translate-x-1/2" />
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+          <div className="w-px h-10 bg-gradient-to-b from-cyan/40 to-transparent animate-pulse-line" />
+          <span className="font-m text-[9px] tracking-[0.3em] uppercase text-dim/50">Scroll</span>
+        </div>
       </div>
     </div>
   );
