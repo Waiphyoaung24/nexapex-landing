@@ -17,16 +17,18 @@ export interface ScenePerspective {
   target: { x: number; y: number; z: number };
   scrollProgress: { start: number; end: number };
   hideText?: boolean;
+  isHero?: boolean;
 }
 
 export const scenePerspectives: ScenePerspective[] = [
   {
-    title: 'NEXAPEX AI LABS',
-    subtitle: 'Intelligence Across Industries',
+    title: 'THE APEX OF\nINTELLIGENCE',
+    subtitle: 'NEXAPEX',
     position: 'center',
     camera: { x: 0, y: 0, z: 12 },
     target: { x: 0, y: 0, z: 0 },
     scrollProgress: { start: 0, end: 11.9 },
+    isHero: true,
   },
   {
     title: 'INTELLIGENCE',

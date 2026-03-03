@@ -80,11 +80,11 @@ function MobileFallback() {
           <img src="/full_color_logo.png" alt="NexApex" className="w-full h-full object-contain" />
         </div>
 
-        {['NEXAPEX AI LABS', 'INTELLIGENCE \u00B7 INTEGRATION \u00B7 OPTIMIZATION', 'SCALABLE AI FOR REAL-WORLD OPERATIONS', 'REACH THE PEAK'].map(
+        {['THE APEX OF INTELLIGENCE', 'INTELLIGENCE \u00B7 INTEGRATION \u00B7 OPTIMIZATION', 'SCALABLE AI FOR REAL-WORLD OPERATIONS', 'REACH THE PEAK'].map(
           (text, i) => (
             <p
               key={i}
-              className="mobile-text absolute font-d font-bold text-2xl tracking-tight text-white text-center px-6 opacity-0"
+              className={`mobile-text absolute font-bold text-center px-6 opacity-0 ${i === 0 ? 'font-d text-3xl tracking-wide text-gradient-hero' : 'font-d text-2xl tracking-tight text-white'}`}
               style={{ top: '60%' }}
             >
               {text}
@@ -109,11 +109,11 @@ function ReducedMotionFallback() {
       >
         <img src="/full_color_logo.png" alt="NexApex" className="w-full h-full object-contain" />
       </div>
-      <p className="font-m text-[11px] tracking-[6px] uppercase text-dim mb-6">NexApex</p>
-      <h1 className="font-d font-extrabold tracking-widest text-gradient text-center px-6"
-        style={{ fontSize: 'clamp(32px, 5vw, 58px)', letterSpacing: '2px' }}
+      <p className="font-m text-[11px] tracking-[0.45em] uppercase text-dim mb-6">NEXAPEX</p>
+      <h1 className="font-d font-bold text-gradient-hero text-center px-6 leading-[1.05]"
+        style={{ fontSize: 'clamp(32px, 5.8vw, 84px)', letterSpacing: '0.02em' }}
       >
-        NEXAPEX<br />AI LABS
+        THE APEX OF<br />INTELLIGENCE
       </h1>
     </div>
   );

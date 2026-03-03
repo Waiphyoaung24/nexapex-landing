@@ -60,10 +60,10 @@
   --color-logo5: #bbbfb8;
   --color-logo6: #86807c;
 
-  /* ── Typography (Brand: Nevera > Orbitron, Nexa > Rajdhani) ── */
-  --font-d: 'Nevera', 'Orbitron', sans-serif;
-  --font-b: 'Nexa', 'Rajdhani', sans-serif;
-  --font-m: 'Space Grotesk', monospace;
+  /* ── Typography (Brand: Nevera display, Nexa body/UI) ── */
+  --font-d: 'Nevera', sans-serif;
+  --font-b: 'Nexa', sans-serif;
+  --font-m: 'Nexa', sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -160,4 +160,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Hero headline gradient: silver-white → ice-cyan (vertical) */
+  .text-gradient-hero {
+    background: linear-gradient(180deg, #9aa0a4 0%, #e8eae7 28%, #f0f1ef 50%, #d4eef0 72%, #b0e8ec 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
 }

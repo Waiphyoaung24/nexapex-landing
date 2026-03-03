@@ -59,6 +59,7 @@ export default function TextOverlays({ containerRef }: TextOverlaysProps) {
 
           const titleChars = textEl.querySelectorAll('h2 .inline-block');
           const subtitleChars = textEl.querySelectorAll('p .inline-block');
+          const heroLabelChars = perspective.isHero ? subtitleChars : null;
           const allChars = [...Array.from(subtitleChars), ...Array.from(titleChars)];
 
           const tl = gsap.timeline({
@@ -74,15 +75,29 @@ export default function TextOverlays({ containerRef }: TextOverlaysProps) {
           if (st) triggers.push(st);
 
           if (index === 0) {
-            // First perspective: starts visible, only exits
-            gsap.set(allChars, { x: 0, opacity: 1 });
-            tl.to(allChars, {
-              x: 80,
+            // Hero perspective: h2 is plain text (not split chars), animate block + label chars
+            const heroH2 = textEl.querySelector('h2');
+            const labelChars = Array.from(subtitleChars);
+
+            gsap.set(labelChars, { x: 0, opacity: 1 });
+            if (heroH2) gsap.set(heroH2, { x: 0, opacity: 1 });
+
+            // Exit: heading slides out first, then label follows
+            if (heroH2) {
+              tl.to(heroH2, {
+                x: 60,
+                opacity: 0,
+                duration: 0.6,
+                ease: 'power2.in',
+              }, 0.3);
+            }
+            tl.to(labelChars, {
+              x: 40,
               opacity: 0,
-              duration: 1,
+              duration: 0.4,
               stagger: -0.02,
               ease: 'power2.in',
-            });
+            }, 0.5);
           } else if (index === scenePerspectives.length - 2) {
             // "NEX APEX" — brand moment: slower enter, longer hold
             tl.fromTo(
@@ -143,7 +158,23 @@ export default function TextOverlays({ containerRef }: TextOverlaysProps) {
           ref={setTextRef(index)}
           className={`absolute ${getPositionClasses(perspective.position)}`}
         >
-          {!perspective.hideText && (
+          {!perspective.hideText && perspective.isHero ? (
+            /* ── Hero perspective: label above, geometric Orbitron heading (plain text for gradient) ── */
+            <>
+              <p className="mb-6 max-md:mb-4">
+                <SplitChars
+                  text={perspective.subtitle}
+                  className="font-m text-[0.85vw] max-md:text-[11px] font-normal tracking-[0.45em] text-dim drop-shadow-lg"
+                />
+              </p>
+              <h2 className="font-d text-[5.8vw] max-md:text-[9vw] font-bold leading-[1.05] tracking-[0.02em] text-gradient-hero">
+                {perspective.title.split('\n').map((line, lineIdx) => (
+                  <span key={lineIdx} className="block">{line}</span>
+                ))}
+              </h2>
+            </>
+          ) : !perspective.hideText ? (
+            /* ── Standard perspectives ── */
             <>
               <h2>
                 <SplitChars
@@ -158,7 +189,7 @@ export default function TextOverlays({ containerRef }: TextOverlaysProps) {
                 />
               </p>
             </>
-          )}
+          ) : null}
         </div>
       ))}
     </div>
