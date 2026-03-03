@@ -32,6 +32,19 @@ export function initProgressBar(
       const wrapper = document.getElementById('progress-wrapper');
       if (!bar || !text || !scrollContainer) return;
 
+      // Start hidden — fade in after 2% scroll so cube section is clear
+      if (wrapper) gsap.set(wrapper, { opacity: 0 });
+
+      const fadeInSt = ScrollTrigger.create({
+        trigger: scrollContainer,
+        start: '0% top',
+        end: '2% top',
+        scrub: 0.5,
+        onUpdate: (self) => {
+          if (wrapper) gsap.set(wrapper, { opacity: self.progress });
+        },
+      });
+
       const setWidth = gsap.quickSetter(bar, 'width', '%');
       const setText = gsap.quickSetter(text, 'textContent');
 
@@ -60,7 +73,7 @@ export function initProgressBar(
         });
       }
 
-      cleanup = () => st.kill();
+      cleanup = () => { fadeInSt.kill(); st.kill(); };
     },
   );
 

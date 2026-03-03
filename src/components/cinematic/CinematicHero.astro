@@ -49,21 +49,35 @@
   style="background: linear-gradient(to bottom, transparent, #0e1418 70%); display: none;"
 ></div>
 
-<!-- Cube scroll animation (desktop prelude) -->
+<!-- Logo prelude (desktop — scroll-driven reveal) -->
 <div id="cube-section" class="relative z-10" style="display: none;">
-  <div class="cube-spacer">
-    <div class="cube-spacer-inner">
-      <div class="cube-scroll-line"></div>
-      <span class="font-m text-[10px] tracking-[3px] uppercase text-dim/60">scroll to explore</span>
-    </div>
-  </div>
-  <div id="cube-main" class="cube-main">
-    <div class="cube-container cube-initial"></div>
-    <div class="cube-container cube-second">
-      <div class="cube-marker"></div>
-    </div>
-    <div class="cube-container cube-third">
-      <div class="cube-marker"></div>
+  <div id="prelude-scroll" class="relative" style="height: 180vh;">
+    <div class="sticky top-0 h-screen flex flex-col items-center justify-center">
+      <!-- Logo -->
+      <div id="prelude-logo" class="prelude-logo">
+        <img src="/full_color_logo.svg" alt="" draggable="false" />
+      </div>
+
+      <!-- Brand name -->
+      <p id="prelude-brand" class="prelude-line font-m text-[11px] tracking-[0.45em] uppercase text-dim">
+        NEXAPEX
+      </p>
+
+      <!-- Pillars -->
+      <div id="prelude-pillars" class="prelude-line flex items-center gap-3">
+        <span class="prelude-divider"></span>
+        <span class="prelude-pillar">Intelligence</span>
+        <span class="prelude-dot">&middot;</span>
+        <span class="prelude-pillar">Integration</span>
+        <span class="prelude-dot">&middot;</span>
+        <span class="prelude-pillar">Optimization</span>
+        <span class="prelude-divider prelude-divider-end"></span>
+      </div>
+
+      <!-- Tagline -->
+      <p id="prelude-tagline" class="prelude-line font-b text-xs tracking-wider" style="color: rgba(110,122,132,0.5);">
+        Reach the Peak
+      </p>
     </div>
   </div>
 </div>
@@ -78,8 +92,7 @@
   >
     <div id="mobile-hero-content" class="flex flex-col items-center text-center px-6">
       <div class="w-16 h-16 mb-8"></div>
-      <p class="font-m text-[11px] font-normal tracking-[0.45em] text-dim mb-5">NEXAPEX</p>
-      <h1 class="font-d font-bold leading-[1.1] tracking-[0.02em] text-gradient-hero"
+      <h1 class="font-d font-bold leading-[1.1] tracking-[0.02em] text-gradient-hero mt-5"
         style="font-size: clamp(32px, 10vw, 52px);"
       >
         THE APEX OF<br />INTELLIGENCE
@@ -100,102 +113,69 @@
 <!-- Reduced motion fallback -->
 <div id="reduced-motion-fallback" class="relative flex flex-col items-center justify-center" style="height: 100vh; display: none; background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);">
   <div class="w-32 h-32 mb-8" style="filter: drop-shadow(0 0 50px rgba(148,252,255,0.1));">
-    <img src="/full_color_logo.png" alt="NexApex" class="w-full h-full object-contain" />
+    <img src="/White_iconmark.png" alt="NexApex" class="w-full h-full object-contain" />
   </div>
-  <p class="font-m text-[11px] tracking-[0.45em] uppercase text-dim mb-6">NEXAPEX</p>
-  <h1 class="font-d font-bold text-gradient-hero text-center px-6 leading-[1.05]"
+  <h1 class="font-d font-bold text-gradient-hero text-center px-6 leading-[1.05] mt-5"
     style="font-size: clamp(32px, 5.8vw, 84px); letter-spacing: 0.02em;"
   >
     THE APEX OF<br />INTELLIGENCE
   </h1>
 </div>
 
-<!-- ═══ Cube section styles ═══ -->
+<!-- ═══ Prelude section styles ═══ -->
 <style is:global>
-  .cube-spacer {
-    width: 100%;
-    height: 15vh;
-    display: grid;
-    place-items: center;
+  /* Logo */
+  .prelude-logo {
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: scale(0.7);
   }
 
-  .cube-spacer-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+  .prelude-logo img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 60px rgba(148, 252, 255, 0.12));
+    user-select: none;
   }
 
-  .cube-scroll-line {
-    width: 1px;
-    height: 32px;
-    background: linear-gradient(to bottom, rgba(148, 252, 255, 0.4), transparent);
-    animation: pulseLine 2.5s ease-in-out infinite;
+  /* All text lines start hidden */
+  .prelude-line {
+    opacity: 0;
+    transform: translateY(16px);
   }
 
-  .cube-main {
-    position: relative;
-    height: 150vh;
+  #prelude-brand {
+    margin-bottom: 1rem;
   }
 
-  .cube-container {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    display: grid;
-    place-items: center;
-    border: 2px dashed rgba(148, 252, 255, 0.12);
-    border-radius: 12px;
-    transition: border-color 0.4s ease;
+  #prelude-pillars {
+    margin-bottom: 0.75rem;
   }
 
-  .cube-container:hover {
-    border-color: rgba(148, 252, 255, 0.25);
+  .prelude-pillar {
+    font-family: var(--font-b);
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
   }
 
-  .cube-initial {
-    left: 60%;
-    top: 10%;
+  .prelude-dot {
+    color: rgba(148, 252, 255, 0.3);
+    font-size: 16px;
   }
 
-  .cube-container.cube-second {
-    left: 10%;
-    top: 50%;
-    width: 100px;
-    height: 100px;
+  .prelude-divider {
+    width: 32px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(148, 252, 255, 0.25));
   }
 
-  .cube-second .cube-marker {
-    width: 100px;
-    height: 100px;
+  .prelude-divider-end {
+    background: linear-gradient(to left, transparent, rgba(148, 252, 255, 0.25));
   }
 
-  .cube-third {
-    right: 10%;
-    bottom: 3rem;
-  }
-
-  .cube-marker {
-    width: 200px;
-    height: 200px;
-    border-radius: 10px;
-    outline: 1px dashed rgba(255, 255, 255, 0.06);
-    outline-offset: -6px;
-    opacity: 0.5;
-  }
-
-  canvas.cube-box {
-    width: 200px;
-    height: 200px;
-    border: dashed 1px rgba(148, 252, 255, 0.25);
-    display: block;
-    border-radius: 10px;
-    background: transparent;
-    z-index: 2;
-    box-shadow: 0 0 40px rgba(148, 252, 255, 0.06), 0 0 80px rgba(148, 252, 255, 0.03);
-  }
-
-  /* Subtle grid overlay for the cube section */
+  /* Subtle grid overlay */
   #cube-section::before {
     content: '';
     position: absolute;
@@ -205,8 +185,8 @@
       linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 70%);
     z-index: -1;
   }
 </style>
