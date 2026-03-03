@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar';
+import LandingSections from '../components/LandingSections';
+---
+
+<Layout>
+  <main class="w-full bg-bg text-white min-h-screen">
+    <!-- Navbar: needs JS immediately for scroll/menu -->
+    <Navbar client:load />
+
+    <!-- Hero: inline Astro markup (no React needed, pure HTML) -->
+    <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
+    >
+      <div class="relative z-10 text-center flex flex-col items-center max-w-4xl mx-auto px-6">
+        <div class="relative w-40 h-40 mb-10 animate-float" style="filter: drop-shadow(0 0 50px rgba(148,252,255,0.1)) drop-shadow(0 0 100px rgba(148,252,255,0.06));">
+          <img
+            src="/full_color_logo.png"
+            alt="NexApex"
+            width="160"
+            height="160"
+            class="object-contain w-full h-full"
+          />
+        </div>
+
+        <p class="font-m text-[11px] tracking-[6px] uppercase text-dim mb-6 opacity-0 animate-fade-up [animation-delay:200ms]">
+          NexApex
+        </p>
+
+        <h1 class="font-d font-extrabold tracking-widest text-gradient opacity-0 animate-fade-up [animation-delay:400ms]"
+          style="font-size: clamp(32px, 5vw, 58px); letter-spacing: 2px;"
+        >
+          THE APEX OF<br />INTELLIGENCE
+        </h1>
+      </div>
+
+      <div class="absolute bottom-10 left-1/2 w-px h-20 bg-gradient-to-b from-cyan to-transparent animate-pulse-line -translate-x-1/2"></div>
+    </section>
+
+    <!-- Landing sections: lazy-hydrate when scrolled into view -->
+    <LandingSections client:visible />
+  </main>
+</Layout>

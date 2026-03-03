@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* ── Local Font: Nevera ── */
+@font-face {
+  font-family: 'Nevera';
+  src: url('/nevera-font/Nevera-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Local Font: Nexa (all weights) ── */
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaThin.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaThinItalic.otf') format('opentype'); font-weight: 100; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaLight.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaLightItalic.otf') format('opentype'); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaRegular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaRegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBook.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBookItalic.otf') format('opentype'); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaXBold.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaXBoldItalic.otf') format('opentype'); font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaHeavy.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaHeavyItalic.otf') format('opentype'); font-weight: 900; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBlack.otf') format('opentype'); font-weight: 950; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Nexa'; src: url('/Nexa-Font/NexaBlackItalic.otf') format('opentype'); font-weight: 950; font-style: italic; font-display: swap; }
+
+@theme {
+  /* ── Brand Primary Colors ── */
+  --color-teal: #1a2630;
+  --color-red: #c63518;
+  --color-slate: #45596d;
+  --color-cyan: #94fcff;
+  --color-mauve: #b9afbb;
+  --color-sage: #dfe4dc;
+
+  /* ── Background & Surface (Brand Guidelines V2) ── */
+  --color-bg: #0e1418;
+  --color-surface: #162029;
+  --color-surface2: #1d2d39;
+  --color-surface3: #253a49;
+
+  /* ── Cyan Accent System ── */
+  --color-cyan-dim: #5ac8cb;
+  --color-cyan-glow: rgba(148, 252, 255, 0.12);
+  --color-cyan-subtle: rgba(148, 252, 255, 0.03);
+
+  /* ── Text Colors (Brand Guidelines) ── */
+  --color-white: #f0f1ef;
+  --color-text: #c8ccc6;
+  --color-dim: #6e7a84;
+
+  /* ── Logo Color Variants ── */
+  --color-logo1: #b9afbb;
+  --color-logo2: #dfe4dc;
+  --color-logo3: #aba49e;
+  --color-logo4: #948c96;
+  --color-logo5: #bbbfb8;
+  --color-logo6: #86807c;
+
+  /* ── Typography (Brand: Nevera > Orbitron, Nexa > Rajdhani) ── */
+  --font-d: 'Nevera', 'Orbitron', sans-serif;
+  --font-b: 'Nexa', 'Rajdhani', sans-serif;
+  --font-m: 'Space Grotesk', monospace;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --bg: #0e1418;
+    --surface: #162029;
+    --surface2: #1d2d39;
+    --surface3: #253a49;
+    --teal: #1a2630;
+    --red: #c63518;
+    --slate: #45596d;
+    --cyan: #94fcff;
+    --cyan-dim: #5ac8cb;
+    --cyan-glow: rgba(148, 252, 255, 0.12);
+    --cyan-subtle: rgba(148, 252, 255, 0.03);
+    --mauve: #b9afbb;
+    --sage: #dfe4dc;
+    --white: #f0f1ef;
+    --text: #c8ccc6;
+    --dim: #6e7a84;
+
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cyan) var(--bg);
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-14px) scale(1.02);
+    }
+  }
+
+  @keyframes pulseLine {
+    0%, 100% {
+      opacity: 0.4;
+      height: 80px;
+    }
+    50% {
+      opacity: 1;
+      height: 100px;
+    }
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 7s ease-in-out infinite;
+  }
+  .animate-pulse-line {
+    animation: pulseLine 2.5s ease-in-out infinite;
+  }
+  .animate-fade-up {
+    animation: fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--white) 0%, var(--mauve) 40%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}

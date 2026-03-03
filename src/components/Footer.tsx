@@ -1,8 +1,4 @@
-'use client';
-
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 
 export default function Footer() {
     return (
@@ -11,20 +7,20 @@ export default function Footer() {
                 <div className="grid md:grid-cols-3 gap-12 mb-16">
                     {/* Logo + tagline */}
                     <div>
-                        <Link href="/" className="inline-flex items-center gap-3 mb-4 cursor-pointer">
+                        <a href="/" className="inline-flex items-center gap-3 mb-4 cursor-pointer no-underline">
                             <div className="relative w-10 h-10">
-                                <Image
+                                <img
                                     src="/full_color_logo.png"
                                     alt="NexApex"
-                                    fill
-                                    sizes="40px"
-                                    className="object-contain"
+                                    width={40}
+                                    height={40}
+                                    className="object-contain w-full h-full"
                                 />
                             </div>
                             <span className="font-d text-[12px] tracking-[2px] uppercase text-sage/70">
                                 Nex Apex
                             </span>
-                        </Link>
+                        </a>
                         <p className="font-b text-sm text-dim leading-[1.6]">
                             AI-driven premium technology studio based in Bangkok.
                         </p>
@@ -42,12 +38,12 @@ export default function Footer() {
                                 { label: 'Contact', href: '#contact' },
                             ].map((item) => (
                                 <li key={item.label}>
-                                    <Link
+                                    <a
                                         href={item.href}
                                         className="font-b text-sm text-dim no-underline transition-colors duration-300 hover:text-cyan cursor-pointer"
                                     >
                                         {item.label}
-                                    </Link>
+                                    </a>
                                 </li>
                             ))}
                         </ul>

@@ -1,62 +1,9 @@
-'use client';
+import React from 'react';
+import Footer from './Footer';
 
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
-import Lenis from 'lenis';
-import Image from 'next/image';
-import { useEffect } from 'react';
-
-export default function Home() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-    return () => { lenis.destroy(); };
-  }, []);
-
+export default function LandingSections() {
   return (
-    <main className="w-full bg-bg text-white min-h-screen">
-      <Navbar />
-
-      {/* ─── 1. HERO ─── */}
-      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-        style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%)' }}
-      >
-        <div className="relative z-10 text-center flex flex-col items-center max-w-4xl mx-auto px-6">
-          <div className="relative w-40 h-40 mb-10 animate-float" style={{ filter: 'drop-shadow(0 0 50px rgba(148,252,255,0.1)) drop-shadow(0 0 100px rgba(148,252,255,0.06))' }}>
-            <Image
-              src="/full_color_logo.png"
-              alt="NexApex"
-              fill
-              sizes="160px"
-              className="object-contain"
-              priority
-            />
-          </div>
-
-          <p className="font-m text-[11px] tracking-[6px] uppercase text-dim mb-6 opacity-0 animate-fade-up [animation-delay:200ms]">
-            NexApex
-          </p>
-
-          <h1 className="font-d font-extrabold tracking-widest text-gradient opacity-0 animate-fade-up [animation-delay:400ms]"
-            style={{ fontSize: 'clamp(32px, 5vw, 58px)', letterSpacing: '2px' }}
-          >
-            THE APEX OF<br />INTELLIGENCE
-          </h1>
-        </div>
-
-        <div className="absolute bottom-10 left-1/2 w-px h-20 bg-gradient-to-b from-cyan to-transparent animate-pulse-line -translate-x-1/2" />
-      </section>
-
+    <>
       {/* ─── 2. WHAT WE DO ─── */}
       <section id="services" className="py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
         <div className="max-w-[1400px] mx-auto">
@@ -281,6 +228,6 @@ export default function Home() {
 
       {/* ─── 8. FOOTER ─── */}
       <Footer />
-    </main>
+    </>
   );
 }
