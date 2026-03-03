@@ -22,7 +22,7 @@ export default function Footer() {
                             </span>
                         </a>
                         <p className="font-b text-sm text-dim leading-[1.6]">
-                            AI-driven premium technology studio based in Bangkok.
+                            AI Labs deploying intelligence into digital systems and physical operations across Southeast Asia.
                         </p>
                     </div>
 
@@ -33,7 +33,7 @@ export default function Footer() {
                             {[
                                 { label: 'Services', href: '#services' },
                                 { label: 'Process', href: '#process' },
-                                { label: 'Work', href: '#work' },
+                                { label: 'Products', href: '#work' },
                                 { label: 'About', href: '#about' },
                                 { label: 'Contact', href: '#contact' },
                             ].map((item) => (

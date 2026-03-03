@@ -11,56 +11,55 @@ export default function LandingSections() {
           <h2 className="font-d font-bold tracking-wider text-gradient mb-20"
             style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', letterSpacing: '1px' }}
           >
-            CAPABILITIES
+            OUR SOLUTIONS
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* AI Development */}
+            {/* AI Strategy & Development */}
             <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
               <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                  <path d="M2 17l10 5 10-5" />
-                  <path d="M2 12l10 5 10-5" />
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">AI Development</h3>
+              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">AI Strategy & Development</h3>
               <p className="font-b text-dim text-base leading-relaxed">
-                Custom AI solutions from intelligent agents to production ML pipelines, engineered for real-world impact.
+                End-to-end design and deployment of intelligent systems — from feasibility analysis to production-grade AI solutions tailored to your business.
               </p>
             </div>
 
-            {/* Scalable Infrastructure */}
+            {/* Systems Integration */}
             <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
               <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="8" rx="2" />
-                  <rect x="2" y="14" width="20" height="8" rx="2" />
-                  <circle cx="6" cy="6" r="1" fill="currentColor" />
-                  <circle cx="6" cy="18" r="1" fill="currentColor" />
+                  <path d="M4 7h3a1 1 0 001-1V4" />
+                  <path d="M20 7h-3a1 1 0 01-1-1V4" />
+                  <path d="M4 17h3a1 1 0 001 1v2" />
+                  <path d="M20 17h-3a1 1 0 01-1 1v2" />
+                  <rect x="8" y="8" width="8" height="8" rx="1" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Scalable Infrastructure</h3>
+              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Systems Integration</h3>
               <p className="font-b text-dim text-base leading-relaxed">
-                Cloud-native architectures built to handle millions of requests with zero-downtime deployments.
+                Bridging software with physical infrastructure — connecting sensors, machinery, and data pipelines into unified, automated workflows.
               </p>
             </div>
 
-            {/* Immersive 3D / Web */}
+            {/* Data Intelligence */}
             <div className="group relative border border-cyan-subtle rounded-[14px] p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }} />
               <div className="w-12 h-12 mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3L1 9l11 6 11-6-11-6z" />
-                  <path d="M1 9v6l11 6" />
-                  <path d="M23 9v6l-11 6" />
+                  <path d="M3 3v18h18" />
+                  <path d="M7 16l4-8 4 5 4-10" />
                 </svg>
               </div>
-              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Immersive 3D & Web</h3>
+              <h3 className="font-d text-lg font-semibold tracking-wider text-white mb-3">Data Intelligence</h3>
               <p className="font-b text-dim text-base leading-relaxed">
-                Interactive 3D experiences and high-performance web applications that captivate and convert.
+                Turning raw operational data into real-time insights and automated decisions — powering smarter pricing, forecasting, and resource allocation.
               </p>
             </div>
           </div>
@@ -79,9 +78,9 @@ export default function LandingSections() {
 
           <div className="grid md:grid-cols-3 gap-0">
             {[
-              { step: '01', title: 'Discover', desc: 'Deep-dive into your goals, users, and technical landscape.' },
-              { step: '02', title: 'Build', desc: 'Rapid iteration with weekly demos. No black-box development.' },
-              { step: '03', title: 'Deploy', desc: 'Production-hardened launch with monitoring and continuous optimization.' },
+              { step: '01', title: 'Discover', desc: 'Deep-dive into your operations, pain points, and automation opportunities across digital and physical systems.' },
+              { step: '02', title: 'Build', desc: 'Rapid iteration with weekly demos. From RAG pipelines to hardware integration — no black-box development.' },
+              { step: '03', title: 'Deploy', desc: 'Production-hardened launch with 24/7 automated decision-making, monitoring, and continuous optimization.' },
             ].map((item, i) => (
               <div key={item.step} className="relative flex flex-col items-center text-center px-8 py-10">
                 {i < 2 && (
@@ -103,19 +102,19 @@ export default function LandingSections() {
       {/* ─── 4. WHY NEX APEX ─── */}
       <section id="why" className="py-[120px] px-6 md:px-12 border-t border-cyan-subtle bg-surface/30">
         <div className="max-w-[1400px] mx-auto">
-          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">Why Nex Apex</p>
+          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">Why NexApex</p>
           <h2 className="font-d font-bold tracking-wider text-gradient mb-20"
             style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', letterSpacing: '1px' }}
           >
-            BY THE NUMBERS
+            OUR ADVANTAGE
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { value: '30+', label: 'Projects Delivered' },
-              { value: '99.9%', label: 'Uptime SLA' },
-              { value: '15+', label: 'Tech Stack Depth' },
-              { value: '100%', label: 'Client Satisfaction' },
+              { value: '24/7', label: 'Automated Decisions' },
+              { value: '3', label: 'AI Products' },
+              { value: 'SEA', label: 'Market Focus' },
+              { value: 'Lab', label: 'Driven Approach' },
             ].map((stat) => (
               <div key={stat.label} className="text-center py-8 border border-cyan-subtle rounded-[12px]">
                 <span className="block font-d text-4xl md:text-5xl font-bold text-cyan mb-2">{stat.value}</span>
@@ -126,32 +125,32 @@ export default function LandingSections() {
         </div>
       </section>
 
-      {/* ─── 5. CASE STUDIES / WORK ─── */}
+      {/* ─── 5. PRODUCTS ─── */}
       <section id="work" className="py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
         <div className="max-w-[1400px] mx-auto">
-          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">Selected Work</p>
+          <p className="font-m text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-4">Products</p>
           <h2 className="font-d font-bold tracking-wider text-gradient mb-20"
             style={{ fontSize: 'clamp(26px, 3.5vw, 44px)', letterSpacing: '1px' }}
           >
-            CASE STUDIES
+            IN DEVELOPMENT
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: 'AI Analytics Platform',
-                category: 'AI / ML',
-                desc: 'Real-time intelligence dashboard processing 2M+ events daily.',
+                title: 'AI Hotel Revenue Manager',
+                category: 'Hospitality AI',
+                desc: 'Real-time competitor price monitoring with dynamic profit-ratio adjustments for the Thai hospitality sector.',
               },
               {
-                title: 'Immersive Brand Portal',
-                category: '3D / WebGL',
-                desc: 'Interactive 3D product configurator with 40% conversion lift.',
+                title: 'Dairy Production AI',
+                category: 'Industrial AI',
+                desc: 'AI-driven machinery and quality control systems for dairy manufacturing — bridging intelligence with physical production.',
               },
               {
-                title: 'Cloud Migration Suite',
-                category: 'Infrastructure',
-                desc: 'Zero-downtime migration of legacy systems to cloud-native architecture.',
+                title: 'Smart POS System',
+                category: 'Retail AI',
+                desc: 'RAG-powered retail management with high-fidelity analytics for cross-border enterprises in Southeast Asia.',
               },
             ].map((project) => (
               <div key={project.title} className="group cursor-pointer border border-cyan-subtle rounded-[14px] overflow-hidden transition-all duration-500 hover:border-cyan/20 hover:-translate-y-1" style={{ transitionTimingFunction: 'cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
@@ -188,10 +187,10 @@ export default function LandingSections() {
 
           <div className="space-y-6">
             <p className="font-b text-lg md:text-xl text-text leading-[1.85]">
-              Nex Apex is a Bangkok-based technology studio specializing in AI-driven solutions, scalable cloud infrastructure, and immersive digital experiences. We exist at the intersection of cutting-edge AI and premium engineering.
+              NexApex is a Bangkok-based AI lab where software meets the physical world. We build intelligent systems that operate across industries — from digital revenue platforms to factory-floor automation.
             </p>
             <p className="font-b text-lg md:text-xl text-dim leading-[1.85]">
-              Founded with the belief that technology should be both powerful and beautiful, we partner with forward-thinking companies to build products that define the future.
+              Our founding team combines deep technical expertise with hands-on operational experience. We take a lab-driven approach — prototyping fast, deploying with precision, and optimizing continuously. We work with manufacturers, hospitality businesses, and enterprises across Southeast Asia who are ready to replace manual processes with scalable intelligence.
             </p>
           </div>
         </div>
@@ -206,7 +205,7 @@ export default function LandingSections() {
             READY TO REACH<br />THE PEAK?
           </h2>
           <p className="font-b text-lg text-dim mb-10 tracking-wide leading-[1.6]">
-            Let&apos;s build something extraordinary together.
+            Let&apos;s automate your operations and scale your business with precision AI.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a

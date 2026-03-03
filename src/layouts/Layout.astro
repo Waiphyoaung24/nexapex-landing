@@ -28,9 +28,13 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
   <body class="font-b bg-bg text-white overflow-x-hidden antialiased">
     <slot />
 
-    <!-- Lenis Smooth Scroll (global, outside React) -->
+    <!-- Lenis Smooth Scroll + GSAP ScrollTrigger sync -->
     <script>
       import Lenis from 'lenis';
+      import gsap from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
 
       const lenis = new Lenis({
         duration: 1.2,
@@ -38,12 +42,16 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
         smoothWheel: true,
       });
 
-      function raf(time: number) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
+      // Sync Lenis scroll position → GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
 
-      requestAnimationFrame(raf);
+      // Sync GSAP ticker → Lenis RAF
+      gsap.ticker.add((time: number) => {
+        lenis.raf(time * 1000);
+      });
+
+      // Disable Lenis's own RAF loop (GSAP ticker handles it now)
+      gsap.ticker.lagSmoothing(0);
     </script>
   </body>
 </html>
