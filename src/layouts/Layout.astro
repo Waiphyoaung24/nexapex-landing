@@ -18,6 +18,10 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
     <title>{title}</title>
   </head>
   <body class="font-b bg-bg text-white overflow-x-hidden antialiased">
+    <!-- Custom sci-fi cursor (desktop only) -->
+    <div id="cursor-small" class="cursor-dot"></div>
+    <div id="cursor-big" class="cursor-ring"></div>
+
     <slot />
 
     <!-- Lenis Smooth Scroll + GSAP ScrollTrigger sync -->
@@ -44,6 +48,46 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
 
       // Disable Lenis's own RAF loop (GSAP ticker handles it now)
       gsap.ticker.lagSmoothing(0);
+    </script>
+
+    <!-- Custom cursor logic (desktop only) -->
+    <script>
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      if (!isTouch) {
+        const dot = document.getElementById('cursor-small')!;
+        const ring = document.getElementById('cursor-big')!;
+        const interactives = document.querySelectorAll('a, button, [role="button"], .cursor-hover');
+
+        document.addEventListener('mousemove', (e) => {
+          dot.style.left = e.clientX + 'px';
+          dot.style.top = e.clientY + 'px';
+          ring.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
+        });
+
+        document.addEventListener('mousedown', () => {
+          ring.classList.add('cursor-click');
+          dot.classList.add('cursor-dot--shrink');
+        });
+
+        document.addEventListener('mouseup', () => {
+          ring.classList.remove('cursor-click');
+          dot.classList.remove('cursor-dot--shrink');
+        });
+
+        interactives.forEach((el) => {
+          el.addEventListener('mouseover', () => {
+            ring.classList.add('cursor-ring--hover');
+            dot.classList.add('cursor-dot--shrink');
+          });
+          el.addEventListener('mouseleave', () => {
+            ring.classList.remove('cursor-ring--hover');
+            dot.classList.remove('cursor-dot--shrink');
+          });
+        });
+
+        document.documentElement.classList.add('custom-cursor');
+      }
     </script>
   </body>
 </html>
