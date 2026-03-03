@@ -1,52 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar';
-import CinematicHero from '../components/cinematic/CinematicHero';
-import LandingSections from '../components/LandingSections';
+import Navbar from '../components/Navbar.astro';
+import CinematicHero from '../components/cinematic/CinematicHero.astro';
+import LandingSections from '../components/LandingSections.astro';
 ---
 
 <Layout>
   <main class="w-full bg-bg text-white min-h-screen">
-    <!-- Navbar: needs JS immediately for scroll/menu -->
-    <Navbar client:load />
+    <!-- Navbar -->
+    <Navbar />
 
-    <!--
-      SSR Loading Screen — rendered in initial HTML, visible instantly.
-      Prevents the flash of unstyled content before React hydrates.
-      CinematicHero removes this element when it mounts.
-    -->
-    <div
-      id="ssr-loader"
-      style="position:fixed;inset:0;z-index:10001;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e1418;"
-    >
-      <style>
-        @keyframes ssrLoaderBar {
-          0% { width: 0%; margin-left: 0%; }
-          50% { width: 60%; margin-left: 20%; }
-          100% { width: 0%; margin-left: 100%; }
-        }
-      </style>
-      <div style="width:64px;height:64px;margin-bottom:32px;opacity:0.4;">
-        <img
-          src="/full_color_logo.png"
-          alt=""
-          style="width:100%;height:100%;object-fit:contain;"
-        />
-      </div>
-      <div style="width:192px;height:2px;background:rgba(255,255,255,0.1);border-radius:9999px;overflow:hidden;">
-        <div
-          style="height:100%;background:linear-gradient(to right,rgba(148,252,255,0.6),#94fcff);border-radius:9999px;animation:ssrLoaderBar 1.5s ease-in-out infinite;box-shadow:0 0 8px rgba(148,252,255,0.5);"
-        ></div>
-      </div>
-      <p style="font-family:'Space Grotesk',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6e7a84;margin-top:16px;">
-        Loading Experience
-      </p>
-    </div>
+    <!-- Cinematic 3D Hero -->
+    <CinematicHero />
 
-    <!-- Cinematic 3D Hero: client:only because Three.js cannot SSR -->
-    <CinematicHero client:only="react" />
-
-    <!-- Landing sections: lazy-hydrate when scrolled into view -->
-    <LandingSections client:visible />
+    <!-- Landing sections -->
+    <LandingSections />
   </main>
 </Layout>

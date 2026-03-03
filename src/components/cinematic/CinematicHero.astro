@@ -1,0 +1,256 @@
+---
+// Static HTML for all fallback states — JS determines which to show
+---
+
+<!-- Loader overlay -->
+<div
+  id="cinematic-loader"
+  class="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-bg transition-opacity duration-500"
+>
+  <div class="w-16 h-16 mb-8 opacity-40">
+    <img src="/full_color_logo.png" alt="" class="w-full h-full object-contain" />
+  </div>
+  <div class="w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
+    <div
+      class="h-full bg-gradient-to-r from-cyan/60 to-cyan rounded-full"
+      style="animation: loaderBar 1.5s ease-in-out infinite; box-shadow: 0 0 8px rgba(148, 252, 255, 0.5);"
+    ></div>
+  </div>
+  <p class="font-m text-[10px] tracking-[3px] uppercase text-dim mt-4">Loading Experience</p>
+</div>
+
+<!-- 3D Canvas wrapper (desktop/tablet) -->
+<div
+  id="canvas-wrapper"
+  class="fixed inset-0 w-full h-screen max-md:h-dvh z-0"
+  style="display: none;"
+>
+  <canvas id="cinematic-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+</div>
+
+<!-- Scroll arrow indicator -->
+<div id="scroll-arrow" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 pointer-events-none" style="display: none;">
+  <div class="flex flex-col items-center gap-4">
+    <svg width="24" height="32" viewBox="0 0 24 32">
+      <path
+        d="M 12 4 L 12 24 M 12 24 L 8 20 M 12 24 L 16 20"
+        stroke="currentColor"
+        stroke-width="0.5"
+        fill="none"
+        class="text-white/60"
+        style="filter: drop-shadow(0 0 4px rgba(255,255,255,0.3));"
+      />
+    </svg>
+    <div class="w-1 h-1 rounded-full bg-white/40" style="box-shadow: 0 0 6px rgba(255,255,255,0.4);"></div>
+  </div>
+</div>
+
+<!-- Gradient bridge (transition zone) -->
+<div
+  id="gradient-bridge"
+  class="fixed bottom-0 left-0 right-0 h-[40vh] z-[5] pointer-events-none opacity-0"
+  style="background: linear-gradient(to bottom, transparent, #0e1418 70%); display: none;"
+></div>
+
+<!-- Scroll trigger container (700vh) -->
+<div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
+
+<!-- Mobile fallback (no WebGL) -->
+<div id="mobile-fallback" class="relative" style="height: 250vh; display: none;">
+  <div class="sticky top-0 h-screen h-dvh flex flex-col items-center justify-center overflow-hidden"
+    style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
+  >
+    <!-- Hero content — visible immediately -->
+    <div id="mobile-hero-content" class="flex flex-col items-center text-center px-6">
+      <div class="relative w-16 h-16 mb-8" style="filter: drop-shadow(0 0 30px rgba(148,252,255,0.08));">
+        <img src="/full_color_logo.png" alt="NexApex" class="w-full h-full object-contain" />
+      </div>
+      <p class="font-m text-[11px] font-normal tracking-[0.45em] text-dim mb-5">NEXAPEX</p>
+      <h1 class="font-d font-bold leading-[1.1] tracking-[0.02em] text-gradient-hero"
+        style="font-size: clamp(32px, 10vw, 52px);"
+      >
+        THE APEX OF<br />INTELLIGENCE
+      </h1>
+    </div>
+
+    <!-- Scroll-triggered secondary messages -->
+    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">INTELLIGENCE &middot; INTEGRATION &middot; OPTIMIZATION</p>
+    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">SCALABLE AI FOR REAL-WORLD OPERATIONS</p>
+    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">REACH THE PEAK</p>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+      <div class="w-px h-10 bg-gradient-to-b from-cyan/40 to-transparent animate-pulse-line"></div>
+      <span class="font-m text-[9px] tracking-[0.3em] uppercase text-dim/50">Scroll</span>
+    </div>
+  </div>
+</div>
+
+<!-- Reduced motion fallback -->
+<div id="reduced-motion-fallback" class="relative flex flex-col items-center justify-center" style="height: 100vh; display: none; background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);">
+  <div class="w-32 h-32 mb-8" style="filter: drop-shadow(0 0 50px rgba(148,252,255,0.1));">
+    <img src="/full_color_logo.png" alt="NexApex" class="w-full h-full object-contain" />
+  </div>
+  <p class="font-m text-[11px] tracking-[0.45em] uppercase text-dim mb-6">NEXAPEX</p>
+  <h1 class="font-d font-bold text-gradient-hero text-center px-6 leading-[1.05]"
+    style="font-size: clamp(32px, 5.8vw, 84px); letter-spacing: 0.02em;"
+  >
+    THE APEX OF<br />INTELLIGENCE
+  </h1>
+</div>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Device Detection ──
+  function getDeviceTier(): 'desktop' | 'tablet' | 'mobile' {
+    const width = window.innerWidth;
+    if (width < 768) return 'mobile';
+    if (width < 1024) return 'tablet';
+    return 'desktop';
+  }
+
+  function hasWebGL2(): boolean {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!canvas.getContext('webgl2');
+    } catch { return false; }
+  }
+
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  // ── DOM Elements ──
+  const loader = document.getElementById('cinematic-loader')!;
+  const canvasWrapper = document.getElementById('canvas-wrapper')!;
+  const scrollArrow = document.getElementById('scroll-arrow')!;
+  const gradientBridge = document.getElementById('gradient-bridge')!;
+  const scrollContainer = document.getElementById('scroll-container')!;
+  const mobileFallback = document.getElementById('mobile-fallback')!;
+  const reducedMotionFallback = document.getElementById('reduced-motion-fallback')!;
+
+  // Remove SSR loader if it exists
+  const ssrLoader = document.getElementById('ssr-loader');
+  if (ssrLoader) ssrLoader.remove();
+
+  const deviceTier = getDeviceTier();
+  const webgl2 = hasWebGL2();
+  const reducedMotion = prefersReducedMotion();
+
+  if (reducedMotion) {
+    // ── Reduced motion: static hero ──
+    loader.remove();
+    reducedMotionFallback.style.display = '';
+  } else if (deviceTier === 'mobile' || !webgl2) {
+    // ── Mobile/no WebGL: fallback ──
+    loader.remove();
+    mobileFallback.style.display = '';
+    initMobileFallback();
+  } else {
+    // ── Full 3D experience ──
+    canvasWrapper.style.display = '';
+    scrollArrow.style.display = '';
+    gradientBridge.style.display = '';
+    scrollContainer.style.display = '';
+
+    initCinematicHero();
+  }
+
+  // ── Mobile Fallback Animations ──
+  function initMobileFallback() {
+    const heroContent = document.getElementById('mobile-hero-content')!;
+    const mobileTexts = mobileFallback.querySelectorAll<HTMLElement>('.mobile-text');
+    const triggers: ScrollTrigger[] = [];
+
+    // Fade out hero heading on scroll
+    const st1 = ScrollTrigger.create({
+      trigger: mobileFallback,
+      start: '5% top',
+      end: '20% top',
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const opacity = 1 - self.progress;
+        const y = self.progress * -30;
+        heroContent.style.opacity = String(opacity);
+        heroContent.style.transform = `translateY(${y}px)`;
+      },
+    });
+    triggers.push(st1);
+
+    // Scroll-triggered secondary messages
+    mobileTexts.forEach((el, i) => {
+      const st = ScrollTrigger.create({
+        trigger: mobileFallback,
+        start: `${20 + i * 25}% top`,
+        end: `${40 + i * 25}% top`,
+        scrub: 0.5,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          let opacity = 0;
+          if (progress < 0.3) opacity = progress / 0.3;
+          else if (progress < 0.7) opacity = 1;
+          else opacity = 1 - (progress - 0.7) / 0.3;
+          el.style.opacity = String(opacity);
+        },
+      });
+      triggers.push(st);
+    });
+  }
+
+  // ── Full 3D Cinematic Hero ──
+  async function initCinematicHero() {
+    const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement;
+    const particleCount = deviceTier === 'tablet' ? 400 : 800;
+    const dpr: [number, number] = deviceTier === 'tablet' ? [1, 1.5] : [1, 2];
+
+    // Dynamic import to avoid loading Three.js on mobile
+    const { CinematicEngine } = await import('./cinematic-engine');
+
+    // Wait for fonts + minimum loading time
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        document.fonts.ready.then(() => resolve());
+      }, 1500);
+    });
+
+    const engine = new CinematicEngine({
+      canvas,
+      scrollContainer,
+      particleCount,
+      dpr,
+      onLoaded: () => {
+        // Fade out loader
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 600);
+
+        // Setup scroll timeline
+        engine.setupScrollTimeline(canvasWrapper, gradientBridge, scrollArrow);
+
+        // Text overlays + progress bar
+        import('./text-overlays').then(({ createTextOverlays, initTextAnimations }) => {
+          const textElements = createTextOverlays(document.body);
+          initTextAnimations(textElements, scrollContainer);
+        });
+
+        import('./progress-bar').then(({ createProgressBar, initProgressBar }) => {
+          createProgressBar(document.body);
+          initProgressBar(scrollContainer);
+        });
+
+        // Start render loop
+        engine.start();
+      },
+    });
+
+    // Mouse tracking
+    canvasWrapper.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      engine.onMouseMove(x, y);
+    });
+  }
+</script>

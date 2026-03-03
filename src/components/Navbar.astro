@@ -1,0 +1,199 @@
+---
+const navItems = [
+  { label: 'Services', href: '#services' },
+  { label: 'Process', href: '#process' },
+  { label: 'Products', href: '#work' },
+  { label: 'About', href: '#about' },
+];
+---
+
+<nav id="main-nav" class="fixed top-0 left-0 w-full z-[100] bg-bg/80 backdrop-blur-[20px] border-b border-cyan-subtle transition-all duration-500" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between h-[60px]">
+
+    <!-- Logo -->
+    <a href="/" class="group relative flex items-center cursor-pointer no-underline">
+      <div class="relative h-10 w-10 transition-all duration-500 group-hover:drop-shadow-[0_0_20px_rgba(148,252,255,0.3)]" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+        <img
+          src="/full_color_logo.png"
+          alt="NexApex Logo"
+          width="40"
+          height="40"
+          class="object-contain w-full h-full"
+        />
+      </div>
+      <span class="font-d text-[12px] tracking-[3px] uppercase text-sage/80 ml-3 hidden sm:block transition-colors duration-300 group-hover:text-cyan">
+        NexApex
+      </span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <ul class="hidden md:flex gap-7 list-none m-0 p-0 items-center">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="text-dim no-underline font-m text-[11px] font-medium tracking-[1.5px] uppercase transition-all duration-300 relative py-1 cursor-pointer hover:text-cyan after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-cyan after:transition-all after:duration-400 after:ease-out hover:after:w-full"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a
+          href="#contact"
+          class="font-m text-[11px] font-medium tracking-[1.5px] uppercase px-4 py-[6px] border border-cyan/30 text-cyan no-underline cursor-pointer transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60"
+        >
+          Contact
+        </a>
+      </li>
+    </ul>
+
+    <!-- Hamburger button — mobile only -->
+    <button
+      id="hamburger-btn"
+      type="button"
+      class="md:hidden relative w-10 h-10 flex items-center justify-center cursor-pointer bg-transparent border-none outline-none z-[110]"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <div class="relative w-5 h-3.5">
+        <span id="ham-top" class="absolute left-0 w-full h-px bg-white transition-all duration-300 ease-out origin-center top-0"></span>
+        <span id="ham-mid" class="absolute left-0 top-1/2 w-full h-px bg-white transition-all duration-200 ease-out"></span>
+        <span id="ham-bot" class="absolute left-0 w-full h-px bg-white transition-all duration-300 ease-out origin-center bottom-0"></span>
+      </div>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div id="mobile-overlay" class="fixed inset-0 z-[99] md:hidden pointer-events-none opacity-0 transition-all duration-400" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+  <!-- Backdrop -->
+  <div id="mobile-backdrop" class="absolute inset-0 bg-bg/95 backdrop-blur-[30px]"></div>
+
+  <!-- Menu content -->
+  <div id="mobile-menu-content" class="relative flex flex-col items-center justify-center h-full gap-1 px-8" style="transform: translateY(-20px); transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);">
+    {navItems.map((item, i) => (
+      <a
+        href={item.href}
+        class="mobile-nav-link block py-4 font-d text-2xl tracking-[4px] uppercase text-white/80 no-underline cursor-pointer transition-all duration-300 hover:text-cyan opacity-0"
+        style={`transform: translateY(12px); transition: opacity 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s;`}
+        data-delay-open={`opacity 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s`}
+        data-delay-close="opacity 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s"
+      >
+        {item.label}
+      </a>
+    ))}
+
+    <!-- Contact CTA -->
+    <a
+      href="#contact"
+      id="mobile-contact-cta"
+      class="mobile-nav-link mt-8 font-m text-sm font-medium tracking-[2px] uppercase px-8 py-3 border border-cyan/40 text-cyan no-underline cursor-pointer transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 rounded-lg opacity-0"
+      style={`transform: translateY(12px); transition: opacity 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s;`}
+      data-delay-open={`opacity 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s`}
+      data-delay-close="opacity 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s"
+    >
+      Contact
+    </a>
+
+    <!-- Decorative bottom line -->
+    <div id="mobile-decor-line" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-12 h-px bg-gradient-to-r from-transparent via-cyan/30 to-transparent opacity-0" style="transition: opacity 0.6s 0.3s;"></div>
+  </div>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger-btn')!;
+  const overlay = document.getElementById('mobile-overlay')!;
+  const backdrop = document.getElementById('mobile-backdrop')!;
+  const menuContent = document.getElementById('mobile-menu-content')!;
+  const hamTop = document.getElementById('ham-top')!;
+  const hamMid = document.getElementById('ham-mid')!;
+  const hamBot = document.getElementById('ham-bot')!;
+  const decorLine = document.getElementById('mobile-decor-line')!;
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.mobile-nav-link');
+
+  let isOpen = false;
+
+  function openMenu() {
+    isOpen = true;
+    document.body.style.overflow = 'hidden';
+    hamburger.setAttribute('aria-expanded', 'true');
+    hamburger.setAttribute('aria-label', 'Close menu');
+
+    // Overlay
+    overlay.style.pointerEvents = 'auto';
+    overlay.style.opacity = '1';
+
+    // Menu content
+    menuContent.style.transform = 'translateY(0)';
+
+    // Hamburger → X
+    hamTop.style.top = '50%';
+    hamTop.style.transform = 'rotate(45deg)';
+    hamMid.style.opacity = '0';
+    hamMid.style.transform = 'scaleX(0)';
+    hamBot.style.bottom = 'auto';
+    hamBot.style.top = '50%';
+    hamBot.style.transform = 'rotate(-45deg)';
+
+    // Staggered nav links
+    navLinks.forEach((link) => {
+      const openTransition = link.dataset.delayOpen;
+      if (openTransition) link.style.transition = openTransition;
+      link.style.opacity = '1';
+      link.style.transform = 'translateY(0)';
+    });
+
+    // Decorative line
+    decorLine.style.opacity = '1';
+  }
+
+  function closeMenu() {
+    isOpen = false;
+    document.body.style.overflow = '';
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open menu');
+
+    // Overlay
+    overlay.style.pointerEvents = 'none';
+    overlay.style.opacity = '0';
+
+    // Menu content
+    menuContent.style.transform = 'translateY(-20px)';
+
+    // Hamburger → lines
+    hamTop.style.top = '0';
+    hamTop.style.transform = 'none';
+    hamMid.style.opacity = '1';
+    hamMid.style.transform = 'scaleX(1)';
+    hamBot.style.top = 'auto';
+    hamBot.style.bottom = '0';
+    hamBot.style.transform = 'none';
+
+    // Nav links — quick close
+    navLinks.forEach((link) => {
+      const closeTransition = link.dataset.delayClose;
+      if (closeTransition) link.style.transition = closeTransition;
+      link.style.opacity = '0';
+      link.style.transform = 'translateY(12px)';
+    });
+
+    // Decorative line
+    decorLine.style.opacity = '0';
+  }
+
+  hamburger.addEventListener('click', () => {
+    if (isOpen) closeMenu();
+    else openMenu();
+  });
+
+  backdrop.addEventListener('click', closeMenu);
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) closeMenu();
+  });
+</script>
