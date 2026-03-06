@@ -89,6 +89,30 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
         document.documentElement.classList.add('custom-cursor');
       }
     </script>
+
+    <!-- Scroll reveal animations for landing sections -->
+    <script>
+      import { initAllAnimations } from '../components/cinematic/scroll-animations';
+      import { initAmbientEffects } from '../components/cinematic/ambient-effects';
+      import { initProductAnimations } from '../components/cinematic/product-animations';
+
+      // Initialize after DOM is ready and fonts are loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          document.fonts.ready.then(() => {
+            initAllAnimations();
+            initAmbientEffects();
+            initProductAnimations();
+          });
+        });
+      } else {
+        document.fonts.ready.then(() => {
+          initAllAnimations();
+          initAmbientEffects();
+          initProductAnimations();
+        });
+      }
+    </script>
   </body>
 </html>
 
