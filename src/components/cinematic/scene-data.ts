@@ -112,7 +112,7 @@ export function getPositionClasses(position: TextPosition): string {
     case 'center':
       return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center';
     case 'left':
-      return 'left-[8vw] top-1/2 -translate-y-1/2';
+      return 'left-[8vw] max-md:left-6 top-1/2 -translate-y-1/2';
     case 'right':
       return 'right-[8vw] top-1/2 -translate-y-1/2 max-md:left-1/2 max-md:-translate-x-1/2 max-md:right-auto';
     case 'top':

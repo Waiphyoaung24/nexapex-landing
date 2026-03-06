@@ -1,5 +1,6 @@
 ---
 // Static HTML for all fallback states — JS determines which to show
+import Logo3D from '../Logo3D.astro';
 ---
 
 <!-- Loader overlay -->
@@ -25,8 +26,20 @@
   <canvas id="cinematic-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
 </div>
 
+<!-- Animated WebGL 3D Glow Logo — centered in hero -->
+<div
+  id="hero-logo3d"
+  class="fixed inset-0 z-[6] flex items-center justify-center pointer-events-none"
+  style="display: none;"
+>
+  <div class="w-full h-full">
+    <Logo3D />
+  </div>
+</div>
+
+
 <!-- Scroll arrow indicator -->
-<div id="scroll-arrow" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 pointer-events-none" style="display: none;">
+<div id="scroll-arrow" class="fixed max-md:bottom-8 max-md:left-1/2 max-md:-translate-x-1/2 md:left-6 md:top-1/2 md:-translate-y-1/2 z-40 pointer-events-none" style="display: none;">
   <div class="flex flex-col items-center gap-4">
     <svg width="24" height="32" viewBox="0 0 24 32">
       <path
@@ -51,38 +64,12 @@
 
 <!-- Logo prelude (desktop — scroll-driven reveal) -->
 <div id="cube-section" class="relative z-10" style="display: none;">
-  <div id="prelude-scroll" class="relative" style="height: 180vh;">
-    <div class="sticky top-0 h-screen flex flex-col items-center justify-center">
-      <!-- Logo -->
-      <div id="prelude-logo" class="prelude-logo">
-        <img src="/full_color_logo.svg" alt="" draggable="false" />
-      </div>
-
-      <!-- Brand name -->
-      <p id="prelude-brand" class="prelude-line font-m text-[11px] tracking-[0.45em] uppercase text-dim">
-        NEXAPEX
-      </p>
-
-      <!-- Pillars -->
-      <div id="prelude-pillars" class="prelude-line flex items-center gap-3">
-        <span class="prelude-divider"></span>
-        <span class="prelude-pillar">Intelligence</span>
-        <span class="prelude-dot">&middot;</span>
-        <span class="prelude-pillar">Integration</span>
-        <span class="prelude-dot">&middot;</span>
-        <span class="prelude-pillar">Optimization</span>
-        <span class="prelude-divider prelude-divider-end"></span>
-      </div>
-
-      <!-- Tagline -->
-      <p id="prelude-tagline" class="prelude-line font-b text-xs tracking-wider" style="color: rgba(110,122,132,0.5);">
-        Reach the Peak
-      </p>
-    </div>
+  <div id="prelude-scroll" class="relative" style="height: 0;">
+    <!-- Removed prelude content as 3D logo is now the primary visual -->
   </div>
 </div>
 
-<!-- Scroll trigger container (700vh) -->
+<!-- Scroll trigger container (responsive height) -->
 <div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
 
 <!-- Mobile fallback (no WebGL) -->
@@ -218,6 +205,7 @@
 
   const loader = document.getElementById('cinematic-loader')!;
   const canvasWrapper = document.getElementById('canvas-wrapper')!;
+  const heroLogo3d = document.getElementById('hero-logo3d')!;
   const scrollArrow = document.getElementById('scroll-arrow')!;
   const gradientBridge = document.getElementById('gradient-bridge')!;
   const cubeSection = document.getElementById('cube-section')!;
@@ -235,17 +223,32 @@
   if (reducedMotion) {
     loader.remove();
     reducedMotionFallback.style.display = '';
-  } else if (deviceTier === 'mobile' || !webgl2) {
+  } else if (!webgl2) {
+    // Only fall back when WebGL2 is truly unavailable
     loader.remove();
     mobileFallback.style.display = '';
     initMobileFallback();
   } else {
     canvasWrapper.style.display = '';
+    heroLogo3d.style.display = '';
     scrollArrow.style.display = '';
     gradientBridge.style.display = '';
     cubeSection.style.display = '';
     scrollContainer.style.display = '';
+    if (deviceTier === 'mobile') {
+      scrollContainer.style.height = '400vh';
+    }
     initCinematicHero();
+  }
+
+  function triggerLogoShatter() {
+    // If Logo3D shatter is already initialized, play immediately
+    if (window.__logo3dPlayShatter) {
+      window.__logo3dPlayShatter();
+    } else {
+      // Signal that we're ready — Logo3D will play once it initializes
+      (window as any).__logo3dTriggerShatter = true;
+    }
   }
 
   function initMobileFallback() {
@@ -283,8 +286,8 @@
 
   async function initCinematicHero() {
     const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement;
-    const particleCount = deviceTier === 'tablet' ? 400 : 800;
-    const dpr: [number, number] = deviceTier === 'tablet' ? [1, 1.5] : [1, 2];
+    const particleCount = deviceTier === 'mobile' ? 200 : deviceTier === 'tablet' ? 400 : 800;
+    const dpr: [number, number] = deviceTier === 'mobile' ? [1, 1] : deviceTier === 'tablet' ? [1, 1.5] : [1, 2];
 
     const { CinematicEngine } = await import('./cinematic-engine');
 
@@ -303,7 +306,29 @@
         loader.style.opacity = '0';
         setTimeout(() => loader.remove(), 600);
 
+        // Trigger logo shatter assembly animation
+        triggerLogoShatter();
+
         engine.setupScrollTimeline(canvasWrapper, gradientBridge, scrollArrow);
+
+        // ── Scroll-driven Logo Fade Out ──
+        ScrollTrigger.create({
+          trigger: scrollContainer,
+          start: 'top top',
+          end: '10% top',
+          scrub: 0.3,
+          onUpdate: (self: any) => {
+            const p = self.progress;
+            heroLogo3d.style.opacity = String(1 - p);
+            heroLogo3d.style.transform = `scale(${1 + p * 0.05 - p * p * 0.15})`;
+
+            if (p >= 0.98) {
+              heroLogo3d.style.display = 'none';
+            } else {
+              heroLogo3d.style.display = '';
+            }
+          },
+        });
 
         import('./cube-scroll').then(({ initCubeScroll }) => {
           initCubeScroll();
