@@ -92,8 +92,21 @@
 
   html {
     scroll-behavior: smooth;
+    /* Firefox */
     scrollbar-width: thin;
     scrollbar-color: var(--cyan) var(--bg);
+  }
+
+  /* Chrome, Safari, Edge */
+  html::-webkit-scrollbar {
+    width: 6px;
+  }
+  html::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  html::-webkit-scrollbar-thumb {
+    background: var(--cyan);
+    border-radius: 3px;
   }
 
   @keyframes float {

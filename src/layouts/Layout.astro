@@ -75,7 +75,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
     <!-- Custom cursor logic (desktop only) -->
     <script>
-      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints != null && navigator.maxTouchPoints > 0);
 
       if (!isTouch) {
         const dot = document.getElementById('cursor-small')!;
@@ -119,21 +119,24 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       import { initAmbientEffects } from '../components/cinematic/ambient-effects';
       import { initProductAnimations } from '../components/cinematic/product-animations';
 
-      // Initialize after DOM is ready and fonts are loaded
+      function startAnimations() {
+        initAllAnimations();
+        initAmbientEffects();
+        initProductAnimations();
+      }
+
+      function initWhenReady() {
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(startAnimations);
+        } else {
+          startAnimations();
+        }
+      }
+
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          document.fonts.ready.then(() => {
-            initAllAnimations();
-            initAmbientEffects();
-            initProductAnimations();
-          });
-        });
+        document.addEventListener('DOMContentLoaded', initWhenReady);
       } else {
-        document.fonts.ready.then(() => {
-          initAllAnimations();
-          initAmbientEffects();
-          initProductAnimations();
-        });
+        initWhenReady();
       }
     </script>
   </body>

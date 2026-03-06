@@ -20,7 +20,7 @@ import Logo3D from '../Logo3D.astro';
 <!-- 3D Canvas wrapper (desktop/tablet) -->
 <div
   id="canvas-wrapper"
-  class="fixed inset-0 w-full h-screen max-md:h-dvh z-0"
+  class="fixed inset-0 w-full h-screen z-0"
   style="display: none;"
 >
   <canvas id="cinematic-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
@@ -74,7 +74,7 @@ import Logo3D from '../Logo3D.astro';
 
 <!-- Mobile fallback (no WebGL) -->
 <div id="mobile-fallback" class="relative" style="height: 250vh; display: none;">
-  <div class="sticky top-0 h-screen h-dvh flex flex-col items-center justify-center overflow-hidden"
+  <div class="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
     style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
   >
     <div id="mobile-hero-content" class="flex flex-col items-center text-center px-6">
@@ -293,7 +293,11 @@ import Logo3D from '../Logo3D.astro';
 
     await new Promise<void>((resolve) => {
       setTimeout(() => {
-        document.fonts.ready.then(() => resolve());
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => resolve());
+        } else {
+          resolve();
+        }
       }, 1500);
     });
 

@@ -257,20 +257,24 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
   import { initAmbientEffects } from '../../components/cinematic/ambient-effects';
   import { initAllAnimations } from '../../components/cinematic/scroll-animations';
 
+  function startAnimations() {
+    initDetailAnimations();
+    initAllAnimations();
+    initAmbientEffects();
+  }
+
+  function initWhenReady() {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(startAnimations);
+    } else {
+      startAnimations();
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.fonts.ready.then(() => {
-        initDetailAnimations();
-        initAllAnimations();
-        initAmbientEffects();
-      });
-    });
+    document.addEventListener('DOMContentLoaded', initWhenReady);
   } else {
-    document.fonts.ready.then(() => {
-      initDetailAnimations();
-      initAllAnimations();
-      initAmbientEffects();
-    });
+    initWhenReady();
   }
 </script>
 
