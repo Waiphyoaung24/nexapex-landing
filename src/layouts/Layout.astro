@@ -4,7 +4,15 @@ interface Props {
   description?: string;
 }
 
-const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } = Astro.props;
+const {
+  title = 'NexApex — AI Labs for Real-World Intelligence',
+  description = 'Bangkok-based AI lab building intelligent systems for hospitality, manufacturing, and retail across Southeast Asia. From dynamic pricing to factory automation.',
+} = Astro.props;
+
+const siteName = 'NexApex';
+const siteUrl = 'https://www.nexapex.ai';
+const ogImage = `${siteUrl}/full_color_logo.png`;
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 ---
 
 <!doctype html>
@@ -14,6 +22,21 @@ const { title = 'NEX APEX', description = 'AI Driven Premium Web Experience' } =
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={siteName} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <title>{title}</title>
   </head>

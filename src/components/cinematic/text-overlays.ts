@@ -16,7 +16,7 @@ export function createTextOverlays(container: HTMLElement): HTMLElement[] {
 
   const textElements: HTMLElement[] = [];
 
-  scenePerspectives.forEach((perspective, index) => {
+  scenePerspectives.forEach((perspective) => {
     const el = document.createElement('div');
     el.className = `absolute ${getPositionClasses(perspective.position)}`;
 
@@ -33,10 +33,10 @@ export function createTextOverlays(container: HTMLElement): HTMLElement[] {
         </h2>
       `;
     } else if (!perspective.hideText) {
-      // Standard perspectives: character-split title + subtitle
+      // Standard perspectives: plain text title (for gradient) + character-split subtitle
       el.innerHTML = `
-        <h2>${splitTextToChars(perspective.title, 'font-d text-[4vw] max-md:text-2xl font-bold leading-[1.1] mb-2 tracking-tight text-white drop-shadow-2xl')}</h2>
-        ${perspective.subtitle ? `<p>${splitTextToChars(perspective.subtitle, 'font-b text-[1.25vw] max-md:text-base leading-[1.4] text-white/70 font-light drop-shadow-lg')}</p>` : ''}
+        <h2 class="font-d text-[4vw] max-md:text-2xl font-bold leading-[1.1] mb-2 tracking-tight text-gradient-hero drop-shadow-2xl">${perspective.title}</h2>
+        ${perspective.subtitle ? `<p>${splitTextToChars(perspective.subtitle, 'font-b text-[1.25vw] max-md:text-base leading-[1.4] text-white font-light drop-shadow-lg')}</p>` : ''}
       `;
     }
 
@@ -71,9 +71,8 @@ export function initTextAnimations(
           return;
         }
 
-        const titleChars = textEl.querySelectorAll('h2 .inline-block');
         const subtitleChars = textEl.querySelectorAll('p .inline-block');
-        const allChars = [...Array.from(subtitleChars), ...Array.from(titleChars)];
+        const heroH2 = textEl.querySelector('h2');
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -88,16 +87,14 @@ export function initTextAnimations(
         if (st) triggers.push(st);
 
         if (index === 0) {
-          // Hero perspective: h2 is plain text (not split chars), animate block + label chars
-          const heroH2 = textEl.querySelector('h2');
+          // Hero perspective: animate h2 block + label chars
           const labelChars = Array.from(subtitleChars);
 
-          // Start hidden — fade in after 2% scroll so cube section is clear
           gsap.set(textEl, { opacity: 0 });
           gsap.set(labelChars, { x: 0, opacity: 1 });
           if (heroH2) gsap.set(heroH2, { x: 0, opacity: 1 });
 
-          // Fade in at 0–2% of scroll-container
+          // Fade in at 0-2% of scroll-container
           const fadeInSt = ScrollTrigger.create({
             trigger: scrollContainer,
             start: '0% top',
@@ -125,48 +122,65 @@ export function initTextAnimations(
             stagger: -0.02,
             ease: 'power2.in',
           }, 0.5);
-        } else if (index === scenePerspectives.length - 2) {
-          // "NEX APEX" — brand moment: slower enter, longer hold
-          tl.fromTo(
-            allChars,
-            { x: -80, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.2,
-              stagger: -0.01,
-              ease: 'power2.out',
-            },
-          )
-            .to({}, { duration: 1.0 })
-            .to(allChars, {
-              x: 80,
-              opacity: 0,
-              duration: 0.25,
-              stagger: -0.02,
-              ease: 'power2.in',
-            });
         } else {
-          // Standard: enter → hold → exit
-          tl.fromTo(
-            allChars,
-            { x: -80, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.25,
-              stagger: -0.02,
-              ease: 'power2.out',
-            },
-          )
-            .to({}, { duration: 0.5 })
-            .to(allChars, {
-              x: 80,
+          // Standard + brand perspectives: animate h2 as block, subtitle chars individually
+          const isLastTextPerspective = index === scenePerspectives.length - 2;
+          const holdDuration = isLastTextPerspective ? 1.0 : 0.5;
+          const enterDuration = isLastTextPerspective ? 0.2 : 0.25;
+          const enterStagger = isLastTextPerspective ? -0.01 : -0.02;
+
+          // Title: slide in/out as a whole block (preserves gradient)
+          if (heroH2) {
+            tl.fromTo(
+              heroH2,
+              { x: -60, opacity: 0 },
+              { x: 0, opacity: 1, duration: enterDuration, ease: 'power2.out' },
+            );
+          }
+
+          // Subtitle chars: staggered character animation
+          if (subtitleChars.length > 0) {
+            tl.fromTo(
+              Array.from(subtitleChars),
+              { x: -80, opacity: 0 },
+              {
+                x: 0,
+                opacity: 1,
+                duration: enterDuration,
+                stagger: enterStagger,
+                ease: 'power2.out',
+              },
+              '<0.05',
+            );
+          }
+
+          // Hold
+          tl.to({}, { duration: holdDuration });
+
+          // Exit: title slides out
+          if (heroH2) {
+            tl.to(heroH2, {
+              x: 60,
               opacity: 0,
               duration: 0.25,
-              stagger: -0.02,
               ease: 'power2.in',
             });
+          }
+
+          // Exit: subtitle chars stagger out
+          if (subtitleChars.length > 0) {
+            tl.to(
+              Array.from(subtitleChars),
+              {
+                x: 80,
+                opacity: 0,
+                duration: 0.25,
+                stagger: -0.02,
+                ease: 'power2.in',
+              },
+              '<0.05',
+            );
+          }
         }
       });
     },
