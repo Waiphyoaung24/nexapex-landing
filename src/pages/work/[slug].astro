@@ -1,0 +1,325 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { products, getProductBySlug } from '../../data/products';
+import type { Product } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+// Find adjacent products for navigation
+const currentIndex = products.findIndex((p) => p.slug === product.slug);
+const prevProduct = currentIndex > 0 ? products[currentIndex - 1] : null;
+const nextProduct = currentIndex < products.length - 1 ? products[currentIndex + 1] : null;
+---
+
+<Layout title={`${product.title} — NEX APEX`} description={product.desc}>
+  <Navbar />
+
+  <main class="w-full bg-bg text-white min-h-screen pt-24">
+
+    <!-- Hero Section -->
+    <div id="detail-hero" class="relative overflow-hidden" style="clip-path: inset(0% 0% 0% 0%);">
+      <!-- Background image -->
+      <div class="absolute inset-0">
+        <img
+          src={product.heroImage}
+          alt=""
+          class="w-full h-full object-cover"
+          aria-hidden="true"
+        />
+        <!-- Dark gradient overlay for readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-bg/70 via-bg/80 to-bg"></div>
+        <!-- Grid pattern -->
+        <div class="absolute inset-0 opacity-15"
+          style="background-image: linear-gradient(rgba(148,252,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(148,252,255,0.03) 1px, transparent 1px); background-size: 60px 60px;"
+        ></div>
+        <!-- Cyan accent glow -->
+        <div class="absolute inset-0"
+          style="background: radial-gradient(ellipse at 50% 30%, rgba(148,252,255,0.04) 0%, transparent 60%);"
+        ></div>
+      </div>
+
+      <div class="relative max-w-[1400px] mx-auto px-6 md:px-12 py-20 md:py-32 lg:py-40">
+        <!-- Back link -->
+        <a href="/#work" class="hero-reveal inline-flex items-center gap-2 text-dim hover:text-cyan transition-colors duration-300 no-underline mb-12 md:mb-16 group">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 group-hover:-translate-x-1">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span class="font-m text-[11px] tracking-[2px] uppercase">Back to Products</span>
+        </a>
+
+        <!-- Category + Status -->
+        <div class="hero-reveal flex flex-wrap items-center gap-3 mb-6 md:mb-8">
+          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-cyan border border-cyan/20 rounded-md px-3 py-1">
+            {product.category}
+          </span>
+          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/60 border border-cyan-subtle rounded-md px-3 py-1">
+            {product.status}
+          </span>
+          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/40">
+            {product.year}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="hero-reveal font-d font-bold tracking-wider text-white leading-[1.05] mb-6 md:mb-8"
+          style="font-size: clamp(32px, 6vw, 80px); letter-spacing: 0.02em;"
+          data-reveal-chars
+        >
+          {product.title}
+        </h1>
+
+        <!-- Tagline -->
+        <p class="hero-reveal font-b text-lg md:text-xl lg:text-2xl text-text/80 leading-relaxed max-w-3xl"
+          data-reveal-lines
+        >
+          {product.tagline}
+        </p>
+
+        <!-- Divider -->
+        <div class="hero-reveal mt-12 md:mt-16 w-24 h-px bg-gradient-to-r from-cyan/40 to-transparent"></div>
+      </div>
+    </div>
+
+    <!-- Featured Image -->
+    <section class="px-6 md:px-12 -mt-8 md:-mt-12 relative z-10">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="relative rounded-[14px] overflow-hidden border border-cyan-subtle" data-reveal-media>
+          <img
+            src={product.image}
+            alt={product.title}
+            class="w-full object-cover"
+            style="aspect-ratio: 21/9;"
+            loading="eager"
+          />
+          <!-- Subtle overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-bg/30 to-transparent pointer-events-none"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle mt-12 md:mt-16">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <!-- Sidebar: Project Info -->
+          <div class="lg:col-span-4">
+            <div class="lg:sticky lg:top-32 space-y-8">
+              <div>
+                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-cyan mb-4" data-reveal="fade-up">Overview</h3>
+                <p class="font-b text-dim text-sm leading-relaxed" data-reveal="fade-up">{product.desc}</p>
+              </div>
+
+              <div>
+                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-mauve mb-4" data-reveal="fade-up">Technology</h3>
+                <div class="flex flex-wrap gap-2" data-reveal-tech>
+                  {product.tech.map((t) => (
+                    <span class="tech-tag font-m text-[10px] tracking-[1px] text-dim border border-cyan-subtle rounded-md px-3 py-1.5 transition-colors duration-300 hover:text-cyan hover:border-cyan/20">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-mauve mb-4" data-reveal="fade-up">Status</h3>
+                <div class="flex items-center gap-2" data-reveal="fade-up">
+                  <div class="w-2 h-2 rounded-full bg-cyan animate-pulse"></div>
+                  <span class="font-b text-sm text-text">{product.status}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="lg:col-span-8">
+            <div class="space-y-6">
+              {product.overview.map((paragraph) => (
+                <p class="font-b text-lg md:text-xl text-text leading-[1.85]" data-reveal-lines>
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle bg-surface/30" data-tech-grid>
+      <div class="max-w-[1400px] mx-auto">
+        <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Capabilities</p>
+        <h2 class="font-d font-bold tracking-wider text-gradient mb-16 md:mb-20" data-reveal="fade-up"
+          style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
+          data-reveal-chars
+        >
+          KEY FEATURES
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8" data-reveal-features>
+          {product.features.map((feature, i) => (
+            <div class="feature-card relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 overflow-hidden group">
+              <!-- Number -->
+              <span class="absolute top-6 right-6 md:top-8 md:right-8 font-d text-[40px] md:text-[56px] font-bold leading-none text-cyan/[0.05] select-none">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+
+              <!-- Accent bar -->
+              <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12"
+                style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
+              ></div>
+
+              <h3 class="font-d text-lg md:text-xl font-semibold tracking-wider text-white mb-3 relative z-[1]">
+                {feature.title}
+              </h3>
+              <p class="font-b text-dim text-sm md:text-base leading-relaxed relative z-[1]">
+                {feature.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Navigation -->
+    <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8">
+          {prevProduct ? (
+            <a href={`/work/${prevProduct.slug}`} class="group no-underline">
+              <span class="font-m text-[10px] tracking-[2px] uppercase text-dim/50 block mb-2">Previous</span>
+              <span class="font-d text-lg md:text-xl font-semibold tracking-wider text-white group-hover:text-cyan transition-colors duration-300 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 group-hover:-translate-x-1">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                {prevProduct.title}
+              </span>
+            </a>
+          ) : <div />}
+
+          {nextProduct ? (
+            <a href={`/work/${nextProduct.slug}`} class="group no-underline text-right">
+              <span class="font-m text-[10px] tracking-[2px] uppercase text-dim/50 block mb-2">Next</span>
+              <span class="font-d text-lg md:text-xl font-semibold tracking-wider text-white group-hover:text-cyan transition-colors duration-300 flex items-center gap-2">
+                {nextProduct.title}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          ) : <div />}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle bg-surface/50">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="font-d font-bold tracking-wider text-gradient mb-6"
+          style="font-size: clamp(24px, 3vw, 36px); letter-spacing: 1px;"
+          data-reveal-chars
+        >
+          INTERESTED IN THIS PROJECT?
+        </h2>
+        <p class="font-b text-dim text-base md:text-lg mb-8 leading-relaxed" data-reveal-lines>
+          We're actively building this product. If you're interested in early access, partnership, or want to learn more, let's talk.
+        </p>
+        <a
+          href="mailto:hello@nexapex.ai"
+          class="inline-block font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 bg-red text-white no-underline cursor-pointer rounded-[12px] transition-all duration-500 hover:shadow-[0_16px_48px_rgba(198,53,24,0.35)] hover:-translate-y-1"
+          style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
+          data-reveal-media
+        >
+          Get in Touch
+        </a>
+      </div>
+    </section>
+
+    <Footer />
+  </main>
+</Layout>
+
+<!-- Detail page animations -->
+<script>
+  import { initDetailAnimations } from '../../components/cinematic/product-animations';
+  import { initAmbientEffects } from '../../components/cinematic/ambient-effects';
+  import { initAllAnimations } from '../../components/cinematic/scroll-animations';
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.fonts.ready.then(() => {
+        initDetailAnimations();
+        initAllAnimations();
+        initAmbientEffects();
+      });
+    });
+  } else {
+    document.fonts.ready.then(() => {
+      initDetailAnimations();
+      initAllAnimations();
+      initAmbientEffects();
+    });
+  }
+</script>
+
+<style is:global>
+  /* ── Text Split Reveal Styles ── */
+  .split-char {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+
+  .split-line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .split-line {
+    display: block;
+    will-change: transform;
+  }
+
+  .split-word {
+    display: inline;
+  }
+
+  /* ── Feature card glow ── */
+  .feature-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 50%, rgba(148, 252, 255, 0.03), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+
+  .feature-card:hover::after {
+    opacity: 1;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .split-char,
+    .split-line {
+      transform: none !important;
+      opacity: 1 !important;
+    }
+    #detail-hero {
+      clip-path: inset(0% 0% 0% 0%) !important;
+    }
+  }
+</style>
