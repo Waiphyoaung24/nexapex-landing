@@ -257,25 +257,46 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
   import { initAmbientEffects } from '../../components/cinematic/ambient-effects';
   import { initAllAnimations } from '../../components/cinematic/scroll-animations';
 
+  let animationInitialized = false;
+
   function startAnimations() {
+    // Avoid double initialization but allow re-init on major layout changes if needed
     initDetailAnimations();
     initAllAnimations();
     initAmbientEffects();
+    animationInitialized = true;
   }
 
   function initWhenReady() {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(startAnimations);
     } else {
-      startAnimations();
+      // Fallback for browsers that don't support document.fonts.ready
+      setTimeout(startAnimations, 200);
     }
   }
 
+  // Handle initial load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWhenReady);
   } else {
     initWhenReady();
   }
+
+  // Re-initialize on window resize for mobile orientation changes
+  let resizeTimer: any;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      // Many GSAP animations need a refresh on resize
+      import('gsap').then(({ default: gsap }) => {
+        import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.refresh();
+        });
+      });
+    }, 250);
+  });
 </script>
 
 <style is:global>

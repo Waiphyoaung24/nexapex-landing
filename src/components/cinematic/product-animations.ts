@@ -34,15 +34,18 @@ function splitIntoChars(el: HTMLElement): HTMLSpanElement[] {
 }
 
 function splitIntoLines(el: HTMLElement): HTMLSpanElement[] {
+  if (!el || !el.textContent?.trim()) return [];
   const text = el.innerHTML;
   // Wrap each text node line in a span with overflow hidden mask
   const words = text.split(/\s+/);
   el.innerHTML = '';
 
   const wrapper = document.createElement('span');
-  wrapper.style.display = 'inline';
+  wrapper.style.display = 'inline-block'; // Changed to inline-block for more reliable offsetTop
+  wrapper.style.width = '100%';
 
   words.forEach((word, i) => {
+    if (!word.trim()) return;
     const wordSpan = document.createElement('span');
     wordSpan.className = 'split-word';
     wordSpan.innerHTML = (i > 0 ? ' ' : '') + word;
@@ -59,7 +62,8 @@ function splitIntoLines(el: HTMLElement): HTMLSpanElement[] {
 
   wordSpans.forEach((ws) => {
     const top = ws.offsetTop;
-    if (lastTop !== -1 && Math.abs(top - lastTop) > 4) {
+    // Increased threshold for different font sizes/line heights
+    if (lastTop !== -1 && Math.abs(top - lastTop) > 6) {
       lines.push(currentLine);
       currentLine = [];
     }
@@ -73,11 +77,13 @@ function splitIntoLines(el: HTMLElement): HTMLSpanElement[] {
   const lineEls: HTMLSpanElement[] = [];
 
   lines.forEach((lineWords) => {
+    if (lineWords.length === 0) return;
     const lineMask = document.createElement('span');
     lineMask.className = 'split-line-mask';
 
     const lineInner = document.createElement('span');
     lineInner.className = 'split-line';
+    lineInner.style.display = 'block';
 
     lineWords.forEach((ws) => {
       lineInner.appendChild(ws);
