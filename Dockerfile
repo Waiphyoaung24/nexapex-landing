@@ -28,6 +28,6 @@ RUN rm -f /etc/nginx/conf.d/default.conf.bak
 
 EXPOSE 3004
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3004/ || exit 1
+# Health check — use lightweight /health endpoint for faster readiness
+HEALTHCHECK --interval=10s --timeout=3s --start-period=2s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3004/health || exit 1
