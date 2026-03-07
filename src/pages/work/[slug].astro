@@ -318,6 +318,9 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
 
         const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
+        // Scrub smoothing matched to Lenis duration (1.2s)
+        const scrubSmooth = 1;
+
         // ── Hero parallax: image moves slower than scroll (desktop only) ──
         if (!isTouch) {
           const heroImg = document.getElementById('hero-parallax-img');
@@ -330,7 +333,7 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
                 trigger: '#detail-hero',
                 start: 'top top',
                 end: 'bottom top',
-                scrub: 0.5,
+                scrub: scrubSmooth,
               },
             });
           }
@@ -394,7 +397,7 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
                   trigger: card,
                   start: 'top bottom',
                   end: 'bottom top',
-                  scrub: 0.3,
+                  scrub: scrubSmooth,
                 },
               }
             );
@@ -432,7 +435,7 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
               trigger: '#detail-hero',
               start: '10% top',
               end: '25% top',
-              scrub: true,
+              scrub: scrubSmooth,
             },
           });
         }
