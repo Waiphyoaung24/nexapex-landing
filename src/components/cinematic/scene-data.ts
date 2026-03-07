@@ -23,7 +23,7 @@ export interface ScenePerspective {
 export const scenePerspectives: ScenePerspective[] = [
   {
     title: 'THE APEX OF\nINTELLIGENCE',
-    subtitle: '',
+    subtitle: 'AI LABS FOR REAL-WORLD OPERATIONS',
     position: 'center',
     camera: { x: 0, y: 0, z: 12 },
     target: { x: 0, y: 0, z: 0 },
