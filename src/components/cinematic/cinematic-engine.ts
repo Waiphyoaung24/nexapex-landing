@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { scenePerspectives } from './scene-data';
@@ -151,6 +150,7 @@ export interface CinematicEngineOptions {
   scrollContainer: HTMLElement;
   particleCount: number;
   dpr: [number, number];
+  deviceTier: 'desktop' | 'tablet' | 'mobile';
   onLoaded: () => void;
 }
 
@@ -218,15 +218,100 @@ export class CinematicEngine {
     // Build scene contents
     this.createAmbientParticles(options.particleCount, 12);
     this.createOrbitalSwirl(16, 5.5);
-    this.loadModel();
+
+    if (options.deviceTier === 'mobile') {
+      this.createProceduralNebula();
+    } else {
+      this.loadModel();
+    }
 
     // Resize handler
     window.addEventListener('resize', this.onResize);
   }
 
-  // ── Model Loading ──
+  // ── Procedural Nebula (mobile replacement for GLB model) ──
 
-  private loadModel() {
+  private createProceduralNebula() {
+    // Dual-layer formation: toroidal core + radial filaments
+    const coreCount = 600;
+    const filamentCount = 200;
+    const totalCount = coreCount + filamentCount;
+
+    const positions = new Float32Array(totalCount * 3);
+    const colors = new Float32Array(totalCount * 3);
+    const sizes = new Float32Array(totalCount);
+
+    // Toroidal core — a ring of particles that looks like a nebula
+    const majorRadius = 1.8;
+    const minorRadius = 0.7;
+
+    for (let i = 0; i < coreCount; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI * 2;
+      // Add noise for organic feel
+      const noise = 0.3 * (Math.random() - 0.5);
+      const r = minorRadius + noise;
+      positions[i * 3] = (majorRadius + r * Math.cos(phi)) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * 0.6; // Flatten vertically
+      positions[i * 3 + 2] = (majorRadius + r * Math.cos(phi)) * Math.sin(theta);
+
+      // Brand color based on distance from ring center
+      const dist = Math.abs(r) / minorRadius;
+      const brand = remapToBrand(0.4 + dist * 0.5);
+      colors[i * 3] = brand.r;
+      colors[i * 3 + 1] = brand.g;
+      colors[i * 3 + 2] = brand.b;
+
+      sizes[i] = 0.1 + Math.random() * 0.3;
+    }
+
+    // Radial filaments — streaks radiating outward like energy tendrils
+    for (let i = 0; i < filamentCount; i++) {
+      const idx = coreCount + i;
+      const angle = Math.random() * Math.PI * 2;
+      const armLength = 1.5 + Math.random() * 2.5;
+      const spread = Math.random() * 0.3;
+      const t = Math.random(); // position along filament
+
+      positions[idx * 3] = Math.cos(angle) * (majorRadius + t * armLength) + spread * (Math.random() - 0.5);
+      positions[idx * 3 + 1] = (Math.random() - 0.5) * 0.4;
+      positions[idx * 3 + 2] = Math.sin(angle) * (majorRadius + t * armLength) + spread * (Math.random() - 0.5);
+
+      // Outer filaments get brighter cyan
+      const brand = remapToBrand(0.55 + t * 0.35);
+      colors[idx * 3] = brand.r;
+      colors[idx * 3 + 1] = brand.g;
+      colors[idx * 3 + 2] = brand.b;
+
+      sizes[idx] = 0.06 + (1 - t) * 0.2; // Bigger near core, dimmer at tips
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    geometry.setAttribute('aSize', new THREE.Float32BufferAttribute(sizes, 1));
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader: nebulaVertexShader,
+      fragmentShader: nebulaFragmentShader,
+      uniforms: { uOpacity: { value: 0.7 } },
+      vertexColors: true,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const points = new THREE.Points(geometry, material);
+    points.scale.setScalar(4.0);
+    this.slowRotatorGroup.add(points);
+
+    this.options.onLoaded();
+  }
+
+  // ── Model Loading (desktop/tablet only) ──
+
+  private async loadModel() {
+    const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
     const loader = new GLTFLoader();
     loader.load('/models/need_some_space.glb', (gltf) => {
       let geometry: THREE.BufferGeometry | null = null;
