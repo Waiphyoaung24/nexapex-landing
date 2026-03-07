@@ -27,101 +27,99 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
 <Layout title={`${product.title} — NEX APEX`} description={product.desc}>
   <Navbar />
 
-  <main class="w-full bg-bg text-white min-h-screen pt-24">
+  <main class="w-full bg-bg text-white min-h-screen">
 
-    <!-- Hero Section -->
-    <div id="detail-hero" class="relative overflow-hidden" style="clip-path: inset(0% 0% 0% 0%);">
-      <!-- Background image -->
+    <!-- ═══ HERO: Full-viewport, edge-to-edge ═══ -->
+    <div id="detail-hero" class="relative min-h-[600px] overflow-hidden" style="height: 100vh; height: 100dvh; clip-path: inset(0% 0% 0% 0%);">
+      <!-- Full-bleed background image with parallax -->
       <div class="absolute inset-0">
         <img
+          id="hero-parallax-img"
           src={product.heroImage}
           alt=""
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover will-change-transform"
+          style="transform: scale(1.15);"
           aria-hidden="true"
         />
-        <!-- Dark gradient overlay for readability -->
-        <div class="absolute inset-0 bg-gradient-to-b from-bg/70 via-bg/80 to-bg"></div>
-        <!-- Grid pattern -->
+        <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/60 to-bg/30"></div>
         <div class="absolute inset-0 opacity-15"
           style="background-image: linear-gradient(rgba(148,252,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(148,252,255,0.03) 1px, transparent 1px); background-size: 60px 60px;"
         ></div>
-        <!-- Cyan accent glow -->
         <div class="absolute inset-0"
-          style="background: radial-gradient(ellipse at 50% 30%, rgba(148,252,255,0.04) 0%, transparent 60%);"
+          style="background: radial-gradient(ellipse at 50% 70%, rgba(148,252,255,0.04) 0%, transparent 60%);"
         ></div>
       </div>
 
-      <div class="relative max-w-[1400px] mx-auto px-6 md:px-12 py-20 md:py-32 lg:py-40">
-        <!-- Back link -->
-        <a href="/#work" class="hero-reveal inline-flex items-center gap-2 text-dim hover:text-cyan transition-colors duration-300 no-underline mb-12 md:mb-16 group">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 group-hover:-translate-x-1">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          <span class="font-m text-[11px] tracking-[2px] uppercase">Back to Products</span>
-        </a>
+      <!-- Hero content pinned to bottom -->
+      <div class="relative h-full flex flex-col justify-end pb-16 md:pb-20 lg:pb-24">
+        <div class="max-w-[1400px] w-full mx-auto px-6 md:px-12">
+          <!-- Back link -->
+          <a href="/#work" class="hero-reveal inline-flex items-center gap-2 text-dim hover:text-cyan transition-colors duration-300 no-underline mb-10 md:mb-12 group">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="transition-transform duration-300 group-hover:-translate-x-1">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span class="font-m text-[11px] tracking-[2px] uppercase">Back to Products</span>
+          </a>
 
-        <!-- Category + Status -->
-        <div class="hero-reveal flex flex-wrap items-center gap-3 mb-6 md:mb-8">
-          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-cyan border border-cyan/20 rounded-md px-3 py-1">
-            {product.category}
-          </span>
-          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/60 border border-cyan-subtle rounded-md px-3 py-1">
-            {product.status}
-          </span>
-          <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/40">
-            {product.year}
-          </span>
+          <!-- Category + Status -->
+          <div class="hero-reveal flex flex-wrap items-center gap-3 mb-5 md:mb-6">
+            <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-cyan border border-cyan/20 rounded-md px-3 py-1">
+              {product.category}
+            </span>
+            <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/60 border border-cyan-subtle rounded-md px-3 py-1">
+              {product.status}
+            </span>
+            <span class="font-m text-[10px] md:text-[11px] tracking-[2px] uppercase text-dim/40">
+              {product.year}
+            </span>
+          </div>
+
+          <!-- Title -->
+          <h1 class="hero-reveal font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg leading-[1.05] mb-5 md:mb-6"
+            style="font-size: clamp(36px, 7vw, 90px); letter-spacing: 0.02em;"
+          >
+            {product.title}
+          </h1>
+
+          <!-- Tagline -->
+          <p class="hero-reveal font-b text-lg md:text-xl lg:text-2xl text-text/80 leading-relaxed max-w-3xl drop-shadow-lg">
+            {product.tagline}
+          </p>
         </div>
+      </div>
 
-        <!-- Title -->
-        <h1 class="hero-reveal font-d font-bold tracking-wider text-white leading-[1.05] mb-6 md:mb-8"
-          style="font-size: clamp(32px, 6vw, 80px); letter-spacing: 0.02em;"
-          data-reveal-chars
-        >
-          {product.title}
-        </h1>
-
-        <!-- Tagline -->
-        <p class="hero-reveal font-b text-lg md:text-xl lg:text-2xl text-text/80 leading-relaxed max-w-3xl"
-          data-reveal-lines
-        >
-          {product.tagline}
-        </p>
-
-        <!-- Divider -->
-        <div class="hero-reveal mt-12 md:mt-16 w-24 h-px bg-gradient-to-r from-cyan/40 to-transparent"></div>
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+        <span class="font-m text-[9px] tracking-[3px] uppercase text-dim">Scroll</span>
+        <div class="w-px h-8 bg-gradient-to-b from-cyan/60 to-transparent animate-pulse-line"></div>
       </div>
     </div>
 
-    <!-- Featured Image -->
-    <section class="px-6 md:px-12 -mt-8 md:-mt-12 relative z-10">
-      <div class="max-w-[1400px] mx-auto">
-        <div class="relative rounded-[14px] overflow-hidden border border-cyan-subtle" data-reveal-media>
-          <img
-            src={product.image}
-            alt={product.title}
-            class="w-full object-cover"
-            style="aspect-ratio: 21/9;"
-            loading="eager"
-          />
-          <!-- Subtle overlay -->
-          <div class="absolute inset-0 bg-gradient-to-t from-bg/30 to-transparent pointer-events-none"></div>
-        </div>
-      </div>
-    </section>
+    <!-- ═══ STICKY CONTENT + SCROLLING PHOTO GRID ═══ -->
+    <section id="sticky-showcase" class="border-t border-cyan-subtle">
+      <div class="max-w-[1400px] mx-auto px-6 md:px-12">
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
 
-    <!-- Overview Section -->
-    <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle mt-12 md:mt-16">
-      <div class="max-w-[1400px] mx-auto">
-        <div class="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          <!-- Sidebar: Project Info -->
-          <div class="lg:col-span-4">
-            <div class="lg:sticky lg:top-32 space-y-8">
+          <!-- LEFT: Sticky content panel -->
+          <div class="lg:col-span-5 py-16 md:py-24 lg:py-32">
+            <div class="lg:sticky lg:top-24 space-y-10">
+              <!-- Overview -->
               <div>
-                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-cyan mb-4" data-reveal="fade-up">Overview</h3>
-                <p class="font-b text-dim text-sm leading-relaxed" data-reveal="fade-up">{product.desc}</p>
+                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-cyan mb-5" data-reveal="fade-up">Overview</h3>
+                <p class="font-b text-dim text-sm md:text-base leading-relaxed mb-6" data-reveal="fade-up">{product.desc}</p>
+                <div class="space-y-4">
+                  {product.overview.map((paragraph) => (
+                    <p class="font-b text-base md:text-lg text-text leading-[1.8]" data-reveal-lines>
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               </div>
 
+              <!-- Divider -->
+              <div class="w-16 h-px bg-gradient-to-r from-cyan/30 to-transparent"></div>
+
+              <!-- Technology -->
               <div>
                 <h3 class="font-m text-[11px] tracking-[3px] uppercase text-mauve mb-4" data-reveal="fade-up">Technology</h3>
                 <div class="flex flex-wrap gap-2" data-reveal-tech>
@@ -133,37 +131,98 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
                 </div>
               </div>
 
-              <div>
-                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-mauve mb-4" data-reveal="fade-up">Status</h3>
-                <div class="flex items-center gap-2" data-reveal="fade-up">
-                  <div class="w-2 h-2 rounded-full bg-cyan animate-pulse"></div>
-                  <span class="font-b text-sm text-text">{product.status}</span>
-                </div>
+              <!-- Status -->
+              <div class="flex items-center gap-3" data-reveal="fade-up">
+                <h3 class="font-m text-[11px] tracking-[3px] uppercase text-mauve">Status</h3>
+                <div class="w-2 h-2 rounded-full bg-cyan animate-pulse"></div>
+                <span class="font-b text-sm text-text">{product.status}</span>
               </div>
             </div>
           </div>
 
-          <!-- Main Content -->
-          <div class="lg:col-span-8">
-            <div class="space-y-6">
-              {product.overview.map((paragraph) => (
-                <p class="font-b text-lg md:text-xl text-text leading-[1.85]" data-reveal-lines>
-                  {paragraph}
-                </p>
-              ))}
+          <!-- RIGHT: Scrolling photo grid with parallax -->
+          <div class="lg:col-span-7 py-8 md:py-16 lg:py-32">
+            <div class="grid grid-cols-2 gap-3 md:gap-4" id="photo-grid">
+              {/* Row 1: Full-width hero shot */}
+              <div class="photo-card col-span-2 relative rounded-[14px] overflow-hidden border border-cyan-subtle group cursor-pointer" data-speed="0.95">
+                <img
+                  src={product.gallery[0]}
+                  alt={`${product.title} — 01`}
+                  class="photo-card-img w-full object-cover"
+                  style="aspect-ratio: 21/9;"
+                  loading="eager"
+                />
+                <div class="photo-card-overlay absolute inset-0 pointer-events-none"></div>
+                <div class="photo-card-glow absolute inset-0 pointer-events-none opacity-0"></div>
+                <span class="photo-card-num absolute bottom-4 left-4 font-d text-[11px] font-bold tracking-[3px] text-white/0">01</span>
+              </div>
+
+              {/* Row 2: Two portrait images */}
+              <div class="photo-card relative rounded-[14px] overflow-hidden border border-cyan-subtle group cursor-pointer" data-speed="1.05">
+                <img
+                  src={product.gallery[1]}
+                  alt={`${product.title} — 02`}
+                  class="photo-card-img w-full object-cover"
+                  style="aspect-ratio: 4/5;"
+                  loading="lazy"
+                />
+                <div class="photo-card-overlay absolute inset-0 pointer-events-none"></div>
+                <div class="photo-card-glow absolute inset-0 pointer-events-none opacity-0"></div>
+                <span class="photo-card-num absolute bottom-4 left-4 font-d text-[11px] font-bold tracking-[3px] text-white/0">02</span>
+              </div>
+
+              <div class="photo-card relative rounded-[14px] overflow-hidden border border-cyan-subtle group cursor-pointer" data-speed="0.9">
+                <img
+                  src={product.gallery[2]}
+                  alt={`${product.title} — 03`}
+                  class="photo-card-img w-full object-cover"
+                  style="aspect-ratio: 4/5;"
+                  loading="lazy"
+                />
+                <div class="photo-card-overlay absolute inset-0 pointer-events-none"></div>
+                <div class="photo-card-glow absolute inset-0 pointer-events-none opacity-0"></div>
+                <span class="photo-card-num absolute bottom-4 left-4 font-d text-[11px] font-bold tracking-[3px] text-white/0">03</span>
+              </div>
+
+              {/* Row 3: Two landscape images */}
+              <div class="photo-card relative rounded-[14px] overflow-hidden border border-cyan-subtle group cursor-pointer" data-speed="1.1">
+                <img
+                  src={product.gallery[3]}
+                  alt={`${product.title} — 04`}
+                  class="photo-card-img w-full object-cover"
+                  style="aspect-ratio: 3/2;"
+                  loading="lazy"
+                />
+                <div class="photo-card-overlay absolute inset-0 pointer-events-none"></div>
+                <div class="photo-card-glow absolute inset-0 pointer-events-none opacity-0"></div>
+                <span class="photo-card-num absolute bottom-4 left-4 font-d text-[11px] font-bold tracking-[3px] text-white/0">04</span>
+              </div>
+
+              <div class="photo-card relative rounded-[14px] overflow-hidden border border-cyan-subtle group cursor-pointer" data-speed="0.85">
+                <img
+                  src={product.gallery[4]}
+                  alt={`${product.title} — 05`}
+                  class="photo-card-img w-full object-cover"
+                  style="aspect-ratio: 3/2;"
+                  loading="lazy"
+                />
+                <div class="photo-card-overlay absolute inset-0 pointer-events-none"></div>
+                <div class="photo-card-glow absolute inset-0 pointer-events-none opacity-0"></div>
+                <span class="photo-card-num absolute bottom-4 left-4 font-d text-[11px] font-bold tracking-[3px] text-white/0">05</span>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- ═══ FEATURES SECTION ═══ -->
     <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle bg-surface/30" data-tech-grid>
       <div class="max-w-[1400px] mx-auto">
         <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Capabilities</p>
-        <h2 class="font-d font-bold tracking-wider text-gradient mb-16 md:mb-20" data-reveal="fade-up"
+        <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-12 md:mb-16" data-reveal="fade-up"
           style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
-          data-reveal-chars
         >
           KEY FEATURES
         </h2>
@@ -171,16 +230,12 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
         <div class="grid md:grid-cols-2 gap-6 md:gap-8" data-reveal-features>
           {product.features.map((feature, i) => (
             <div class="feature-card relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 overflow-hidden group">
-              <!-- Number -->
               <span class="absolute top-6 right-6 md:top-8 md:right-8 font-d text-[40px] md:text-[56px] font-bold leading-none text-cyan/[0.05] select-none">
                 {String(i + 1).padStart(2, '0')}
               </span>
-
-              <!-- Accent bar -->
               <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12"
                 style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
               ></div>
-
               <h3 class="font-d text-lg md:text-xl font-semibold tracking-wider text-white mb-3 relative z-[1]">
                 {feature.title}
               </h3>
@@ -227,9 +282,8 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
     <!-- CTA -->
     <section class="py-16 md:py-24 px-6 md:px-12 border-t border-cyan-subtle bg-surface/50">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="font-d font-bold tracking-wider text-gradient mb-6"
+        <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-6" data-reveal="fade-up"
           style="font-size: clamp(24px, 3vw, 36px); letter-spacing: 1px;"
-          data-reveal-chars
         >
           INTERESTED IN THIS PROJECT?
         </h2>
@@ -257,38 +311,160 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
   import { initAmbientEffects } from '../../components/cinematic/ambient-effects';
   import { initAllAnimations } from '../../components/cinematic/scroll-animations';
 
-  let animationInitialized = false;
+  function initPhotoGridAnimations() {
+    import('gsap').then(({ default: gsap }) => {
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+        // ── Hero parallax: image moves slower than scroll (desktop only) ──
+        if (!isTouch) {
+          const heroImg = document.getElementById('hero-parallax-img');
+          if (heroImg) {
+            gsap.to(heroImg, {
+              yPercent: 20,
+              scale: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: '#detail-hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.5,
+              },
+            });
+          }
+        }
+
+        // ── Photo grid: staggered reveal + per-card parallax ──
+        const cards = gsap.utils.toArray<HTMLElement>('.photo-card');
+
+        // Initial stagger reveal
+        cards.forEach((card, i) => {
+          const img = card.querySelector('.photo-card-img') as HTMLElement;
+          const overlay = card.querySelector('.photo-card-overlay') as HTMLElement;
+          const glow = card.querySelector('.photo-card-glow') as HTMLElement;
+          const num = card.querySelector('.photo-card-num') as HTMLElement;
+
+          // Entrance animation
+          gsap.fromTo(card,
+            { y: 80, opacity: 0, scale: 0.92 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 1,
+              ease: 'expo.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 90%',
+                once: true,
+              },
+              delay: (i % 2) * 0.15, // offset columns
+            }
+          );
+
+          // Number reveal on enter
+          if (num) {
+            gsap.to(num, {
+              color: 'rgba(255,255,255,0.2)',
+              duration: 0.6,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 80%',
+                once: true,
+              },
+              delay: 0.4 + (i % 2) * 0.15,
+            });
+          }
+
+          // Per-card parallax: image moves inside card on scroll (desktop only)
+          if (img && !isTouch) {
+            const speed = parseFloat(card.dataset.speed || '1');
+            const direction = speed > 1 ? 1 : -1;
+            const distance = Math.abs(speed - 1) * 80;
+
+            gsap.fromTo(img,
+              { yPercent: -distance * direction },
+              {
+                yPercent: distance * direction,
+                ease: 'none',
+                scrollTrigger: {
+                  trigger: card,
+                  start: 'top bottom',
+                  end: 'bottom top',
+                  scrub: 0.3,
+                },
+              }
+            );
+
+            // Scale image slightly larger so parallax doesn't show edges
+            gsap.set(img, { scale: 1.15 });
+          }
+
+          // Cyan glow border pulse as card enters center of viewport
+          if (glow) {
+            gsap.fromTo(glow,
+              { opacity: 0 },
+              {
+                opacity: 1,
+                duration: 0.3,
+                scrollTrigger: {
+                  trigger: card,
+                  start: 'top 60%',
+                  end: 'bottom 40%',
+                  toggleActions: 'play reverse play reverse',
+                },
+              }
+            );
+          }
+        });
+
+        // ── Scroll indicator fade out ──
+        const scrollIndicator = document.querySelector('#detail-hero .absolute.bottom-6');
+        if (scrollIndicator) {
+          gsap.to(scrollIndicator, {
+            opacity: 0,
+            y: 10,
+            ease: 'power2.in',
+            scrollTrigger: {
+              trigger: '#detail-hero',
+              start: '10% top',
+              end: '25% top',
+              scrub: true,
+            },
+          });
+        }
+      });
+    });
+  }
 
   function startAnimations() {
-    // Avoid double initialization but allow re-init on major layout changes if needed
     initDetailAnimations();
     initAllAnimations();
     initAmbientEffects();
-    animationInitialized = true;
+    initPhotoGridAnimations();
   }
 
   function initWhenReady() {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(startAnimations);
     } else {
-      // Fallback for browsers that don't support document.fonts.ready
       setTimeout(startAnimations, 200);
     }
   }
 
-  // Handle initial load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWhenReady);
   } else {
     initWhenReady();
   }
 
-  // Re-initialize on window resize for mobile orientation changes
   let resizeTimer: any;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      // Many GSAP animations need a refresh on resize
       import('gsap').then(({ default: gsap }) => {
         import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
           gsap.registerPlugin(ScrollTrigger);
@@ -320,6 +496,78 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
     display: inline;
   }
 
+  /* ── Photo card interactive effects ── */
+  .photo-card {
+    will-change: transform, opacity;
+    overflow: hidden;
+    -webkit-transform: translateZ(0); /* Safari compositing layer */
+  }
+
+  .photo-card-img {
+    will-change: transform;
+    -webkit-transition: filter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: filter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    -webkit-backface-visibility: hidden; /* Safari flicker fix */
+    backface-visibility: hidden;
+  }
+
+  .photo-card-overlay {
+    background: linear-gradient(180deg, transparent 40%, rgba(14, 20, 24, 0.4) 100%);
+    -webkit-transition: background 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: background 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .photo-card:hover .photo-card-overlay {
+    background: linear-gradient(180deg, transparent 40%, rgba(14, 20, 24, 0.15) 100%);
+  }
+
+  .photo-card:hover .photo-card-img {
+    -webkit-filter: brightness(1.08) saturate(1.1);
+    filter: brightness(1.08) saturate(1.1);
+  }
+
+  .photo-card-glow {
+    background: radial-gradient(ellipse at 50% 50%, rgba(148, 252, 255, 0.06) 0%, transparent 70%);
+    -webkit-box-shadow: inset 0 0 0 1px rgba(148, 252, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(148, 252, 255, 0.12);
+    border-radius: inherit;
+  }
+
+  .photo-card:hover .photo-card-glow {
+    opacity: 1 !important;
+  }
+
+  .photo-card:hover {
+    border-color: rgba(148, 252, 255, 0.2);
+  }
+
+  .photo-card-num {
+    -webkit-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+    text-shadow: 0 0 12px rgba(148, 252, 255, 0.3);
+  }
+
+  .photo-card:hover .photo-card-num {
+    color: rgba(148, 252, 255, 0.5) !important;
+  }
+
+  /* ── Mobile: disable parallax on touch devices ── */
+  @media (hover: none), (pointer: coarse) {
+    .photo-card-img {
+      -webkit-transform: none !important;
+      transform: none !important;
+      will-change: auto;
+    }
+    #hero-parallax-img {
+      -webkit-transform: none !important;
+      transform: none !important;
+      will-change: auto;
+    }
+    .photo-card {
+      will-change: auto;
+    }
+  }
+
   /* ── Feature card glow ── */
   .feature-card::after {
     content: '';
@@ -345,6 +593,19 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
     }
     #detail-hero {
       clip-path: inset(0% 0% 0% 0%) !important;
+    }
+    #hero-parallax-img {
+      transform: none !important;
+    }
+    .photo-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .photo-card-img {
+      transform: none !important;
+    }
+    .photo-card-num {
+      color: rgba(255, 255, 255, 0.2) !important;
     }
   }
 </style>

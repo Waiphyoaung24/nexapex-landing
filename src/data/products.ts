@@ -8,6 +8,7 @@ export interface Product {
   year: string;
   image: string;
   heroImage: string;
+  gallery: string[];
   tech: string[];
   features: { title: string; desc: string }[];
   overview: string[];
@@ -24,6 +25,7 @@ export const products: Product[] = [
     year: '2026',
     image: '/product-hotel.jpg',
     heroImage: '/product-hotel-hero.jpg',
+    gallery: ['/product-hotel.jpg', '/product-hotel-hero.jpg', '/product-hotel.jpg', '/product-hotel-hero.jpg', '/product-hotel.jpg'],
     tech: ['Python', 'TensorFlow', 'FastAPI', 'PostgreSQL', 'Redis', 'React'],
     features: [
       { title: 'Competitor Intelligence', desc: 'Continuous monitoring of competitor pricing across OTAs, direct booking channels, and meta-search platforms with automated data collection and analysis.' },
@@ -47,6 +49,7 @@ export const products: Product[] = [
     year: '2026',
     image: '/product-factory.jpg',
     heroImage: '/product-factory-hero.jpg',
+    gallery: ['/product-factory.jpg', '/product-factory-hero.jpg', '/product-factory.jpg', '/product-factory-hero.jpg', '/product-factory.jpg'],
     tech: ['Python', 'PyTorch', 'PLC Integration', 'Computer Vision', 'MQTT', 'Edge Computing'],
     features: [
       { title: 'Predictive Maintenance', desc: 'Sensor-driven anomaly detection that predicts equipment failures before they cause costly production downtime.' },
@@ -70,6 +73,7 @@ export const products: Product[] = [
     year: '2026',
     image: '/product-pos.jpg',
     heroImage: '/product-pos-hero.jpg',
+    gallery: ['/product-pos.jpg', '/product-pos-hero.jpg', '/product-pos.jpg', '/product-pos-hero.jpg', '/product-pos.jpg'],
     tech: ['TypeScript', 'RAG Pipeline', 'LLM Integration', 'Next.js', 'Supabase', 'Stripe'],
     features: [
       { title: 'Natural Language Queries', desc: 'Ask your POS anything in plain language — "What sold best last Tuesday?" or "Show me margin trends for Q1" — powered by RAG.' },
