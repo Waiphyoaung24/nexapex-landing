@@ -63,6 +63,38 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
       // Sync Lenis scroll position → GSAP ScrollTrigger
       lenis.on('scroll', ScrollTrigger.update);
+      // Handle initial hash scroll
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+          setTimeout(() => {
+            lenis.scrollTo(target, { offset: -80, duration: 1.5 });
+          }, 500);
+        }
+      }
+
+      // Handle anchor clicks for cross-page or same-page smooth scroll
+      document.querySelectorAll('a[href^="/#"], a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          const href = anchor.getAttribute('href');
+          const hash = href.includes('#') ? '#' + href.split('#')[1] : null;
+          
+          if (hash) {
+            const target = document.querySelector(hash);
+            const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+            const isCrossPage = !href.startsWith('#') && !isHomePage;
+
+            if (target && !isCrossPage) {
+              e.preventDefault();
+              lenis.scrollTo(target, { offset: -80, duration: 1.5 });
+              if (history.pushState) {
+                history.pushState(null, '', hash);
+              }
+            }
+          }
+        });
+      });
+    
 
       // Sync GSAP ticker → Lenis RAF
       gsap.ticker.add((time: number) => {
