@@ -70,10 +70,10 @@ import Logo3D from '../Logo3D.astro';
 </div>
 
 <!-- Scroll trigger container (responsive height) -->
-<div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
+<div id="scroll-container" class="relative z-20" style="height: 900vh; display: none;"></div>
 
 <!-- Mobile fallback (no WebGL) -->
-<div id="mobile-fallback" class="relative" style="height: 250vh; display: none;">
+<div id="mobile-fallback" class="relative" style="height: 350vh; display: none;">
   <div class="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
     style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
   >
@@ -238,7 +238,7 @@ import Logo3D from '../Logo3D.astro';
     cubeSection.style.display = '';
     scrollContainer.style.display = '';
     if (deviceTier === 'mobile') {
-      scrollContainer.style.height = '400vh';
+      scrollContainer.style.height = '500vh';
     }
     initCinematicHero();
   }
@@ -260,8 +260,8 @@ import Logo3D from '../Logo3D.astro';
     ScrollTrigger.create({
       trigger: mobileFallback,
       start: '5% top',
-      end: '20% top',
-      scrub: 0.5,
+      end: '25% top',
+      scrub: 1.5,
       onUpdate: (self) => {
         heroContent.style.opacity = String(1 - self.progress);
         heroContent.style.transform = `translateY(${self.progress * -30}px)`;
@@ -271,9 +271,9 @@ import Logo3D from '../Logo3D.astro';
     mobileTexts.forEach((el, i) => {
       ScrollTrigger.create({
         trigger: mobileFallback,
-        start: `${20 + i * 25}% top`,
-        end: `${40 + i * 25}% top`,
-        scrub: 0.5,
+        start: `${20 + i * 22}% top`,
+        end: `${42 + i * 22}% top`,
+        scrub: 1.5,
         onUpdate: (self) => {
           const p = self.progress;
           let opacity = 0;

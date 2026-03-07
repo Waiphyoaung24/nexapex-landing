@@ -434,7 +434,7 @@ export class CinematicEngine {
         trigger: scrollContainer,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: true,
+        scrub: 1.5,
         onUpdate: (self) => {
           const velocity = self.progress - this.lastProgress;
           this.scrollVelocity.value = velocity * 60;
@@ -540,7 +540,7 @@ export class CinematicEngine {
       this.interactiveGroup.rotation.y = this.currentRotation.y;
 
       // Slow rotator
-      this.slowRotatorGroup.rotation.y = elapsed * 0.015;
+      this.slowRotatorGroup.rotation.y = elapsed * 0.008;
 
       // Ambient particles
       if (this.ambientMaterial) {

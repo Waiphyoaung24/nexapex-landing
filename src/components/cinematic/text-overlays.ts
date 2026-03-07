@@ -79,7 +79,7 @@ export function initTextAnimations(
             trigger: scrollContainer,
             start: `${perspective.scrollProgress.start}% top`,
             end: `${perspective.scrollProgress.end}% top`,
-            scrub: 0.5,
+            scrub: 1.5,
           },
         });
 
@@ -125,9 +125,9 @@ export function initTextAnimations(
         } else {
           // Standard + brand perspectives: animate h2 as block, subtitle chars individually
           const isLastTextPerspective = index === scenePerspectives.length - 2;
-          const holdDuration = isLastTextPerspective ? 1.0 : 0.5;
-          const enterDuration = isLastTextPerspective ? 0.2 : 0.25;
-          const enterStagger = isLastTextPerspective ? -0.01 : -0.02;
+          const holdDuration = isLastTextPerspective ? 1.4 : 0.8;
+          const enterDuration = isLastTextPerspective ? 0.25 : 0.3;
+          const enterStagger = isLastTextPerspective ? -0.01 : -0.015;
 
           // Title: slide in/out as a whole block (preserves gradient)
           if (heroH2) {

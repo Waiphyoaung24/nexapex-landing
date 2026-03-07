@@ -14,7 +14,7 @@ export function initCubeScroll(): void {
       trigger: section,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1.5,
+      scrub: 2,
     },
   });
 
