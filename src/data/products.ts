@@ -34,9 +34,9 @@ export const products: Product[] = [
       { title: 'Multi-Channel Distribution', desc: 'Unified rate management across Booking.com, Agoda, Expedia, and direct channels with automated parity control.' },
     ],
     overview: [
-      'The Thai hospitality market operates in one of the most competitive pricing environments in Southeast Asia. Hotels constantly adjust rates across dozens of channels, often reacting too late to competitor moves or demand shifts.',
-      'Our AI Revenue Manager replaces manual rate-setting with an intelligent system that monitors, predicts, and acts autonomously. It ingests real-time data from competitor channels, analyzes demand patterns, and optimizes pricing to maximize profit-per-room rather than just occupancy.',
-      'Built for the unique dynamics of the Thai market — from Songkran surges to monsoon dips — the system learns continuously and adapts its strategy as market conditions evolve.',
+      'The Thai hospitality market operates in one of the <mark class="text-highlight">most competitive pricing environments</mark> in Southeast Asia. Hotels constantly adjust rates across dozens of channels, often <mark class="text-highlight">reacting too late</mark> to competitor moves or demand shifts.',
+      'Our AI Revenue Manager replaces manual rate-setting with an <mark class="text-highlight">intelligent system that monitors, predicts, and acts autonomously</mark>. It ingests real-time data from competitor channels, analyzes demand patterns, and optimizes pricing to <mark class="text-highlight">maximize profit-per-room</mark> rather than just occupancy.',
+      'Built for the <mark class="text-highlight">unique dynamics of the Thai market</mark> — from Songkran surges to monsoon dips — the system learns continuously and adapts its strategy as market conditions evolve.',
     ],
   },
   {
@@ -58,9 +58,9 @@ export const products: Product[] = [
       { title: 'Environmental Monitoring', desc: 'Continuous monitoring of temperature, humidity, and contamination risks across the production facility with automated alerts.' },
     ],
     overview: [
-      'Dairy manufacturing demands precision at every stage — from raw material intake to final packaging. Even small deviations in temperature, timing, or ingredient ratios can compromise entire batches.',
-      'Our system bridges the gap between factory-floor machinery and intelligent decision-making. By connecting directly to PLCs, sensors, and production equipment, we create a digital nervous system that monitors, learns, and optimizes autonomously.',
-      'The result is a production environment where AI doesn\'t replace human operators — it amplifies them. Operators receive real-time guidance, maintenance teams get predictive alerts, and management sees unified analytics across the entire operation.',
+      'Dairy manufacturing demands <mark class="text-highlight">precision at every stage</mark> — from raw material intake to final packaging. Even small deviations in temperature, timing, or ingredient ratios can <mark class="text-highlight">compromise entire batches</mark>.',
+      'Our system bridges the gap between factory-floor machinery and intelligent decision-making. By connecting directly to PLCs, sensors, and production equipment, we create a <mark class="text-highlight">digital nervous system</mark> that monitors, learns, and optimizes autonomously.',
+      'The result is a production environment where AI doesn\'t replace human operators — <mark class="text-highlight">it amplifies them</mark>. Operators receive real-time guidance, maintenance teams get <mark class="text-highlight">predictive alerts</mark>, and management sees unified analytics across the entire operation.',
     ],
   },
   {
@@ -82,9 +82,9 @@ export const products: Product[] = [
       { title: 'Multi-Language Support', desc: 'Full Thai, English, and Mandarin support across the interface, receipts, and AI assistant — built for Southeast Asian operations.' },
     ],
     overview: [
-      'Traditional POS systems are transactional black boxes — they record sales but offer little insight. For cross-border retail operations in Southeast Asia, the challenge multiplies: different currencies, tax regimes, languages, and consumer behaviors.',
-      'Smart POS reimagines the point of sale as an intelligence hub. Every transaction feeds into a RAG-powered analytics engine that operators can query in natural language. No dashboards to learn, no reports to configure — just ask.',
-      'Designed from the ground up for multi-location, multi-country retail operations, the system handles the complexity of cross-border commerce while presenting a simple, unified view to operators and management.',
+      'Traditional POS systems are <mark class="text-highlight">transactional black boxes</mark> — they record sales but offer little insight. For cross-border retail operations in Southeast Asia, the challenge multiplies: different currencies, tax regimes, languages, and consumer behaviors.',
+      'Smart POS reimagines the point of sale as an <mark class="text-highlight">intelligence hub</mark>. Every transaction feeds into a RAG-powered analytics engine that operators can <mark class="text-highlight">query in natural language</mark>. No dashboards to learn, no reports to configure — just ask.',
+      'Designed from the ground up for <mark class="text-highlight">multi-location, multi-country retail</mark> operations, the system handles the complexity of cross-border commerce while presenting a simple, unified view to operators and management.',
     ],
   },
 ];

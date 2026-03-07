@@ -107,11 +107,9 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
               <div>
                 <h3 class="font-m text-[11px] tracking-[3px] uppercase text-cyan mb-5" data-reveal="fade-up">Overview</h3>
                 <p class="font-b text-dim text-sm md:text-base leading-relaxed mb-6" data-reveal="fade-up">{product.desc}</p>
-                <div class="space-y-4">
+                <div class="space-y-4" data-highlight-section>
                   {product.overview.map((paragraph) => (
-                    <p class="font-b text-base md:text-lg text-text leading-[1.8]" data-reveal-lines>
-                      {paragraph}
-                    </p>
+                    <p class="font-b text-base md:text-lg text-text leading-[1.8]" data-reveal="fade-up" set:html={paragraph} />
                   ))}
                 </div>
               </div>
@@ -424,6 +422,17 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
           }
         });
 
+        // ── Text highlight activation on scroll ──
+        const highlights = gsap.utils.toArray<HTMLElement>('.text-highlight');
+        highlights.forEach((mark) => {
+          ScrollTrigger.create({
+            trigger: mark,
+            start: 'top 85%',
+            once: true,
+            onEnter: () => mark.classList.add('is-active'),
+          });
+        });
+
         // ── Scroll indicator fade out ──
         const scrollIndicator = document.querySelector('#detail-hero .absolute.bottom-6');
         if (scrollIndicator) {
@@ -497,6 +506,43 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
 
   .split-word {
     display: inline;
+  }
+
+  /* ── Text highlight scroll reveal ── */
+  mark.text-highlight {
+    all: unset;
+    display: inline;
+    color: var(--text);
+    background-image: linear-gradient(
+      120deg,
+      rgba(148, 252, 255, 0.22) 0%,
+      rgba(148, 252, 255, 0.35) 50%,
+      rgba(148, 252, 255, 0.22) 100%
+    );
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0% 45%;
+    padding: 0.05em 0.2em;
+    margin: 0 -0.1em;
+    border-radius: 3px;
+    -webkit-transition: background-size 1.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+                        color 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: background-size 1.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+                color 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  mark.text-highlight.is-active {
+    background-size: 100% 45%;
+    color: #e0fdfe;
+    text-shadow: 0 0 20px rgba(148, 252, 255, 0.15);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    mark.text-highlight {
+      background-size: 100% 45% !important;
+      color: #e0fdfe !important;
+      transition: none !important;
+    }
   }
 
   /* ── Photo card interactive effects ── */
