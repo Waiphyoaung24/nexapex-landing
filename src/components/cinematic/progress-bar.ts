@@ -39,7 +39,7 @@ export function initProgressBar(
         trigger: scrollContainer,
         start: '0% top',
         end: '2% top',
-        scrub: 0.5,
+        scrub: 2,
         onUpdate: (self) => {
           if (wrapper) gsap.set(wrapper, { opacity: self.progress });
         },
@@ -52,7 +52,7 @@ export function initProgressBar(
         trigger: scrollContainer,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: true,
+        scrub: 2,
         onUpdate: (self) => {
           const progress = self.progress * 100;
           setWidth(progress);
@@ -68,7 +68,7 @@ export function initProgressBar(
             trigger: scrollContainer,
             start: '88% top',
             end: '95% top',
-            scrub: true,
+            scrub: 2,
           },
         });
       }

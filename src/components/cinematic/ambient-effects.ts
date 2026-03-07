@@ -47,7 +47,7 @@ export function initParticleBridge(): void {
     trigger: bridge,
     start: 'top 90%',
     end: 'bottom 20%',
-    scrub: 0.5,
+    scrub: 2,
     onUpdate: (self) => {
       const p = self.progress;
       // Bell curve: fade in first half, fade out second half
@@ -125,7 +125,7 @@ export function initTechGrid(): void {
           trigger: section,
           start: 'top 80%',
           end: 'bottom 20%',
-          scrub: 1,
+          scrub: 2,
           onUpdate: (self) => {
             // Fade in at start, fade out at end
             const p = self.progress;

@@ -316,8 +316,8 @@ const nextProduct = currentIndex < products.length - 1 ? products[currentIndex +
 
         const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-        // Scrub smoothing matched to Lenis duration (1.2s)
-        const scrubSmooth = 1;
+        // Scrub smoothing matched to Lenis duration (2.4s)
+        const scrubSmooth = 2;
 
         // ── Hero parallax: image moves slower than scroll (desktop only) ──
         if (!isTouch) {

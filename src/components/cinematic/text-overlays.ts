@@ -79,7 +79,7 @@ export function initTextAnimations(
             trigger: scrollContainer,
             start: `${perspective.scrollProgress.start}% top`,
             end: `${perspective.scrollProgress.end}% top`,
-            scrub: 1.5,
+            scrub: 2,
           },
         });
 
@@ -99,7 +99,7 @@ export function initTextAnimations(
             trigger: scrollContainer,
             start: '0% top',
             end: '2% top',
-            scrub: 0.5,
+            scrub: 2,
             onUpdate: (self) => {
               gsap.set(textEl, { opacity: self.progress });
             },

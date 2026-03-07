@@ -434,7 +434,7 @@ export class CinematicEngine {
         trigger: scrollContainer,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.5,
+        scrub: 2,
         onUpdate: (self) => {
           const velocity = self.progress - this.lastProgress;
           this.scrollVelocity.value = velocity * 60;
@@ -470,7 +470,7 @@ export class CinematicEngine {
       trigger: scrollContainer,
       start: '88% top',
       end: '98% top',
-      scrub: true,
+      scrub: 2,
       onUpdate: (self) => {
         canvasWrapper.style.opacity = String(1 - self.progress);
       },
@@ -490,7 +490,7 @@ export class CinematicEngine {
           trigger: scrollContainer,
           start: '85% top',
           end: '95% top',
-          scrub: true,
+          scrub: 2,
         },
       });
     }
@@ -503,7 +503,7 @@ export class CinematicEngine {
           trigger: scrollContainer,
           start: '5% top',
           end: '15% top',
-          scrub: true,
+          scrub: 2,
         },
       });
     }

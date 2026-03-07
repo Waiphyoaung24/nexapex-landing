@@ -55,12 +55,16 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
       gsap.registerPlugin(ScrollTrigger);
 
+      const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints != null && navigator.maxTouchPoints > 0);
+      const hasHeavy3D = !!document.getElementById('cinematic-canvas') || !!document.getElementById('canvas-wrapper');
+      const disableSyncTouch = isTouch && hasHeavy3D;
+
       const lenis = new Lenis({
         duration: 2.4,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         wheelMultiplier: 0.7,
-        syncTouch: true,
+        syncTouch: !disableSyncTouch,
         syncTouchLerp: 0.04,
         touchInertiaExponent: 1.2,
         touchMultiplier: 0.8,

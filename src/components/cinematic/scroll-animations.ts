@@ -204,7 +204,7 @@ export function initSectionConnectors(): void {
         trigger: connector,
         start: 'top 90%',
         end: 'bottom 60%',
-        scrub: 0.5,
+        scrub: 2,
         onUpdate(self) {
           if (dot) {
             dot.style.opacity = String(Math.min(self.progress * 2, 1));
