@@ -73,7 +73,11 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       gsap.registerPlugin(ScrollTrigger);
 
       const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints != null && navigator.maxTouchPoints > 0);
-      const hasHeavy3D = !!document.getElementById('cinematic-canvas') || !!document.getElementById('canvas-wrapper');
+
+      // Only count 3D as heavy if the canvas is actually rendering (visible),
+      // not just present in DOM (mobile hides it with display:none).
+      const canvasWrapper = document.getElementById('canvas-wrapper');
+      const hasHeavy3D = canvasWrapper != null && canvasWrapper.style.display !== 'none';
       const disableSyncTouch = isTouch && hasHeavy3D;
 
       // Normalize scroll speed across pages with different content heights.
@@ -82,18 +86,17 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       const scrollPages = docHeight / vpHeight;
       const referencePages = 12;
 
-      // Work detail pages: faster, snappier scroll — no speed dampening
       const isWorkPage = window.location.pathname.startsWith('/work');
 
       const lenis = new Lenis({
-        duration: isWorkPage ? 0.8 : 1.2,
+        duration: isWorkPage ? 1.0 : 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        wheelMultiplier: isWorkPage ? (isTouch ? 1.2 : 0.5) : 0.7,
+        wheelMultiplier: isWorkPage ? (isTouch ? 1.0 : 0.5) : 0.7,
         syncTouch: !disableSyncTouch,
-        syncTouchLerp: isWorkPage ? 0.06 : 0.04,
-        touchInertiaExponent: 1.2,
-        touchMultiplier: isWorkPage ? (isTouch ? 1.2 : 0.5) : 0.8,
+        syncTouchLerp: isWorkPage ? 0.075 : 0.05,
+        touchInertiaExponent: isWorkPage ? 1.5 : 1.2,
+        touchMultiplier: isWorkPage ? (isTouch ? 1.0 : 0.5) : 0.6,
         virtualScroll: (e: { deltaY: number; deltaX: number }) => {
           // Skip speed normalization on work pages — they're shorter by design
           if (isWorkPage) return;
