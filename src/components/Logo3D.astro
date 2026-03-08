@@ -21,6 +21,8 @@
       __logo3dShatterReady?: boolean;
       __logo3dPlayShatter?: () => void;
       __logo3dTriggerShatter?: boolean;
+      __logoShatterComplete?: boolean;
+      __onLogoShatterComplete?: () => void;
     }
   }
 
@@ -44,6 +46,13 @@
       splinterGrouping: 0.55,
       explosionStrength: isMobile ? 3.5 : 4.5,
       rotationStrength: isMobile ? 12.0 : 18.0,
+      onComplete: () => {
+        // Signal to CinematicHero that logo shatter assembly is done
+        window.__logoShatterComplete = true;
+        if (window.__onLogoShatterComplete) {
+          window.__onLogoShatterComplete();
+        }
+      },
     }).then((instance) => {
       window.__logo3dShatterReady = true;
       window.__logo3dPlayShatter = () => {

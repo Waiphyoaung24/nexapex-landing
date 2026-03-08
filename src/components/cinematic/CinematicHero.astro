@@ -17,11 +17,11 @@ import Logo3D from '../Logo3D.astro';
   <p class="font-m text-[10px] tracking-[3px] uppercase text-dim mt-4">Loading Experience</p>
 </div>
 
-<!-- 3D Canvas wrapper (desktop/tablet) -->
+<!-- 3D Canvas wrapper (desktop/tablet) — starts hidden, revealed after cinematic load -->
 <div
   id="canvas-wrapper"
   class="fixed inset-0 w-full h-screen z-0"
-  style="display: none;"
+  style="display: none; opacity: 0;"
 >
   <canvas id="cinematic-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
 </div>
@@ -101,7 +101,7 @@ import Logo3D from '../Logo3D.astro';
 <!-- Reduced motion fallback -->
 <div id="reduced-motion-fallback" class="relative flex flex-col items-center justify-center" style="height: 100vh; display: none; background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);">
   <div class="w-32 h-32 mb-8" style="filter: drop-shadow(0 0 50px rgba(148,252,255,0.1));">
-    <img src="/full_color_logo.png" alt="NexApex" class="w-full h-full object-contain" />
+    <img src="/full_color_logo.svg" alt="NexApex" class="w-full h-full object-contain" />
   </div>
   <p class="font-m text-[11px] md:text-[0.85vw] tracking-[0.45em] text-dim drop-shadow-lg mb-3">AI LABS FOR REAL-WORLD OPERATIONS</p>
   <h1 class="font-d font-bold text-gradient-hero text-center px-6 leading-[1.05] mt-5"
@@ -187,6 +187,14 @@ import Logo3D from '../Logo3D.astro';
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // ── Global bridge for logo shatter completion ──
+  declare global {
+    interface Window {
+      __logoShatterComplete?: boolean;
+      __onLogoShatterComplete?: () => void;
+    }
+  }
+
   function getDeviceTier(): 'desktop' | 'tablet' | 'mobile' {
     const width = window.innerWidth;
     if (width < 768) return 'mobile';
@@ -226,17 +234,16 @@ import Logo3D from '../Logo3D.astro';
     loader.remove();
     reducedMotionFallback.style.display = '';
   } else if (!webgl2) {
-    // Only fall back when WebGL2 is truly unavailable
     loader.remove();
     mobileFallback.style.display = '';
     initMobileFallback();
   } else {
-    canvasWrapper.style.display = '';
     heroLogo3d.style.display = '';
     scrollArrow.style.display = '';
     gradientBridge.style.display = '';
     cubeSection.style.display = '';
     scrollContainer.style.display = '';
+    canvasWrapper.style.display = '';
     if (deviceTier === 'mobile') {
       scrollContainer.style.height = '400vh';
     }
@@ -244,13 +251,55 @@ import Logo3D from '../Logo3D.astro';
   }
 
   function triggerLogoShatter() {
-    // If Logo3D shatter is already initialized, play immediately
     if (window.__logo3dPlayShatter) {
       window.__logo3dPlayShatter();
     } else {
-      // Signal that we're ready — Logo3D will play once it initializes
       (window as any).__logo3dTriggerShatter = true;
     }
+  }
+
+  /**
+   * Set up scroll-driven transitions after cinematic engine loads.
+   */
+  function setupScrollDrivenTransition(engine: any) {
+    // Set up the engine scroll timeline and other scroll features immediately
+    engine.setupScrollTimeline(canvasWrapper, gradientBridge, scrollArrow);
+
+    // Show cinematic canvas immediately
+    canvasWrapper.style.opacity = '1';
+
+    // ── Scroll-driven Logo Fade Out ──
+    ScrollTrigger.create({
+      trigger: scrollContainer,
+      start: 'top top',
+      end: '10% top',
+      scrub: 2,
+      onUpdate: (self: any) => {
+        const p = self.progress;
+        heroLogo3d.style.opacity = String(1 - p);
+        heroLogo3d.style.transform = `scale(${1 + p * 0.05 - p * p * 0.15})`;
+
+        if (p >= 0.98) {
+          heroLogo3d.style.display = 'none';
+        } else {
+          heroLogo3d.style.display = '';
+        }
+      },
+    });
+
+    import('./cube-scroll').then(({ initCubeScroll }) => {
+      initCubeScroll();
+    });
+
+    import('./text-overlays').then(({ createTextOverlays, initTextAnimations }) => {
+      const textElements = createTextOverlays(document.body);
+      initTextAnimations(textElements, scrollContainer);
+    });
+
+    import('./progress-bar').then(({ createProgressBar, initProgressBar }) => {
+      createProgressBar(document.body);
+      initProgressBar(scrollContainer);
+    });
   }
 
   function initMobileFallback() {
@@ -309,48 +358,30 @@ import Logo3D from '../Logo3D.astro';
       particleCount,
       dpr,
       onLoaded: () => {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.remove(), 600);
+        // Use queueMicrotask to avoid TDZ — on mobile, onLoaded fires synchronously
+        // during the CinematicEngine constructor, before `engine` is assigned.
+        queueMicrotask(() => {
+          // Start engine but keep canvas hidden — render warm-up frames
+          // so GPU compiles shaders before the user sees anything (prevents lag).
+          engine.start();
 
-        // Trigger logo shatter assembly animation
-        triggerLogoShatter();
-
-        engine.setupScrollTimeline(canvasWrapper, gradientBridge, scrollArrow);
-
-        // ── Scroll-driven Logo Fade Out ──
-        ScrollTrigger.create({
-          trigger: scrollContainer,
-          start: 'top top',
-          end: '10% top',
-          scrub: 0.3,
-          onUpdate: (self: any) => {
-            const p = self.progress;
-            heroLogo3d.style.opacity = String(1 - p);
-            heroLogo3d.style.transform = `scale(${1 + p * 0.05 - p * p * 0.15})`;
-
-            if (p >= 0.98) {
-              heroLogo3d.style.display = 'none';
-            } else {
-              heroLogo3d.style.display = '';
+          // Wait for a few frames to render off-screen, then reveal
+          let warmupFrames = 0;
+          const warmupTarget = deviceTier === 'mobile' ? 8 : 4;
+          function onWarmup() {
+            warmupFrames++;
+            if (warmupFrames < warmupTarget) {
+              requestAnimationFrame(onWarmup);
+              return;
             }
-          },
+            // GPU is warm — reveal everything
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 600);
+            triggerLogoShatter();
+            setupScrollDrivenTransition(engine);
+          }
+          requestAnimationFrame(onWarmup);
         });
-
-        import('./cube-scroll').then(({ initCubeScroll }) => {
-          initCubeScroll();
-        });
-
-        import('./text-overlays').then(({ createTextOverlays, initTextAnimations }) => {
-          const textElements = createTextOverlays(document.body);
-          initTextAnimations(textElements, scrollContainer);
-        });
-
-        import('./progress-bar').then(({ createProgressBar, initProgressBar }) => {
-          createProgressBar(document.body);
-          initProgressBar(scrollContainer);
-        });
-
-        engine.start();
       },
     });
 
@@ -359,6 +390,5 @@ import Logo3D from '../Logo3D.astro';
       const y = (e.clientY / window.innerHeight) * 2 - 1;
       engine.onMouseMove(x, y);
     });
-
   }
 </script>

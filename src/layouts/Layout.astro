@@ -55,10 +55,33 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
       gsap.registerPlugin(ScrollTrigger);
 
+      const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints != null && navigator.maxTouchPoints > 0);
+      const hasHeavy3D = !!document.getElementById('cinematic-canvas') || !!document.getElementById('canvas-wrapper');
+      const disableSyncTouch = isTouch && hasHeavy3D;
+
+      // Normalize scroll speed across pages with different content heights.
+      const docHeight = document.documentElement.scrollHeight;
+      const vpHeight = window.innerHeight;
+      const scrollPages = docHeight / vpHeight;
+      const referencePages = 12;
+
       const lenis = new Lenis({
         duration: 1.2,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
+        wheelMultiplier: 0.7,
+        syncTouch: !disableSyncTouch,
+        syncTouchLerp: 0.04,
+        touchInertiaExponent: 1.2,
+        touchMultiplier: 0.8,
+        virtualScroll: (e: { deltaY: number; deltaX: number }) => {
+          if (scrollPages < referencePages) {
+            const ratio = scrollPages / referencePages;
+            const scale = Math.max(0.45, ratio * ratio);
+            e.deltaY *= scale;
+            e.deltaX *= scale;
+          }
+        },
       });
 
       // Sync Lenis scroll position → GSAP ScrollTrigger
