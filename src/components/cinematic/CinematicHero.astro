@@ -78,7 +78,14 @@ import Logo3D from '../Logo3D.astro';
     style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
   >
     <div id="mobile-hero-content" class="flex flex-col items-center text-center px-6">
-      <div class="w-16 h-16 mb-8"></div>
+      <div class="mobile-hero-logo w-24 h-24 mb-10">
+        <img
+          src="/outline_iconmark.png"
+          alt="NexApex"
+          class="w-full h-full object-contain"
+          loading="eager"
+        />
+      </div>
       <p class="font-m text-[11px] tracking-[0.45em] text-dim drop-shadow-lg mb-3">AI LABS FOR REAL-WORLD OPERATIONS</p>
       <h1 class="font-d font-bold leading-[1.1] tracking-[0.02em] text-gradient-hero mt-5"
         style="font-size: clamp(32px, 10vw, 52px);"
@@ -113,6 +120,32 @@ import Logo3D from '../Logo3D.astro';
 
 <!-- ═══ Prelude section styles ═══ -->
 <style is:global>
+  /* Mobile hero animated logo */
+  .mobile-hero-logo {
+    animation: mobileLogo 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px rgba(148, 252, 255, 0.25))
+            drop-shadow(0 0 60px rgba(148, 252, 255, 0.1));
+  }
+
+  @keyframes mobileLogo {
+    0%, 100% {
+      filter: drop-shadow(0 0 24px rgba(148, 252, 255, 0.25))
+              drop-shadow(0 0 60px rgba(148, 252, 255, 0.1));
+      transform: scale(1);
+    }
+    50% {
+      filter: drop-shadow(0 0 36px rgba(148, 252, 255, 0.45))
+              drop-shadow(0 0 80px rgba(148, 252, 255, 0.2));
+      transform: scale(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-hero-logo {
+      animation: none;
+    }
+  }
+
   /* Logo */
   .prelude-logo {
     margin-bottom: 2rem;

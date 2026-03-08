@@ -12,7 +12,6 @@
 </div>
 
 <script>
-  import { createLogoShatter } from './cinematic/logo-shatter';
 
   // Global bridges
   declare global {
@@ -26,26 +25,44 @@
     }
   }
 
-  function initLogo3D() {
+  // Bail out on mobile — no 3D loading at all
+  const isMobile = window.innerWidth < 768
+    || ('ontouchstart' in window && window.innerWidth < 1024);
+
+  if (isMobile) {
+    // No-op shatter bridge so CinematicHero doesn't wait forever
+    window.__logo3dShatterReady = true;
+    window.__logo3dPlayShatter = () => {
+      window.__logoShatterComplete = true;
+      if (window.__onLogoShatterComplete) window.__onLogoShatterComplete();
+    };
+    if (window.__logo3dTriggerShatter) window.__logo3dPlayShatter();
+  }
+
+  async function initLogo3D() {
+    if (isMobile) return;
+
     const shatterCanvas = document.getElementById('logo3d-shatter') as HTMLCanvasElement;
     const wrapper = document.getElementById('logo3d-wrapper')!;
     if (!shatterCanvas || !wrapper) return;
 
     const w = wrapper.clientWidth || 380;
     const h = wrapper.clientHeight || 380;
-    const isMobile = window.innerWidth < 768;
+
+    // Dynamic import — Three.js + d3-delaunay only downloaded on desktop
+    const { createLogoShatter } = await import('./cinematic/logo-shatter');
 
     createLogoShatter({
       canvas: shatterCanvas,
       logoUrl: '/outline_iconmark.png',
       width: w,
       height: h,
-      duration: isMobile ? 2.8 : 3.5,
-      baseSplinters: isMobile ? 20 : 35,
-      tinySplinters: isMobile ? 400 : 1200,
+      duration: 3.5,
+      baseSplinters: 35,
+      tinySplinters: 1200,
       splinterGrouping: 0.55,
-      explosionStrength: isMobile ? 3.5 : 4.5,
-      rotationStrength: isMobile ? 12.0 : 18.0,
+      explosionStrength: 4.5,
+      rotationStrength: 18.0,
       onComplete: () => {
         // Signal to CinematicHero that logo shatter assembly is done
         window.__logoShatterComplete = true;
@@ -67,8 +84,8 @@
     });
   }
 
-  // ── Init — handle display:none parent ──
-  if (typeof window !== 'undefined') {
+  // ── Init — handle display:none parent (desktop only) ──
+  if (typeof window !== 'undefined' && !isMobile) {
     function tryInit() {
       const wrapper = document.getElementById('logo3d-wrapper');
       if (!wrapper) return;

@@ -2,16 +2,18 @@
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
 const {
   title = 'NexApex — AI Labs for Real-World Intelligence',
   description = 'Bangkok-based AI lab building intelligent systems for hospitality, manufacturing, and retail across Southeast Asia. From dynamic pricing to factory automation.',
+  ogImage: ogImageProp,
 } = Astro.props;
 
 const siteName = 'NexApex';
 const siteUrl = 'https://www.nexapex.ai';
-const ogImage = `${siteUrl}/full_color_logo.png`;
+const ogImage = ogImageProp ? (ogImageProp.startsWith('http') ? ogImageProp : `${siteUrl}${ogImageProp}`) : `${siteUrl}/full_color_logo.png`;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 ---
 
@@ -31,6 +33,10 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content={siteName} />
+    <meta property="og:image:width" content="1080" />
+    <meta property="og:image:height" content="1080" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -39,6 +45,17 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
     <meta name="twitter:image" content={ogImage} />
 
     <title>{title}</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "NexApex",
+      "url": "https://www.nexapex.ai",
+      "logo": "https://www.nexapex.ai/full_color_logo.png",
+      "description": description,
+      "sameAs": []
+    })}></script>
   </head>
   <body class="font-b bg-bg text-white overflow-x-hidden antialiased">
     <!-- Custom sci-fi cursor (desktop only) -->
