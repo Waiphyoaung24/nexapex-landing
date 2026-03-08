@@ -233,7 +233,8 @@ import Logo3D from '../Logo3D.astro';
   if (reducedMotion) {
     loader.remove();
     reducedMotionFallback.style.display = '';
-  } else if (!webgl2) {
+  } else if (!webgl2 || deviceTier === 'mobile') {
+    // Mobile gets lightweight fallback — 3D engine causes scroll lag
     loader.remove();
     mobileFallback.style.display = '';
     initMobileFallback();
@@ -244,9 +245,6 @@ import Logo3D from '../Logo3D.astro';
     cubeSection.style.display = '';
     scrollContainer.style.display = '';
     canvasWrapper.style.display = '';
-    if (deviceTier === 'mobile') {
-      scrollContainer.style.height = '400vh';
-    }
     initCinematicHero();
   }
 
