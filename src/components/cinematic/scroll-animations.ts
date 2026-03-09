@@ -204,7 +204,7 @@ export function initSectionConnectors(): void {
         trigger: connector,
         start: 'top 90%',
         end: 'bottom 60%',
-        scrub: 0.5,
+        scrub: isMobile() ? true : 0.5,
         onUpdate(self) {
           if (dot) {
             dot.style.opacity = String(Math.min(self.progress * 2, 1));
@@ -394,7 +394,7 @@ export function initProcessFlow(): void {
         trigger: processSection,
         start: 'top 70%',
         end: 'bottom 40%',
-        scrub: 0.6,
+        scrub: isMobile() ? true : 0.6,
       },
     });
   }
