@@ -18,7 +18,6 @@ export interface ScenePerspective {
   scrollProgress: { start: number; end: number };
   hideText?: boolean;
   isHero?: boolean;
-  isFinal?: boolean;
 }
 
 export const scenePerspectives: ScenePerspective[] = [
@@ -104,7 +103,6 @@ export const scenePerspectives: ScenePerspective[] = [
     camera: { x: 2, y: 1, z: 14 },
     target: { x: 0, y: 0, z: 0 },
     scrollProgress: { start: 92, end: 100 },
-    isFinal: true,
   },
 ];
 
