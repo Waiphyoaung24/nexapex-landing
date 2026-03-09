@@ -131,8 +131,11 @@ export function initTextAnimations(
             );
           }
 
-          // Hold — stays visible through end of scroll
-          ftl.to({}, { duration: 0.4 });
+          // Brief hold
+          ftl.to({}, { duration: 0.3 });
+
+          // Fade out: entire container dissolves upward
+          ftl.to(textEl, { opacity: 0, y: -20, duration: 0.25, ease: 'power2.in' });
           return;
         }
 
