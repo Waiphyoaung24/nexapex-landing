@@ -28,6 +28,6 @@ RUN rm -f /etc/nginx/conf.d/default.conf.bak
 
 EXPOSE 85
 
-# Health check — use lightweight /health endpoint for faster readiness
-HEALTHCHECK --interval=10s --timeout=3s --start-period=2s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:85/health || exit 1
+# Health check — use 127.0.0.1 to avoid IPv6 resolution issues in Alpine
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -q -O /dev/null http://127.0.0.1:85/health || exit 1
