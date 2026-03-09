@@ -73,8 +73,8 @@ import Logo3D from '../Logo3D.astro';
 <div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
 
 <!-- Mobile fallback (no WebGL) -->
-<div id="mobile-fallback" class="relative" style="height: 260vh; display: none;">
-  <div class="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
+<div id="mobile-fallback" class="relative" style="height: 320vh; display: none;">
+  <div id="mobile-panel" class="h-screen flex flex-col items-center justify-center overflow-hidden"
     style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
   >
     <div id="mobile-hero-content" class="flex flex-col items-center text-center px-6">
@@ -367,61 +367,107 @@ import Logo3D from '../Logo3D.astro';
 
   function initMobileFallback() {
     const heroContent = document.getElementById('mobile-hero-content')!;
-    const mobileTexts = mobileFallback.querySelectorAll<HTMLElement>('.mobile-text');
+    const stickyPanel  = document.getElementById('mobile-panel')!;
+    const scrollHint   = mobileFallback.querySelector<HTMLElement>('.absolute.bottom-8')!;
+    const mobileTexts  = mobileFallback.querySelectorAll<HTMLElement>('.mobile-text');
 
-    // Hero content fade and slide
+    // ── 0. Pin the panel for the full 320vh using GSAP (fixes CSS sticky math) ──
+    // CSS sticky releases early when panel bottom exits the parent container.
+    // GSAP pin uses position:fixed internally and stays locked for the full range.
+    ScrollTrigger.create({
+      trigger: mobileFallback,
+      start: 'top top',
+      end: 'bottom top',
+      pin: stickyPanel,
+      pinSpacing: false,
+      anticipatePin: 1,
+    });
+
+    // ── 1. Hero: fade + lift out by 16% ──────────────────────────────────
     gsap.to(heroContent, {
       opacity: 0,
-      y: -40,
+      y: -36,
       ease: 'none',
       scrollTrigger: {
         trigger: mobileFallback,
         start: 'top top',
-        end: '30% top',
-        scrub: 0.1,
+        end: '16% top',
+        scrub: 0.4,
       },
     });
 
-    // Sequential text reveals — 5 scenes evenly across 25%–98% scroll range
-    const totalTexts = mobileTexts.length;
-    const step = 14; // % per scene
+    // Scroll hint fades earlier (users have started scrolling)
+    gsap.to(scrollHint, {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: mobileFallback,
+        start: '3% top',
+        end: '10% top',
+        scrub: 0.4,
+      },
+    });
+
+    // ── 2. Sequential text scenes: 18% → 86% (each scene = ~13.6%) ──────
+    // Layout: in(35%) — hold(30%) — out(35%) per scene
+    // Finale (last): in(40%) only — then panel dissolves
+    const totalTexts = mobileTexts.length;  // 5
+    const RANGE_START = 18;
+    const RANGE_END   = 86;
+    const sceneStep   = (RANGE_END - RANGE_START) / totalTexts; // ≈13.6 %
+
     mobileTexts.forEach((el, i) => {
-      const isFinale = i === totalTexts - 1;
-      const start = 26 + i * step;
-      const end = start + step;
+      const isFinale   = i === totalTexts - 1;
+      const sceneStart = RANGE_START + i * sceneStep;
+      const sceneEnd   = sceneStart + sceneStep;
 
       if (isFinale) {
-        // Finale: fade in and stay
+        // WHERE AI MEETS REALITY — fade in, stay; panel handles the exit
         gsap.fromTo(el,
-          { opacity: 0, y: 30, scale: 0.96 },
+          { opacity: 0, y: 22, scale: 0.97 },
           {
             opacity: 1, y: 0, scale: 1,
-            ease: 'power3.out',
+            ease: 'none',
             scrollTrigger: {
               trigger: mobileFallback,
-              start: `${start}% top`,
-              end: `${start + 8}% top`,
-              scrub: 0.3,
+              start: `${sceneStart}% top`,
+              end: `${sceneStart + sceneStep * 0.45}% top`,
+              scrub: 0.5,
             },
-          }
+          },
         );
       } else {
+        // in → hold → out (proportional durations inside timeline)
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: mobileFallback,
-            start: `${start}% top`,
-            end: `${end}% top`,
-            scrub: 0.1,
+            start: `${sceneStart}% top`,
+            end: `${sceneEnd}% top`,
+            scrub: 0.4,
           },
         });
-        tl.fromTo(el,
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, ease: 'power2.out', duration: 0.35 }
-        ).to(el,
-          { opacity: 0, y: -24, ease: 'power2.in', duration: 0.35 },
-          '+=0.3'
-        );
+        tl
+          .fromTo(el,
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, ease: 'none', duration: 0.35 },
+          )
+          .to(el, { opacity: 1, y: 0, ease: 'none', duration: 0.30 })
+          .to(el, { opacity: 0, y: -22, ease: 'none', duration: 0.35 });
       }
+    });
+
+    // ── 3. Cinematic dissolve → next section (87% → 100%) ────────────────
+    // Fades the entire sticky panel so content below is revealed as the
+    // user scrolls through the final stretch of the hero section.
+    gsap.to(stickyPanel, {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: mobileFallback,
+        start: '87% top',
+        end: '100% top',
+        scrub: 0.6,
+      },
     });
   }
 
@@ -429,6 +475,7 @@ import Logo3D from '../Logo3D.astro';
     const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement;
     const particleCount = deviceTier === 'mobile' ? 200 : deviceTier === 'tablet' ? 400 : 800;
     const dpr: [number, number] = deviceTier === 'mobile' ? [1, 1] : deviceTier === 'tablet' ? [1, 1.5] : [1, 2];
+
 
     const { CinematicEngine } = await import('./cinematic-engine');
 
