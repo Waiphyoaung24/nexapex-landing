@@ -337,32 +337,37 @@ import Logo3D from '../Logo3D.astro';
     const heroContent = document.getElementById('mobile-hero-content')!;
     const mobileTexts = mobileFallback.querySelectorAll<HTMLElement>('.mobile-text');
 
-    ScrollTrigger.create({
-      trigger: mobileFallback,
-      start: '5% top',
-      end: '30% top',
-      scrub: true,
-      onUpdate: (self) => {
-        heroContent.style.opacity = String(1 - self.progress);
-        heroContent.style.transform = `translateY(${self.progress * -30}px)`;
+    // Hero content fade and slide
+    gsap.to(heroContent, {
+      opacity: 0,
+      y: -40,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: mobileFallback,
+        start: 'top top',
+        end: '30% top',
+        scrub: 0.1,
       },
     });
 
+    // Sequential text reveals
     mobileTexts.forEach((el, i) => {
-      ScrollTrigger.create({
-        trigger: mobileFallback,
-        start: `${30 + i * 20}% top`,
-        end: `${50 + i * 20}% top`,
-        scrub: true,
-        onUpdate: (self) => {
-          const p = self.progress;
-          let opacity = 0;
-          if (p < 0.3) opacity = p / 0.3;
-          else if (p < 0.7) opacity = 1;
-          else opacity = 1 - (p - 0.7) / 0.3;
-          el.style.opacity = String(opacity);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mobileFallback,
+          start: `${30 + i * 20}% top`,
+          end: `${50 + i * 20}% top`,
+          scrub: 0.1,
         },
       });
+
+      tl.fromTo(el, 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, ease: 'power2.out', duration: 0.4 }
+      ).to(el,
+        { opacity: 0, y: -20, ease: 'power2.in', duration: 0.4 },
+        '+=0.2'
+      );
     });
   }
 
