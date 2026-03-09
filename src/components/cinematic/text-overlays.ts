@@ -32,6 +32,18 @@ export function createTextOverlays(container: HTMLElement): HTMLElement[] {
           ${perspective.title.split('\n').map((line) => `<span class="block">${line}</span>`).join('')}
         </h2>
       `;
+    } else if (!perspective.hideText && perspective.isFinal) {
+      // Final perspective: large title + subtitle with divider
+      el.innerHTML = `
+        <div class="flex flex-col items-center gap-4 max-md:gap-3">
+          <div class="cinematic-final-line w-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent"></div>
+          <h2 class="font-d text-[5vw] max-md:text-[8vw] font-bold leading-[1.05] tracking-[0.02em] text-gradient-hero drop-shadow-2xl text-center">
+            ${perspective.title.split('\n').map((line: string) => `<span class="block">${line}</span>`).join('')}
+          </h2>
+          ${perspective.subtitle ? `<p>${splitTextToChars(perspective.subtitle, 'font-b text-[1.1vw] max-md:text-sm leading-[1.4] text-dim font-light drop-shadow-lg')}</p>` : ''}
+          <div class="cinematic-final-line w-0 h-px bg-gradient-to-r from-transparent via-cyan/60 to-transparent"></div>
+        </div>
+      `;
     } else if (!perspective.hideText) {
       // Standard perspectives: plain text title (for gradient) + character-split subtitle
       el.innerHTML = `
@@ -68,6 +80,59 @@ export function initTextAnimations(
 
         if (perspective.hideText) {
           gsap.set(textEl, { opacity: 0, pointerEvents: 'none' });
+          return;
+        }
+
+        // Final perspective: cinematic entrance that holds (no exit)
+        if (perspective.isFinal) {
+          const finalH2 = textEl.querySelector('h2');
+          const finalChars = textEl.querySelectorAll('p .inline-block');
+          const finalLines = textEl.querySelectorAll('.cinematic-final-line');
+
+          gsap.set(textEl, { opacity: 0 });
+
+          const ftl = gsap.timeline({
+            scrollTrigger: {
+              trigger: scrollContainer,
+              start: `${perspective.scrollProgress.start}% top`,
+              end: `${perspective.scrollProgress.end}% top`,
+              scrub: 0.5,
+            },
+          });
+          if (ftl.scrollTrigger) triggers.push(ftl.scrollTrigger);
+
+          // Fade in container
+          ftl.to(textEl, { opacity: 1, duration: 0.15, ease: 'power2.out' });
+
+          // Expand divider lines from center
+          if (finalLines.length > 0) {
+            ftl.to(Array.from(finalLines), {
+              width: '120px',
+              duration: 0.3,
+              ease: 'power2.out',
+            }, '<');
+          }
+
+          // Title: scale up from slight shrink
+          if (finalH2) {
+            ftl.fromTo(finalH2,
+              { scale: 0.9, opacity: 0, y: 20 },
+              { scale: 1, opacity: 1, y: 0, duration: 0.25, ease: 'expo.out' },
+              '<0.05',
+            );
+          }
+
+          // Subtitle chars: stagger in
+          if (finalChars.length > 0) {
+            ftl.fromTo(Array.from(finalChars),
+              { y: 12, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.2, stagger: -0.008, ease: 'power2.out' },
+              '<0.1',
+            );
+          }
+
+          // Hold — stays visible through end of scroll
+          ftl.to({}, { duration: 0.4 });
           return;
         }
 
