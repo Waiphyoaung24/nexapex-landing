@@ -96,7 +96,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
         syncTouch: !disableSyncTouch,
         syncTouchLerp: isWorkPage ? 0.075 : 0.05,
         touchInertiaExponent: isWorkPage ? 1.5 : 1.2,
-        touchMultiplier: isWorkPage ? (isTouch ? 1.1 : 0.5) : 0.9,
+        touchMultiplier: isWorkPage ? (isTouch ? 1.5 : 0.5) : 1.5,
         virtualScroll: (e: { deltaY: number; deltaX: number }) => {
           // Skip speed normalization on work pages — they're shorter by design
           if (isWorkPage) return;
