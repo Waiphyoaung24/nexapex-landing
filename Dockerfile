@@ -20,14 +20,14 @@ FROM nginx:alpine
 # Copy built static files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Custom nginx config (port 3004)
+# Custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Remove default nginx config to avoid conflicts
 RUN rm -f /etc/nginx/conf.d/default.conf.bak
 
-EXPOSE 3004
+EXPOSE 85
 
 # Health check — use lightweight /health endpoint for faster readiness
 HEALTHCHECK --interval=10s --timeout=3s --start-period=2s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3004/health || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:85/health || exit 1
