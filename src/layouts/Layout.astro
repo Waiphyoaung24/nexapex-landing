@@ -76,7 +76,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints != null && navigator.maxTouchPoints > 0);
 
       // Desktop/Mobile specific multipliers
-      const desktopMultiplier = isWorkPage ? 0.6 : 0.4;
+      const desktopMultiplier = isWorkPage ? 0.6 : 0.24;
       const mobileMultiplier = isWorkPage ? 0.8 : 1.3;
 
       const lenis = new Lenis({

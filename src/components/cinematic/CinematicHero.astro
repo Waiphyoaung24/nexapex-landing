@@ -73,7 +73,7 @@ import Logo3D from '../Logo3D.astro';
 <div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
 
 <!-- Mobile fallback (no WebGL) -->
-<div id="mobile-fallback" class="relative" style="height: 180vh; display: none;">
+<div id="mobile-fallback" class="relative" style="height: 260vh; display: none;">
   <div class="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
     style="background: radial-gradient(ellipse at 50% 40%, rgba(26,38,48,0.6), #0e1418 70%);"
   >
@@ -94,9 +94,41 @@ import Logo3D from '../Logo3D.astro';
       </h1>
     </div>
 
-    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">INTELLIGENCE &middot; INTEGRATION &middot; OPTIMIZATION</p>
-    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">SCALABLE AI FOR REAL-WORLD OPERATIONS</p>
-    <p class="mobile-text absolute font-d font-bold text-xl tracking-tight text-white text-center px-8 opacity-0" style="top: 58%;">REACH THE PEAK</p>
+    <!-- Scene 1: INTELLIGENCE -->
+    <div class="mobile-text absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 45%;">
+      <p class="font-d font-bold tracking-tight text-white" style="font-size: clamp(28px, 9vw, 40px);">INTELLIGENCE</p>
+      <p class="font-b text-xs text-dim mt-2 tracking-[0.1em]">Systems That Learn, Adapt &amp; Decide</p>
+    </div>
+
+    <!-- Scene 2: INTEGRATION -->
+    <div class="mobile-text absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 45%;">
+      <p class="font-d font-bold tracking-tight text-white" style="font-size: clamp(28px, 9vw, 40px);">INTEGRATION</p>
+      <p class="font-b text-xs text-dim mt-2 tracking-[0.1em]">Connecting Digital Systems to Physical Operations</p>
+    </div>
+
+    <!-- Scene 3: OPTIMIZATION -->
+    <div class="mobile-text absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 45%;">
+      <p class="font-d font-bold tracking-tight text-white" style="font-size: clamp(28px, 9vw, 40px);">OPTIMIZATION</p>
+      <p class="font-b text-xs text-dim mt-2 tracking-[0.1em]">Data-Driven Decisions at Every Layer</p>
+    </div>
+
+    <!-- Scene 4: REACH THE PEAK -->
+    <div class="mobile-text absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 45%;">
+      <p class="font-d font-bold tracking-tight text-white" style="font-size: clamp(28px, 9vw, 40px);">REACH THE PEAK</p>
+      <p class="font-b text-xs text-dim mt-2 tracking-[0.1em]">NEX APEX</p>
+    </div>
+
+    <!-- Scene 5: FINALE — WHERE AI MEETS REALITY -->
+    <div class="mobile-text mobile-text-finale absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 38%;">
+      <h2 class="font-d font-bold text-gradient-hero leading-[1.05]"
+        style="font-size: clamp(36px, 11vw, 56px); letter-spacing: 0.02em;"
+      >
+        WHERE AI<br />MEETS REALITY
+      </h2>
+      <p class="font-b text-sm text-dim mt-4 tracking-wide leading-[1.6] max-w-[280px]">
+        Built for Real-World Operations Across Southeast Asia
+      </p>
+    </div>
 
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
       <div class="w-px h-10 bg-gradient-to-b from-cyan/40 to-transparent animate-pulse-line"></div>
@@ -350,24 +382,46 @@ import Logo3D from '../Logo3D.astro';
       },
     });
 
-    // Sequential text reveals
+    // Sequential text reveals — 5 scenes evenly across 25%–98% scroll range
+    const totalTexts = mobileTexts.length;
+    const step = 14; // % per scene
     mobileTexts.forEach((el, i) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: mobileFallback,
-          start: `${30 + i * 20}% top`,
-          end: `${50 + i * 20}% top`,
-          scrub: 0.1,
-        },
-      });
+      const isFinale = i === totalTexts - 1;
+      const start = 26 + i * step;
+      const end = start + step;
 
-      tl.fromTo(el, 
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, ease: 'power2.out', duration: 0.4 }
-      ).to(el,
-        { opacity: 0, y: -20, ease: 'power2.in', duration: 0.4 },
-        '+=0.2'
-      );
+      if (isFinale) {
+        // Finale: fade in and stay
+        gsap.fromTo(el,
+          { opacity: 0, y: 30, scale: 0.96 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: mobileFallback,
+              start: `${start}% top`,
+              end: `${start + 8}% top`,
+              scrub: 0.3,
+            },
+          }
+        );
+      } else {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: mobileFallback,
+            start: `${start}% top`,
+            end: `${end}% top`,
+            scrub: 0.1,
+          },
+        });
+        tl.fromTo(el,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, ease: 'power2.out', duration: 0.35 }
+        ).to(el,
+          { opacity: 0, y: -24, ease: 'power2.in', duration: 0.35 },
+          '+=0.3'
+        );
+      }
     });
   }
 
