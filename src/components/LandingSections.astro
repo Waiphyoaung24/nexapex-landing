@@ -65,11 +65,12 @@ const industries = [
       OUR SOLUTIONS
     </h2>
 
-    <div class="grid md:grid-cols-3 gap-4 md:gap-8" data-reveal-stagger>
+    <div class="grid md:grid-cols-3 gap-4 md:gap-6" data-reveal-stagger>
       {services.map((service) => (
-        <div class="group relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" data-tilt style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+        <div class="group relative border border-cyan-subtle rounded-2xl p-6 md:p-8 bg-surface/20 backdrop-blur-sm transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" data-tilt style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);" />
-          <div class="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
+          <div class="relative w-11 h-11 md:w-12 md:h-12 mb-5 md:mb-6 flex items-center justify-center border border-cyan/15 rounded-xl text-cyan transition-all duration-300 group-hover:bg-cyan/10 group-hover:border-cyan/30 group-hover:shadow-[0_0_20px_rgba(148,252,255,0.1)]">
             {service.icon === 'ai' && (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3" />
@@ -92,8 +93,8 @@ const industries = [
               </svg>
             )}
           </div>
-          <h3 class="font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{service.title}</h3>
-          <p class="font-b text-dim text-sm md:text-base leading-relaxed">{service.desc}</p>
+          <h3 class="relative font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{service.title}</h3>
+          <p class="relative font-b text-dim text-sm md:text-[15px] leading-[1.7]">{service.desc}</p>
         </div>
       ))}
     </div>
@@ -129,16 +130,21 @@ const industries = [
         </defs>
       </svg>
       {processSteps.map((item, i) => (
-        <div class="relative flex flex-col items-center text-center px-6 md:px-8 py-8 md:py-10" data-reveal="fade-up">
+        <div class="group relative flex flex-col items-center text-center px-6 md:px-8 py-8 md:py-10" data-reveal="fade-up">
           {i < 2 && (
-            <div class="hidden md:block absolute top-16 right-0 w-1/2 h-px bg-gradient-to-r from-cyan/30 to-transparent" />
+            <div class="hidden md:block absolute top-[52px] right-0 w-1/2 h-px bg-gradient-to-r from-cyan/30 to-transparent" />
           )}
           {i > 0 && (
-            <div class="hidden md:block absolute top-16 left-0 w-1/2 h-px bg-gradient-to-l from-cyan/30 to-transparent" />
+            <div class="hidden md:block absolute top-[52px] left-0 w-1/2 h-px bg-gradient-to-l from-cyan/30 to-transparent" />
           )}
-          <span class="font-d text-3xl md:text-4xl font-bold text-cyan/20 mb-3 md:mb-4">{item.step}</span>
+          <div class="relative mb-5 md:mb-6">
+            <div class="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full border border-cyan/15 flex items-center justify-center bg-surface/40 backdrop-blur-sm transition-all duration-500 group-hover:border-cyan/30 group-hover:shadow-[0_0_30px_rgba(148,252,255,0.1)]">
+              <span class="font-d text-2xl md:text-3xl font-bold text-cyan/40 group-hover:text-cyan/70 transition-colors duration-500">{item.step}</span>
+            </div>
+            <div class="absolute inset-0 rounded-full bg-cyan/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          </div>
           <h3 class="font-d text-lg md:text-xl font-semibold tracking-wider text-white mb-2 md:mb-3">{item.title}</h3>
-          <p class="font-b text-dim text-sm md:text-base leading-relaxed max-w-xs">{item.desc}</p>
+          <p class="font-b text-dim text-sm md:text-[15px] leading-[1.7] max-w-xs">{item.desc}</p>
         </div>
       ))}
     </div>
@@ -160,11 +166,12 @@ const industries = [
       OUR ADVANTAGE
     </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8" data-reveal-stagger>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8" data-reveal-stagger>
       {stats.map((stat) => (
-        <div class="text-center py-8 border border-cyan-subtle rounded-[12px]">
-          <span class="block font-d text-4xl md:text-5xl font-bold text-cyan mb-2" data-counter={stat.value}>{stat.value}</span>
-          <span class="font-m text-[11px] tracking-[2px] uppercase text-dim">{stat.label}</span>
+        <div class="group relative text-center py-8 md:py-10 border border-cyan-subtle rounded-2xl bg-surface/30 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 cursor-default">
+          <div class="absolute inset-0 bg-gradient-to-b from-cyan/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <span class="relative block font-d text-4xl md:text-5xl font-bold text-cyan mb-3" style="text-shadow: 0 0 40px rgba(148, 252, 255, 0.2);" data-counter={stat.value}>{stat.value}</span>
+          <span class="relative font-m text-[11px] tracking-[2.5px] uppercase text-dim">{stat.label}</span>
         </div>
       ))}
     </div>
@@ -186,11 +193,12 @@ const industries = [
       BUILT FOR REAL-WORLD OPERATIONS
     </h2>
 
-    <div class="grid md:grid-cols-3 gap-4 md:gap-8" data-reveal-stagger>
+    <div class="grid md:grid-cols-3 gap-4 md:gap-6" data-reveal-stagger>
       {industries.map((industry) => (
-        <div class="group relative border border-cyan-subtle rounded-[14px] p-6 md:p-8 transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 overflow-hidden cursor-pointer" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+        <div class="group relative border border-cyan-subtle rounded-2xl p-6 md:p-8 bg-surface/20 backdrop-blur-sm transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 overflow-hidden cursor-pointer" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);" />
-          <div class="w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6 flex items-center justify-center border border-cyan/20 rounded-xl text-cyan transition-colors duration-300 group-hover:bg-cyan/10">
+          <div class="relative w-11 h-11 md:w-12 md:h-12 mb-5 md:mb-6 flex items-center justify-center border border-cyan/15 rounded-xl text-cyan transition-all duration-300 group-hover:bg-cyan/10 group-hover:border-cyan/30 group-hover:shadow-[0_0_20px_rgba(148,252,255,0.1)]">
             {industry.icon === 'hospitality' && (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 21h18M6 21V9l6-4 6 4v12M9 21v-6h6v6" />
@@ -210,8 +218,8 @@ const industries = [
               </svg>
             )}
           </div>
-          <h3 class="font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{industry.name}</h3>
-          <p class="font-b text-dim text-sm md:text-base leading-relaxed">{industry.desc}</p>
+          <h3 class="relative font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{industry.name}</h3>
+          <p class="relative font-b text-dim text-sm md:text-[15px] leading-[1.7]">{industry.desc}</p>
         </div>
       ))}
     </div>
@@ -241,11 +249,11 @@ const industries = [
       WHO WE ARE
     </h2>
 
-    <div class="space-y-6">
-      <p class="font-b text-base md:text-lg lg:text-xl text-text leading-[1.85]" data-reveal="fade-up">
+    <div class="space-y-7">
+      <p class="font-b text-base md:text-lg lg:text-xl text-text leading-[1.85]" data-reveal="fade-up" style="max-width: 65ch;">
         NexApex is a Bangkok-based AI lab where software meets the physical world. We build intelligent systems that operate across industries — from digital revenue platforms to factory-floor automation.
       </p>
-      <p class="font-b text-base md:text-lg lg:text-xl text-dim leading-[1.85]" data-reveal="fade-up">
+      <p class="font-b text-base md:text-lg lg:text-xl text-dim leading-[1.85]" data-reveal="fade-up" style="max-width: 65ch;">
         Our founding team combines deep technical expertise with hands-on operational experience. We take a lab-driven approach — prototyping fast, deploying with precision, and optimizing continuously. We work with manufacturers, hospitality businesses, and enterprises across Southeast Asia who are ready to replace manual processes with scalable intelligence.
       </p>
     </div>
@@ -258,27 +266,29 @@ const industries = [
 </div>
 
 <!-- 7. CTA BANNER -->
-<section id="contact" class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle bg-surface/50" data-tech-grid data-ambient-particles="6">
-  <div class="max-w-4xl mx-auto text-center">
+<section id="contact" class="relative py-20 md:py-[140px] px-6 md:px-12 border-t border-cyan-subtle overflow-hidden" data-tech-grid data-ambient-particles="6">
+  <!-- Radial glow background -->
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 50%, rgba(148,252,255,0.04) 0%, rgba(22,32,41,0.5) 40%, var(--bg) 70%);" />
+  <div class="relative max-w-4xl mx-auto text-center">
     <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-6"
-      style="font-size: clamp(26px, 3.5vw, 44px); letter-spacing: 1px;"
+      style="font-size: clamp(28px, 4vw, 52px); letter-spacing: 1px;"
     >
       <span class="cta-word inline-block">READY</span> <span class="cta-word inline-block">TO</span> <span class="cta-word inline-block">REACH</span><br /><span class="cta-word inline-block">THE</span> <span class="cta-word inline-block">PEAK?</span>
     </h2>
-    <p class="font-b text-lg text-dim mb-10 tracking-wide leading-[1.6]">
+    <p class="font-b text-lg md:text-xl text-dim mb-12 tracking-wide leading-[1.7] max-w-2xl mx-auto">
       Tell us about your operations — we&apos;ll show you where AI can make the biggest impact.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
       <a
         href="mailto:hello@nexapex.ai"
-        class="font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 bg-red text-white no-underline cursor-pointer rounded-[12px] transition-all duration-500 hover:shadow-[0_16px_48px_rgba(198,53,24,0.35)] hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
+        class="group font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 bg-red text-white no-underline cursor-pointer rounded-xl transition-all duration-500 hover:shadow-[0_16px_48px_rgba(198,53,24,0.4),0_0_0_1px_rgba(198,53,24,0.3)] hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/50 focus-visible:rounded-xl"
         style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
       >
         Start a Conversation
       </a>
       <a
         href="mailto:hello@nexapex.ai"
-        class="font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 border border-cyan/30 text-cyan no-underline cursor-pointer rounded-[12px] transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
+        class="font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 border border-cyan/30 text-cyan no-underline cursor-pointer rounded-xl transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(148,252,255,0.1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded-xl"
       >
         hello@nexapex.ai
       </a>

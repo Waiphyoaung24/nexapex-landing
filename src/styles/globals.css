@@ -94,19 +94,22 @@
     scroll-behavior: smooth;
     /* Firefox */
     scrollbar-width: thin;
-    scrollbar-color: var(--cyan) var(--bg);
+    scrollbar-color: var(--cyan-dim) var(--bg);
   }
 
   /* Chrome, Safari, Edge */
   html::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
   html::-webkit-scrollbar-track {
     background: var(--bg);
   }
   html::-webkit-scrollbar-thumb {
-    background: var(--cyan);
+    background: var(--cyan-dim);
     border-radius: 3px;
+  }
+  html::-webkit-scrollbar-thumb:hover {
+    background: var(--cyan);
   }
 
   @keyframes float {
