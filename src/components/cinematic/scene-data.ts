@@ -93,7 +93,7 @@ export const scenePerspectives: ScenePerspective[] = [
     position: 'center',
     camera: { x: 8, y: 3, z: -6 },
     target: { x: 0, y: 0, z: 0 },
-    scrollProgress: { start: 77.9, end: 92 },
+    scrollProgress: { start: 77.9, end: 82 },
     hideText: true,
   },
   {
@@ -102,7 +102,7 @@ export const scenePerspectives: ScenePerspective[] = [
     position: 'center',
     camera: { x: 2, y: 1, z: 14 },
     target: { x: 0, y: 0, z: 0 },
-    scrollProgress: { start: 92, end: 100 },
+    scrollProgress: { start: 82, end: 100 },
   },
 ];
 
