@@ -74,8 +74,9 @@ Total cinematic height: **700vh** (7 viewports). 8 branded perspectives + 1 hidd
 | 4 | 48–55% | *(hidden)* | — | — | (2, 10, -4) | (0, 5, 0) |
 | 5 | 55–67% | INNOVATION | Where Technology Meets Design | center | (5, 8, 5) | (0, 4, 0) |
 | 6 | 67–78% | PRECISION | Every Detail Matters | bottom-right | (7, 5, 3) | (0, 3, 0) |
-| 7 | 78–88% | NEX APEX | Reach the Peak | top | (4, 10, -6) | (0, 5, 0) |
-| 8 | 88–100% | *(transition)* | — | center | (0, 6, 10) | (0, 3, 0) |
+| 7 | 69.5–77.9% | NEX APEX | Reach the Peak | top | (0, 6, 10) | (0, 0, 0) |
+| 8 | 77.9–92% | *(hidden)* | — | center | (8, 3, -6) | (0, 0, 0) |
+| 9 | 92–100% | WHERE AI MEETS REALITY | Built for Real-World Operations Across Southeast Asia | center | (2, 1, 14) | (0, 0, 0) |
 
 All camera tweens use `ease: 'none'` — linear interpolation. Cinematic feel comes from Lenis momentum.
 
