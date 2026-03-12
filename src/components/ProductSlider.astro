@@ -1,0 +1,138 @@
+---
+import { products } from '../data/products';
+---
+
+<section id="work" class="py-[120px] max-md:py-16 px-6 md:px-12 border-t border-cyan-subtle" data-ambient-particles="12">
+  <div class="max-w-[1400px] mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Products</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-16 md:mb-24" data-reveal="fade-up"
+      style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      IN DEVELOPMENT
+    </h2>
+
+    <!-- Vertical Slider -->
+    <div id="product-slider" class="relative">
+      {products.map((product, i) => (
+        <a
+          href={`/work/${product.slug}`}
+          class="product-slide group relative block mb-8 md:mb-12 last:mb-0 no-underline cursor-pointer"
+          data-product-index={i}
+          style="transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);"
+        >
+          <div class="product-slide-inner relative overflow-hidden rounded-2xl border border-cyan-subtle transition-all duration-600"
+            style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
+          >
+            <!-- Image area -->
+            <div class="product-slide-visual relative overflow-hidden" style="aspect-ratio: 21/9;">
+              <!-- Real product image -->
+              <img
+                src={product.image}
+                alt={product.title}
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+              <!-- Dark overlay for text readability -->
+              <div class="absolute inset-0 bg-bg/40 transition-opacity duration-700 group-hover:bg-bg/30"></div>
+              <!-- Subtle grid pattern overlay -->
+              <div class="absolute inset-0 opacity-20 pointer-events-none"
+                style="background-image: linear-gradient(rgba(148,252,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,252,255,0.04) 1px, transparent 1px); background-size: 40px 40px;"
+              ></div>
+              <!-- Large index number -->
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="product-slide-num font-d text-[60px] md:text-[100px] lg:text-[140px] font-bold leading-none text-white/[0.06] select-none">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+              <!-- Hover glow -->
+              <div class="product-slide-glow absolute inset-0 opacity-0 transition-opacity duration-700 pointer-events-none"
+                style="background: radial-gradient(ellipse at 50% 50%, rgba(148,252,255,0.08) 0%, transparent 70%);"
+              ></div>
+            </div>
+
+            <!-- Text content overlay at bottom -->
+            <div class="product-slide-content absolute bottom-0 left-0 right-0 p-6 md:p-8 lg:p-10"
+              style="background: linear-gradient(to top, rgba(14,20,24,0.95) 0%, rgba(14,20,24,0.7) 60%, transparent 100%);"
+            >
+              <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div>
+                  <span class="inline-block font-m text-[9px] md:text-[10px] tracking-[2px] uppercase text-cyan border border-cyan/20 bg-cyan/[0.06] backdrop-blur-sm rounded-full px-4 py-1.5 mb-3 md:mb-4">
+                    {product.category}
+                  </span>
+                  <h3 class="product-slide-title font-d text-xl md:text-2xl lg:text-3xl font-bold tracking-wider text-white leading-tight">
+                    {product.title}
+                  </h3>
+                  <p class="product-slide-desc font-b text-dim text-sm md:text-base leading-relaxed mt-2 max-w-xl">{product.desc}</p>
+                </div>
+                <div class="product-slide-arrow flex items-center gap-2 text-cyan/50 group-hover:text-cyan transition-colors duration-500 shrink-0">
+                  <span class="font-m text-[10px] tracking-[2px] uppercase hidden md:inline">View Project</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="transition-transform duration-500 group-hover:translate-x-1">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Index number on side (desktop) -->
+          <div class="hidden lg:flex absolute -left-16 top-1/2 -translate-y-1/2 items-center">
+            <span class="font-d text-[13px] font-bold tracking-[3px] text-dim/30 rotate-[-90deg]">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Vertical Slider Styles ── */
+  .product-slide {
+    will-change: transform;
+  }
+
+  .product-slide-inner {
+    transform: scale(0.97);
+    opacity: 0.6;
+  }
+
+  .product-slide.is-active .product-slide-inner {
+    transform: scale(1);
+    opacity: 1;
+    border-color: rgba(148, 252, 255, 0.15);
+  }
+
+  .product-slide.is-active .product-slide-glow {
+    opacity: 1;
+  }
+
+  .product-slide.is-active .product-slide-num {
+    color: rgba(148, 252, 255, 0.07);
+  }
+
+  /* Hover states */
+  .product-slide:hover .product-slide-inner {
+    border-color: rgba(148, 252, 255, 0.2);
+  }
+
+  .product-slide:hover .product-slide-glow {
+    opacity: 1;
+  }
+
+  /* Title reveal mask */
+  .product-slide-title {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* Mobile: all slides visible at full scale */
+  @media (max-width: 767px) {
+    .product-slide-inner {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .product-slide-visual {
+      aspect-ratio: 16/9 !important;
+    }
+  }
+</style>

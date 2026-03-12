@@ -1,48 +1,33 @@
-# Base image
+# Build stage
 FROM node:lts-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache libc6-compat
-
-# Copy requirements first for better caching
-COPY package.json package-lock.json ./
-
-# Install Node dependencies
+# Install dependencies
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy application code
+# Copy source and build
 COPY . .
-
-# Build the application
-ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# Production image
-FROM node:lts-alpine AS runner
+# Debug: verify build output exists
+RUN echo "=== Build output ===" && ls -la dist/ && ls -la dist/work/ && echo "=== Done ==="
 
-# Set working directory
-WORKDIR /app
+# Serve stage (nginx for static files)
+FROM nginx:alpine
 
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=3004
-ENV HOSTNAME="0.0.0.0"
-ENV NEXT_TELEMETRY_DISABLED=1
+# Copy built static files
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy built application code
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# Custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port
-EXPOSE 3004
+# Remove default nginx config to avoid conflicts
+RUN rm -f /etc/nginx/conf.d/default.conf.bak
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3004/ || exit 1
+EXPOSE 85
 
-# Run the application
-CMD ["node", "server.js"]
+# Health check — use 127.0.0.1 to avoid IPv6 resolution issues in Alpine
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -q -O /dev/null http://127.0.0.1:85/health || exit 1

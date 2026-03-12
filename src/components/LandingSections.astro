@@ -1,0 +1,300 @@
+---
+import Footer from './Footer.astro';
+import ProductSlider from './ProductSlider.astro';
+
+const services = [
+  {
+    title: 'AI Strategy & Development',
+    desc: 'End-to-end design and deployment of intelligent systems — from feasibility analysis to production-grade AI solutions tailored to your business.',
+    icon: 'ai',
+  },
+  {
+    title: 'Systems Integration',
+    desc: 'Bridging software with physical infrastructure — connecting sensors, machinery, and data pipelines into unified, automated workflows.',
+    icon: 'integration',
+  },
+  {
+    title: 'Data Intelligence',
+    desc: 'Turning raw operational data into real-time insights and automated decisions — powering smarter pricing, forecasting, and resource allocation.',
+    icon: 'data',
+  },
+];
+
+const processSteps = [
+  { step: '01', title: 'Discover', desc: 'Deep-dive into your operations, pain points, and automation opportunities across digital and physical systems.' },
+  { step: '02', title: 'Build', desc: 'Rapid iteration with weekly demos. From RAG pipelines to hardware integration — no black-box development.' },
+  { step: '03', title: 'Deploy', desc: 'Production-hardened launch with 24/7 automated decision-making, monitoring, and continuous optimization.' },
+];
+
+const stats = [
+  { value: '24/7', label: 'Automated Decisions' },
+  { value: '3', label: 'AI Products in Development' },
+  { value: 'SEA', label: 'Market Focus' },
+  { value: 'Lab', label: 'Driven Approach' },
+];
+
+const industries = [
+  {
+    name: 'Hospitality',
+    desc: 'Dynamic pricing & revenue intelligence for hotels across Thailand.',
+    icon: 'hospitality',
+  },
+  {
+    name: 'Manufacturing',
+    desc: 'Predictive maintenance & quality control for production lines.',
+    icon: 'manufacturing',
+  },
+  {
+    name: 'Retail',
+    desc: 'RAG-powered POS analytics for cross-border retail operations.',
+    icon: 'retail',
+  },
+];
+---
+
+<!-- Particle transition bridge from hero into content -->
+<div id="particle-bridge" aria-hidden="true"></div>
+
+<!-- 2. WHAT WE DO -->
+<section id="services" class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle" data-ambient-particles="10">
+  <div class="max-w-[1400px] mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">What We Do</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-10 md:mb-20" data-reveal="fade-up"
+      style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      OUR SOLUTIONS
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-4 md:gap-6" data-reveal-stagger>
+      {services.map((service) => (
+        <div class="group relative border border-cyan-subtle rounded-2xl p-6 md:p-8 bg-surface/20 backdrop-blur-sm transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 hover:-translate-y-1 cursor-pointer overflow-hidden" data-tilt style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);" />
+          <div class="relative w-11 h-11 md:w-12 md:h-12 mb-5 md:mb-6 flex items-center justify-center border border-cyan/15 rounded-xl text-cyan transition-all duration-300 group-hover:bg-cyan/10 group-hover:border-cyan/30 group-hover:shadow-[0_0_20px_rgba(148,252,255,0.1)]">
+            {service.icon === 'ai' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+              </svg>
+            )}
+            {service.icon === 'integration' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h3a1 1 0 001-1V4" />
+                <path d="M20 7h-3a1 1 0 01-1-1V4" />
+                <path d="M4 17h3a1 1 0 001 1v2" />
+                <path d="M20 17h-3a1 1 0 01-1 1v2" />
+                <rect x="8" y="8" width="8" height="8" rx="1" />
+              </svg>
+            )}
+            {service.icon === 'data' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="M7 16l4-8 4 5 4-10" />
+              </svg>
+            )}
+          </div>
+          <h3 class="relative font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{service.title}</h3>
+          <p class="relative font-b text-dim text-sm md:text-[15px] leading-[1.7]">{service.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 3. HOW WE WORK -->
+<section id="process" class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle" data-tech-grid>
+  <div class="max-w-[1400px] mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">How We Work</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-10 md:mb-20" data-reveal="fade-up"
+      style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      OUR PROCESS
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-0 relative">
+      <svg class="process-line absolute top-16 left-0 w-full h-px hidden md:block" aria-hidden="true" preserveAspectRatio="none">
+        <line x1="16.5%" y1="50%" x2="83.5%" y2="50%" stroke="url(#process-gradient)" stroke-width="1" stroke-dasharray="4 4" />
+        <defs>
+          <linearGradient id="process-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(148, 252, 255, 0)" />
+            <stop offset="20%" stop-color="rgba(148, 252, 255, 0.3)" />
+            <stop offset="50%" stop-color="rgba(148, 252, 255, 0.5)" />
+            <stop offset="80%" stop-color="rgba(148, 252, 255, 0.3)" />
+            <stop offset="100%" stop-color="rgba(148, 252, 255, 0)" />
+          </linearGradient>
+        </defs>
+      </svg>
+      {processSteps.map((item, i) => (
+        <div class="group relative flex flex-col items-center text-center px-6 md:px-8 py-8 md:py-10" data-reveal="fade-up">
+          {i < 2 && (
+            <div class="hidden md:block absolute top-[52px] right-0 w-1/2 h-px bg-gradient-to-r from-cyan/30 to-transparent" />
+          )}
+          {i > 0 && (
+            <div class="hidden md:block absolute top-[52px] left-0 w-1/2 h-px bg-gradient-to-l from-cyan/30 to-transparent" />
+          )}
+          <div class="relative mb-5 md:mb-6">
+            <div class="w-[72px] h-[72px] md:w-[84px] md:h-[84px] rounded-full border border-cyan/15 flex items-center justify-center bg-surface/40 backdrop-blur-sm transition-all duration-500 group-hover:border-cyan/30 group-hover:shadow-[0_0_30px_rgba(148,252,255,0.1)]">
+              <span class="font-d text-2xl md:text-3xl font-bold text-cyan/40 group-hover:text-cyan/70 transition-colors duration-500">{item.step}</span>
+            </div>
+            <div class="absolute inset-0 rounded-full bg-cyan/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          </div>
+          <h3 class="font-d text-lg md:text-xl font-semibold tracking-wider text-white mb-2 md:mb-3">{item.title}</h3>
+          <p class="font-b text-dim text-sm md:text-[15px] leading-[1.7] max-w-xs">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 4. WHY NEX APEX -->
+<section id="why" class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle bg-surface/30" data-ambient-particles="8" data-tech-grid>
+  <div class="max-w-[1400px] mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Why NexApex</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-10 md:mb-20" data-reveal="fade-up"
+      style="font-size: clamp(26px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      OUR ADVANTAGE
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8" data-reveal-stagger>
+      {stats.map((stat) => (
+        <div class="group relative text-center py-8 md:py-10 border border-cyan-subtle rounded-2xl bg-surface/30 backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 cursor-default">
+          <div class="absolute inset-0 bg-gradient-to-b from-cyan/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <span class="relative block font-d text-4xl md:text-5xl font-bold text-cyan mb-3" style="text-shadow: 0 0 40px rgba(148, 252, 255, 0.2);" data-counter={stat.value}>{stat.value}</span>
+          <span class="relative font-m text-[11px] tracking-[2.5px] uppercase text-dim">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 4b. INDUSTRIES WE SERVE -->
+<section class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle" data-ambient-particles="6">
+  <div class="max-w-[1400px] mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Industries</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-10 md:mb-20" data-reveal="fade-up"
+      style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      BUILT FOR REAL-WORLD OPERATIONS
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-4 md:gap-6" data-reveal-stagger>
+      {industries.map((industry) => (
+        <div class="group relative border border-cyan-subtle rounded-2xl p-6 md:p-8 bg-surface/20 backdrop-blur-sm transition-all duration-500 hover:border-cyan/20 hover:bg-surface/50 overflow-hidden cursor-pointer" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-cyan rounded-r transition-all duration-500 group-hover:h-12" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);" />
+          <div class="relative w-11 h-11 md:w-12 md:h-12 mb-5 md:mb-6 flex items-center justify-center border border-cyan/15 rounded-xl text-cyan transition-all duration-300 group-hover:bg-cyan/10 group-hover:border-cyan/30 group-hover:shadow-[0_0_20px_rgba(148,252,255,0.1)]">
+            {industry.icon === 'hospitality' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M6 21V9l6-4 6 4v12M9 21v-6h6v6" />
+                <path d="M10 9h4M10 13h4" />
+              </svg>
+            )}
+            {industry.icon === 'manufacturing' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 20h20M5 20V10l4 3V7l4 3V4l4 3v13" />
+                <path d="M19 20V8" />
+              </svg>
+            )}
+            {industry.icon === 'retail' && (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18l-2 13H5L3 3z" />
+                <path d="M1 1h2M16 16a3 3 0 100 6 3 3 0 000-6zM9 16a3 3 0 100 6 3 3 0 000-6z" />
+              </svg>
+            )}
+          </div>
+          <h3 class="relative font-d text-base md:text-lg font-semibold tracking-wider text-white mb-2 md:mb-3">{industry.name}</h3>
+          <p class="relative font-b text-dim text-sm md:text-[15px] leading-[1.7]">{industry.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 5. PRODUCTS (Vertical Slider) -->
+<ProductSlider />
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 6. ABOUT -->
+<section id="about" class="py-16 md:py-[120px] px-6 md:px-12 border-t border-cyan-subtle">
+  <div class="max-w-4xl mx-auto">
+    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">About</p>
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-8 md:mb-12" data-reveal="fade-up"
+      style="font-size: clamp(26px, 3.5vw, 44px); letter-spacing: 1px;"
+    >
+      WHO WE ARE
+    </h2>
+
+    <div class="space-y-7">
+      <p class="font-b text-base md:text-lg lg:text-xl text-text leading-[1.85]" data-reveal="fade-up" style="max-width: 65ch;">
+        NexApex is a Bangkok-based AI lab where software meets the physical world. We build intelligent systems that operate across industries — from digital revenue platforms to factory-floor automation.
+      </p>
+      <p class="font-b text-base md:text-lg lg:text-xl text-dim leading-[1.85]" data-reveal="fade-up" style="max-width: 65ch;">
+        Our founding team combines deep technical expertise with hands-on operational experience. We take a lab-driven approach — prototyping fast, deploying with precision, and optimizing continuously. We work with manufacturers, hospitality businesses, and enterprises across Southeast Asia who are ready to replace manual processes with scalable intelligence.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="section-connector" aria-hidden="true">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 7. CTA BANNER -->
+<section id="contact" class="relative py-20 md:py-[140px] px-6 md:px-12 border-t border-cyan-subtle overflow-hidden" data-tech-grid data-ambient-particles="6">
+  <!-- Radial glow background -->
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 50% 50%, rgba(148,252,255,0.04) 0%, rgba(22,32,41,0.5) 40%, var(--bg) 70%);" />
+  <div class="relative max-w-4xl mx-auto text-center">
+    <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-6"
+      style="font-size: clamp(28px, 4vw, 52px); letter-spacing: 1px;"
+    >
+      <span class="cta-word inline-block">READY</span> <span class="cta-word inline-block">TO</span> <span class="cta-word inline-block">REACH</span><br /><span class="cta-word inline-block">THE</span> <span class="cta-word inline-block">PEAK?</span>
+    </h2>
+    <p class="font-b text-lg md:text-xl text-dim mb-12 tracking-wide leading-[1.7] max-w-2xl mx-auto">
+      Tell us about your operations — we&apos;ll show you where AI can make the biggest impact.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a
+        href="mailto:hello@nexapex.ai"
+        class="group font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 bg-red text-white no-underline cursor-pointer rounded-xl transition-all duration-500 hover:shadow-[0_16px_48px_rgba(198,53,24,0.4),0_0_0_1px_rgba(198,53,24,0.3)] hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/50 focus-visible:rounded-xl"
+        style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
+      >
+        Start a Conversation
+      </a>
+      <a
+        href="mailto:hello@nexapex.ai"
+        class="font-m text-sm font-medium tracking-[1.5px] uppercase px-10 py-4 border border-cyan/30 text-cyan no-underline cursor-pointer rounded-xl transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(148,252,255,0.1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded-xl"
+      >
+        hello@nexapex.ai
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FOOTER -->
+<Footer />
