@@ -7,13 +7,13 @@ const navItems = [
 ];
 ---
 
-<nav id="main-nav" class="fixed top-4 left-4 right-4 z-[100] bg-surface/60 backdrop-blur-[24px] border border-cyan-subtle rounded-2xl transition-all duration-500 shadow-[0_4px_30px_rgba(0,0,0,0.3)]" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+<nav id="main-nav" class="fixed top-4 left-4 right-4 z-[100] bg-bg/50 backdrop-blur-[20px] backdrop-saturate-[1.3] border border-white/[0.04] rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.03)] transition-[background-color,border-color,box-shadow] duration-500" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:bg-bg focus:text-cyan focus:px-4 focus:py-2 focus:rounded font-m text-sm">Skip to content</a>
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between h-[56px]">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between h-14">
 
     <!-- Logo -->
     <a href="/" class="group relative flex items-center cursor-pointer no-underline">
-      <div class="relative h-10 w-10 transition-all duration-500 group-hover:drop-shadow-[0_0_20px_rgba(148,252,255,0.3)]" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+      <div class="relative h-10 w-10 transition-[filter] duration-500 group-hover:drop-shadow-[0_0_16px_rgba(148,252,255,0.25)]" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
         <img
           src="/full_color_logo.svg"
           alt="NexApex Logo"
@@ -22,7 +22,7 @@ const navItems = [
           class="object-contain w-full h-full"
         />
       </div>
-      <span class="font-d text-[12px] tracking-[3px] uppercase text-sage/80 ml-5 hidden sm:block transition-colors duration-300 group-hover:text-cyan">
+      <span class="font-d text-[11px] tracking-[3px] uppercase text-sage/70 ml-5 hidden sm:block transition-colors duration-300 group-hover:text-cyan" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
         NexApex
       </span>
     </a>
@@ -33,7 +33,8 @@ const navItems = [
         <li>
           <a
             href={item.href}
-            class="text-dim no-underline font-m text-[11px] font-medium tracking-[1.5px] uppercase transition-all duration-300 relative py-1 cursor-pointer hover:text-cyan after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-cyan after:transition-all after:duration-400 after:ease-out hover:after:w-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
+            class="text-dim no-underline font-m text-[11px] font-medium tracking-[1.5px] uppercase relative py-1 cursor-pointer hover:text-cyan-dim after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-cyan-dim after:rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded transition-colors duration-300 hover:after:w-full after:transition-[width] after:duration-500"
+            style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); --tw-after-transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"
           >
             {item.label}
           </a>
@@ -42,7 +43,8 @@ const navItems = [
       <li>
         <a
           href="/#contact"
-          class="font-m text-[11px] font-medium tracking-[1.5px] uppercase px-5 py-[7px] border border-cyan/30 text-cyan no-underline cursor-pointer rounded-full transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 hover:shadow-[0_0_20px_rgba(148,252,255,0.15)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded-full"
+          class="font-m text-[11px] font-medium tracking-[1.5px] uppercase px-5 py-[7px] border border-cyan/25 text-cyan no-underline cursor-pointer rounded-full hover:bg-cyan/[0.07] hover:border-cyan/50 hover:shadow-[0_0_16px_rgba(148,252,255,0.1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded-full active:scale-[0.97] transition-[color,background-color,border-color,box-shadow,transform] duration-300"
+          style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"
         >
           Let's Talk
         </a>
@@ -53,33 +55,33 @@ const navItems = [
     <button
       id="hamburger-btn"
       type="button"
-      class="md:hidden relative w-11 h-11 flex items-center justify-center cursor-pointer bg-transparent border-none outline-none z-[110]"
+      class="md:hidden relative w-11 h-11 flex items-center justify-center cursor-pointer bg-transparent border-none z-[110] rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50"
       aria-label="Open menu"
       aria-expanded="false"
     >
       <div class="relative w-5 h-3.5">
-        <span id="ham-top" class="absolute left-0 w-full h-px bg-white transition-all duration-300 ease-out origin-center top-0"></span>
-        <span id="ham-mid" class="absolute left-0 top-1/2 w-full h-px bg-white transition-all duration-200 ease-out"></span>
-        <span id="ham-bot" class="absolute left-0 w-full h-px bg-white transition-all duration-300 ease-out origin-center bottom-0"></span>
+        <span id="ham-top" class="absolute left-0 w-full h-px bg-sage/80 origin-center top-0 transition-[top,transform,opacity] duration-300" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"></span>
+        <span id="ham-mid" class="absolute left-0 top-1/2 w-full h-px bg-sage/80 transition-[opacity,transform] duration-200" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"></span>
+        <span id="ham-bot" class="absolute left-0 w-full h-px bg-sage/80 origin-center bottom-0 transition-[bottom,top,transform,opacity] duration-300" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"></span>
       </div>
     </button>
   </div>
 </nav>
 
 <!-- Mobile menu overlay -->
-<div id="mobile-overlay" class="fixed inset-0 z-[99] md:hidden pointer-events-none opacity-0 transition-all duration-400" style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);">
+<div id="mobile-overlay" class="fixed inset-0 z-[99] md:hidden pointer-events-none opacity-0 transition-opacity duration-400" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
   <!-- Backdrop -->
-  <div id="mobile-backdrop" class="absolute inset-0 bg-bg/95 backdrop-blur-[30px]"></div>
+  <div id="mobile-backdrop" class="absolute inset-0 bg-bg/96 backdrop-blur-[24px] backdrop-saturate-[1.2]"></div>
 
   <!-- Menu content -->
-  <div id="mobile-menu-content" class="relative flex flex-col items-center justify-center h-full gap-1 px-8" style="transform: translateY(-20px); transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);">
+  <div id="mobile-menu-content" class="relative flex flex-col items-center justify-center h-full gap-1 px-8" style="transform: translateY(-16px); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);">
     {navItems.map((item, i) => (
       <a
         href={item.href}
-        class="mobile-nav-link block py-4 font-d text-2xl tracking-[4px] uppercase text-white/80 no-underline cursor-pointer transition-all duration-300 hover:text-cyan opacity-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
-        style={`transform: translateY(12px); transition: opacity 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s;`}
-        data-delay-open={`opacity 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + i * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s`}
-        data-delay-close="opacity 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s"
+        class="mobile-nav-link block py-4 font-d text-2xl tracking-[4px] uppercase text-white/80 no-underline cursor-pointer transition-colors duration-300 hover:text-cyan-dim opacity-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
+        style={`transform: translateY(12px); transition: opacity 0.45s ${0.08 + i * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), transform 0.45s ${0.08 + i * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s;`}
+        data-delay-open={`opacity 0.45s ${0.08 + i * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), transform 0.45s ${0.08 + i * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s`}
+        data-delay-close="opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1), transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s"
       >
         {item.label}
       </a>
@@ -89,16 +91,16 @@ const navItems = [
     <a
       href="/#contact"
       id="mobile-contact-cta"
-      class="mobile-nav-link mt-8 font-m text-sm font-medium tracking-[2px] uppercase px-8 py-3 border border-cyan/40 text-cyan no-underline cursor-pointer transition-all duration-300 hover:bg-cyan/10 hover:border-cyan/60 rounded-lg opacity-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded"
-      style={`transform: translateY(12px); transition: opacity 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s;`}
-      data-delay-open={`opacity 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.4s ${0.1 + navItems.length * 0.05}s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s`}
-      data-delay-close="opacity 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.3s, background-color 0.3s, border-color 0.3s"
+      class="mobile-nav-link mt-8 font-m text-sm font-medium tracking-[2px] uppercase px-8 py-3 border border-cyan/30 text-cyan no-underline cursor-pointer hover:bg-cyan/[0.07] hover:border-cyan/50 rounded-lg opacity-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50 focus-visible:rounded transition-[color,background-color,border-color] duration-300"
+      style={`transform: translateY(12px); transition: opacity 0.45s ${0.08 + navItems.length * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), transform 0.45s ${0.08 + navItems.length * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s, background-color 0.3s, border-color 0.3s;`}
+      data-delay-open={`opacity 0.45s ${0.08 + navItems.length * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), transform 0.45s ${0.08 + navItems.length * 0.06}s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s, background-color 0.3s, border-color 0.3s`}
+      data-delay-close="opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1), transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), color 0.3s, background-color 0.3s, border-color 0.3s"
     >
       Let's Talk
     </a>
 
     <!-- Decorative bottom line -->
-    <div id="mobile-decor-line" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-12 h-px bg-gradient-to-r from-transparent via-cyan/30 to-transparent opacity-0" style="transition: opacity 0.6s 0.3s;"></div>
+    <div id="mobile-decor-line" class="absolute bottom-12 left-1/2 -translate-x-1/2 w-16 h-px bg-gradient-to-r from-transparent via-cyan/25 to-transparent opacity-0" style="transition: opacity 0.6s 0.35s cubic-bezier(0.32, 0.72, 0, 1);"></div>
   </div>
 </div>
 
@@ -160,7 +162,7 @@ const navItems = [
     overlay.style.opacity = '0';
 
     // Menu content
-    menuContent.style.transform = 'translateY(-20px)';
+    menuContent.style.transform = 'translateY(-16px)';
 
     // Hamburger → lines
     hamTop.style.top = '0';

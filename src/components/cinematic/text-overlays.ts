@@ -13,6 +13,8 @@ function splitTextToChars(text: string, className: string): string {
 export function createTextOverlays(container: HTMLElement): HTMLElement[] {
   const overlayContainer = document.createElement('div');
   overlayContainer.className = 'fixed inset-0 pointer-events-none z-10';
+  // Subtle vignette for text legibility over 3D scene
+  overlayContainer.style.cssText = 'background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(14,20,24,0.15) 100%);';
 
   const textElements: HTMLElement[] = [];
 
@@ -22,26 +24,28 @@ export function createTextOverlays(container: HTMLElement): HTMLElement[] {
 
     if (!perspective.hideText && perspective.isHero) {
       // Hero perspective: label above, plain text heading (for gradient)
+      // Strong text-shadow stack for legibility over the 3D spacestation scene
       el.innerHTML = `
         ${perspective.subtitle ? `
         <p class="mb-3 max-md:mb-2">
-          ${splitTextToChars(perspective.subtitle, 'font-m text-[0.85vw] max-md:text-[11px] font-normal tracking-[0.45em] text-dim drop-shadow-lg')}
+          ${splitTextToChars(perspective.subtitle, 'font-m text-[0.85vw] max-md:text-[11px] font-normal tracking-[0.45em] text-dim')}
         </p>
         ` : ''}
-        <h2 class="font-d text-[5.8vw] max-md:text-[9vw] font-bold leading-[1.05] tracking-[0.02em] text-gradient-hero mt-5">
+        <h2 class="font-d text-[5.8vw] max-md:text-[9vw] font-bold leading-[1.05] tracking-[0.02em] text-gradient-hero mt-5" style="filter: drop-shadow(0 2px 12px rgba(0,0,0,0.6)) drop-shadow(0 8px 32px rgba(0,0,0,0.4));">
           ${perspective.title.split('\n').map((line) => `<span class="block">${line}</span>`).join('')}
         </h2>
       `;
     } else if (!perspective.hideText) {
       // Standard perspectives: plain text title (for gradient) + character-split subtitle
+      // Enhanced shadow stack: tight crisp shadow + wide ambient shadow for 3D scene backing
       const hasMultiline = perspective.title.includes('\n');
       const titleHtml = hasMultiline
         ? perspective.title.split('\n').map((line: string) => `<span class="block">${line}</span>`).join('')
         : perspective.title;
       const ariaAttr = hasMultiline ? ` aria-label="${perspective.title.replace(/\n/g, ' ')}"` : '';
       el.innerHTML = `
-        <h2 class="font-d text-[4vw] max-md:text-2xl font-bold leading-[1.1] mb-2 tracking-tight text-gradient-hero drop-shadow-2xl"${ariaAttr}>${titleHtml}</h2>
-        ${perspective.subtitle ? `<p>${splitTextToChars(perspective.subtitle, 'font-b text-[1.25vw] max-md:text-base leading-[1.4] text-white font-light drop-shadow-lg')}</p>` : ''}
+        <h2 class="font-d text-[4vw] max-md:text-2xl font-bold leading-[1.1] mb-2 tracking-tight text-gradient-hero"${ariaAttr} style="filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)) drop-shadow(0 6px 24px rgba(0,0,0,0.5));">${titleHtml}</h2>
+        ${perspective.subtitle ? `<p style="text-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.4);">${splitTextToChars(perspective.subtitle, 'font-b text-[1.25vw] max-md:text-base leading-[1.4] text-white/90 font-light')}</p>` : ''}
       `;
     }
 

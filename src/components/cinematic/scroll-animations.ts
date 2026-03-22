@@ -79,11 +79,11 @@ export function initScrollReveals(): void {
     gsap.utils.toArray<HTMLElement>(`[data-reveal="${type}"]`).forEach((el) => {
       gsap.fromTo(el, from, {
         ...to,
-        duration: 0.8,
+        duration: 0.9,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: el,
-          start: 'top 85%',
+          start: 'top 88%',
           once: true,
         },
       });
@@ -97,16 +97,16 @@ export function initScrollReveals(): void {
 
     gsap.fromTo(
       children,
-      { y: 40, opacity: 0 },
+      { y: 36, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: 0.8,
+        duration: 0.9,
         ease: 'power3.out',
-        stagger: 0.12,
+        stagger: 0.1,
         scrollTrigger: {
           trigger: parent,
-          start: 'top 85%',
+          start: 'top 88%',
           once: true,
         },
       },

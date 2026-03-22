@@ -2,9 +2,9 @@
 import { products } from '../data/products';
 ---
 
-<section id="work" class="py-[120px] max-md:py-16 px-6 md:px-12 border-t border-cyan-subtle" data-ambient-particles="12">
+<section id="work" class="py-[120px] max-md:py-20 px-6 md:px-12 border-t border-white/[0.04]" data-ambient-particles="12">
   <div class="max-w-[1400px] mx-auto">
-    <p class="font-m text-[12px] md:text-[14px] font-semibold tracking-[2px] uppercase text-cyan mb-3 md:mb-4" data-reveal="fade-up">Products</p>
+    <p class="font-m text-[11px] md:text-[13px] font-semibold tracking-[2.5px] uppercase text-cyan-dim mb-3 md:mb-4" data-reveal="fade-up">Products</p>
     <h2 class="font-d font-bold tracking-wider text-gradient-hero drop-shadow-lg mb-16 md:mb-24" data-reveal="fade-up"
       style="font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 1px;"
     >
@@ -20,8 +20,8 @@ import { products } from '../data/products';
           data-product-index={i}
           style="transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);"
         >
-          <div class="product-slide-inner relative overflow-hidden rounded-2xl border border-cyan-subtle transition-all duration-600"
-            style="transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);"
+          <div class="product-slide-inner relative overflow-hidden rounded-2xl border border-white/[0.05] transition-[transform,opacity,border-color] duration-600"
+            style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);"
           >
             <!-- Image area -->
             <div class="product-slide-visual relative overflow-hidden" style="aspect-ratio: 21/9;">
@@ -56,7 +56,7 @@ import { products } from '../data/products';
             >
               <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                 <div>
-                  <span class="inline-block font-m text-[9px] md:text-[10px] tracking-[2px] uppercase text-cyan border border-cyan/20 bg-cyan/[0.06] backdrop-blur-sm rounded-full px-4 py-1.5 mb-3 md:mb-4">
+                  <span class="inline-block font-m text-[9px] md:text-[10px] tracking-[2px] uppercase text-cyan-dim border border-cyan/15 bg-cyan/[0.04] backdrop-blur-sm rounded-full px-4 py-1.5 mb-3 md:mb-4">
                     {product.category}
                   </span>
                   <h3 class="product-slide-title font-d text-xl md:text-2xl lg:text-3xl font-bold tracking-wider text-white leading-tight">
@@ -64,9 +64,9 @@ import { products } from '../data/products';
                   </h3>
                   <p class="product-slide-desc font-b text-dim text-sm md:text-base leading-relaxed mt-2 max-w-xl">{product.desc}</p>
                 </div>
-                <div class="product-slide-arrow flex items-center gap-2 text-cyan/50 group-hover:text-cyan transition-colors duration-500 shrink-0">
+                <div class="product-slide-arrow flex items-center gap-2 text-cyan/40 group-hover:text-cyan-dim transition-colors duration-500 shrink-0" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
                   <span class="font-m text-[10px] tracking-[2px] uppercase hidden md:inline">View Project</span>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="transition-transform duration-500 group-hover:translate-x-1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="transition-transform duration-500 group-hover:translate-x-1" style="transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);">
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </div>
@@ -100,7 +100,7 @@ import { products } from '../data/products';
   .product-slide.is-active .product-slide-inner {
     transform: scale(1);
     opacity: 1;
-    border-color: rgba(148, 252, 255, 0.15);
+    border-color: rgba(148, 252, 255, 0.1);
   }
 
   .product-slide.is-active .product-slide-glow {
@@ -108,12 +108,12 @@ import { products } from '../data/products';
   }
 
   .product-slide.is-active .product-slide-num {
-    color: rgba(148, 252, 255, 0.07);
+    color: rgba(148, 252, 255, 0.06);
   }
 
   /* Hover states */
   .product-slide:hover .product-slide-inner {
-    border-color: rgba(148, 252, 255, 0.2);
+    border-color: rgba(148, 252, 255, 0.15);
   }
 
   .product-slide:hover .product-slide-glow {

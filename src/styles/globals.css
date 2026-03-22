@@ -87,7 +87,16 @@
     --text: #c8ccc6;
     --dim: #6e7a84;
 
-    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    /* Easing curves */
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Transition durations */
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 700ms;
   }
 
   html {
@@ -117,25 +126,25 @@
       transform: translateY(0) scale(1);
     }
     50% {
-      transform: translateY(-14px) scale(1.02);
+      transform: translateY(-12px) scale(1.015);
     }
   }
 
   @keyframes pulseLine {
     0%, 100% {
-      opacity: 0.4;
-      height: 80px;
+      opacity: 0.35;
+      transform: scaleY(0.85);
     }
     50% {
       opacity: 1;
-      height: 100px;
+      transform: scaleY(1);
     }
   }
 
   @keyframes fadeUp {
     from {
       opacity: 0;
-      transform: translateY(24px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -157,17 +166,31 @@
       margin-left: 100%;
     }
   }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 }
 
 @layer utilities {
   .animate-float {
-    animation: float 7s ease-in-out infinite;
+    animation: float 7s var(--ease-in-out) infinite;
   }
   .animate-pulse-line {
-    animation: pulseLine 2.5s ease-in-out infinite;
+    animation: pulseLine 2.5s var(--ease-in-out) infinite;
+    transform-origin: center bottom;
   }
   .animate-fade-up {
-    animation: fadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    animation: fadeUp 0.6s var(--ease-out-expo) forwards;
+  }
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
   }
 
   .text-gradient {
@@ -306,7 +329,7 @@
 /* ── Card Tilt Glow Effect ── */
 [data-tilt] {
   transform-style: preserve-3d;
-  transition: transform 0.4s var(--ease);
+  transition: transform var(--duration-slow) var(--ease);
 }
 
 [data-tilt] .tilt-glow {
@@ -314,7 +337,7 @@
   inset: 0;
   border-radius: inherit;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity var(--duration-normal) var(--ease);
   pointer-events: none;
   z-index: 1;
 }
@@ -336,7 +359,7 @@
 /* ── CTA Word Animation ── */
 .cta-word {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(24px);
   will-change: transform, opacity;
 }
 
@@ -353,12 +376,24 @@
 
 /* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   [data-reveal],
   [data-reveal-stagger] > *,
   .cta-word {
     opacity: 1 !important;
     transform: none !important;
     will-change: auto !important;
+  }
+  .section-connector {
+    transform: scaleY(1) !important;
   }
   .section-connector .connector-line {
     height: 100% !important;
@@ -369,6 +404,15 @@
   }
   [data-counter] {
     animation: none !important;
+  }
+  .animate-float,
+  .animate-pulse-line,
+  .animate-shimmer {
+    animation: none !important;
+  }
+  .product-slide-inner {
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
 

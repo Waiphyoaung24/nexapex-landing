@@ -1,6 +1,8 @@
 ---
-// Static HTML for all fallback states — JS determines which to show
-import Logo3D from '../Logo3D.astro';
+// CinematicHero — Desktop: SpaceStation3D (scroll-driven GLB model)
+//                 Mobile:  text overlay + GSAP pin fallback (no 3D)
+//                 Reduced motion: static logo image
+import SpaceStation3D from '../SpaceStation3D.tsx';
 ---
 
 <!-- Loader overlay -->
@@ -17,26 +19,10 @@ import Logo3D from '../Logo3D.astro';
   <p class="font-m text-[10px] tracking-[3px] uppercase text-dim mt-4">Loading Experience</p>
 </div>
 
-<!-- 3D Canvas wrapper (desktop/tablet) — starts hidden, revealed after cinematic load -->
-<div
-  id="canvas-wrapper"
-  class="fixed inset-0 w-full h-screen z-0"
-  style="display: none; opacity: 0;"
->
-  <canvas id="cinematic-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+<!-- SpaceStation3D — React island, desktop only (renders its own fixed canvas at z-0) -->
+<div id="spacestation-wrapper" data-spacestation-wrapper style="display: none;">
+  <SpaceStation3D client:only="react" />
 </div>
-
-<!-- Animated WebGL 3D Glow Logo — centered in hero -->
-<div
-  id="hero-logo3d"
-  class="fixed inset-0 z-[6] flex items-center justify-center pointer-events-none"
-  style="display: none;"
->
-  <div class="w-full h-full">
-    <Logo3D />
-  </div>
-</div>
-
 
 <!-- Scroll arrow indicator -->
 <div id="scroll-arrow" class="fixed max-md:bottom-8 max-md:left-1/2 max-md:-translate-x-1/2 md:left-6 md:top-1/2 md:-translate-y-1/2 z-40 pointer-events-none" style="display: none;">
@@ -61,13 +47,6 @@ import Logo3D from '../Logo3D.astro';
   class="fixed bottom-0 left-0 right-0 h-[40vh] z-[5] pointer-events-none opacity-0"
   style="background: linear-gradient(to bottom, transparent, #0e1418 70%); display: none;"
 ></div>
-
-<!-- Logo prelude (desktop — scroll-driven reveal) -->
-<div id="cube-section" class="relative z-10" style="display: none;">
-  <div id="prelude-scroll" class="relative" style="height: 0;">
-    <!-- Removed prelude content as 3D logo is now the primary visual -->
-  </div>
-</div>
 
 <!-- Scroll trigger container (responsive height) -->
 <div id="scroll-container" class="relative z-20" style="height: 700vh; display: none;"></div>
@@ -118,7 +97,7 @@ import Logo3D from '../Logo3D.astro';
       <p class="font-b text-sm text-white/80 font-light mt-2 tracking-[0.1em] drop-shadow-lg">NEX APEX</p>
     </div>
 
-    <!-- Scene 5: FINALE — WHERE AI MEETS REALITY -->
+    <!-- Scene 5: FINALE -->
     <div class="mobile-text mobile-text-finale absolute flex flex-col items-center text-center px-8 opacity-0" style="top: 38%;">
       <h2 class="font-d font-bold text-gradient-hero leading-[1.05]"
         style="font-size: clamp(36px, 11vw, 56px); letter-spacing: 0.02em;"
@@ -150,7 +129,7 @@ import Logo3D from '../Logo3D.astro';
   </h1>
 </div>
 
-<!-- ═══ Prelude section styles ═══ -->
+<!-- ═══ Styles ═══ -->
 <style is:global>
   /* Mobile hero animated logo */
   .mobile-hero-logo {
@@ -177,72 +156,6 @@ import Logo3D from '../Logo3D.astro';
       animation: none;
     }
   }
-
-  /* Logo */
-  .prelude-logo {
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: scale(0.7);
-  }
-
-  .prelude-logo img {
-    width: 220px;
-    height: 220px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 60px rgba(148, 252, 255, 0.12));
-    user-select: none;
-  }
-
-  /* All text lines start hidden */
-  .prelude-line {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  #prelude-brand {
-    margin-bottom: 1rem;
-  }
-
-  #prelude-pillars {
-    margin-bottom: 0.75rem;
-  }
-
-  .prelude-pillar {
-    font-family: var(--font-b);
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.5);
-  }
-
-  .prelude-dot {
-    color: rgba(148, 252, 255, 0.3);
-    font-size: 16px;
-  }
-
-  .prelude-divider {
-    width: 32px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(148, 252, 255, 0.25));
-  }
-
-  .prelude-divider-end {
-    background: linear-gradient(to left, transparent, rgba(148, 252, 255, 0.25));
-  }
-
-  /* Subtle grid overlay */
-  #cube-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 70%);
-    z-index: -1;
-  }
 </style>
 
 <!-- ═══ Cinematic Hero script ═══ -->
@@ -251,14 +164,6 @@ import Logo3D from '../Logo3D.astro';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   gsap.registerPlugin(ScrollTrigger);
-
-  // ── Global bridge for logo shatter completion ──
-  declare global {
-    interface Window {
-      __logoShatterComplete?: boolean;
-      __onLogoShatterComplete?: () => void;
-    }
-  }
 
   function getDeviceTier(): 'desktop' | 'tablet' | 'mobile' {
     const width = window.innerWidth;
@@ -279,11 +184,9 @@ import Logo3D from '../Logo3D.astro';
   }
 
   const loader = document.getElementById('cinematic-loader')!;
-  const canvasWrapper = document.getElementById('canvas-wrapper')!;
-  const heroLogo3d = document.getElementById('hero-logo3d')!;
+  const spacestationWrapper = document.getElementById('spacestation-wrapper')!;
   const scrollArrow = document.getElementById('scroll-arrow')!;
   const gradientBridge = document.getElementById('gradient-bridge')!;
-  const cubeSection = document.getElementById('cube-section')!;
   const scrollContainer = document.getElementById('scroll-container')!;
   const mobileFallback = document.getElementById('mobile-fallback')!;
   const reducedMotionFallback = document.getElementById('reduced-motion-fallback')!;
@@ -299,70 +202,62 @@ import Logo3D from '../Logo3D.astro';
     loader.remove();
     reducedMotionFallback.style.display = '';
   } else if (!webgl2 || deviceTier === 'mobile') {
-    // Mobile gets lightweight fallback — 3D engine causes scroll lag
+    // Mobile: lightweight fallback, no 3D
     loader.remove();
     mobileFallback.style.display = '';
     initMobileFallback();
   } else {
-    heroLogo3d.style.display = '';
+    // Desktop / Tablet: show SpaceStation3D + scroll container + text overlays
+    spacestationWrapper.style.display = '';
     scrollArrow.style.display = '';
     gradientBridge.style.display = '';
-    cubeSection.style.display = '';
     scrollContainer.style.display = '';
-    canvasWrapper.style.display = '';
-    initCinematicHero();
-  }
-
-  function triggerLogoShatter() {
-    if (window.__logo3dPlayShatter) {
-      window.__logo3dPlayShatter();
-    } else {
-      (window as any).__logo3dTriggerShatter = true;
-    }
+    initDesktopHero();
   }
 
   /**
-   * Set up scroll-driven transitions after cinematic engine loads.
+   * Desktop: SpaceStation3D handles its own Three.js rendering.
+   * We still need text overlays, scroll arrow fade, gradient bridge, and progress bar.
    */
-  function setupScrollDrivenTransition(engine: any) {
-    // Set up the engine scroll timeline and other scroll features immediately
-    engine.setupScrollTimeline(canvasWrapper, gradientBridge, scrollArrow);
-
-    // Show cinematic canvas immediately
-    canvasWrapper.style.opacity = '1';
-
-    // ── Scroll-driven Logo Fade Out ──
-    ScrollTrigger.create({
-      trigger: scrollContainer,
-      start: 'top top',
-      end: '10% top',
-      scrub: 2,
-      onUpdate: (self: any) => {
-        const p = self.progress;
-        heroLogo3d.style.opacity = String(1 - p);
-        heroLogo3d.style.transform = `scale(${1 + p * 0.05 - p * p * 0.15})`;
-
-        if (p >= 0.98) {
-          heroLogo3d.style.display = 'none';
-        } else {
-          heroLogo3d.style.display = '';
-        }
+  function initDesktopHero() {
+    // Scroll arrow fade-out
+    gsap.to(scrollArrow, {
+      opacity: 0,
+      scrollTrigger: {
+        trigger: scrollContainer,
+        start: '5% top',
+        end: '15% top',
+        scrub: true,
       },
     });
 
-    import('./cube-scroll').then(({ initCubeScroll }) => {
-      initCubeScroll();
+    // Gradient bridge fade-in near end of hero
+    gsap.to(gradientBridge, {
+      opacity: 1,
+      scrollTrigger: {
+        trigger: scrollContainer,
+        start: '85% top',
+        end: '95% top',
+        scrub: true,
+      },
     });
 
+    // Text overlays
     import('./text-overlays').then(({ createTextOverlays, initTextAnimations }) => {
       const textElements = createTextOverlays(document.body);
       initTextAnimations(textElements, scrollContainer);
     });
 
+    // Progress bar
     import('./progress-bar').then(({ createProgressBar, initProgressBar }) => {
       createProgressBar(document.body);
       initProgressBar(scrollContainer);
     });
+
+    // The SpaceStation3D React component handles:
+    // - GLB loading + loader dismiss
+    // - Scroll-scrubbed animations via its own ScrollTrigger instances
+    // - Canvas fade-out at 88-98% via [data-spacestation-wrapper]
   }
 
   function initMobileFallback() {
@@ -371,9 +266,7 @@ import Logo3D from '../Logo3D.astro';
     const scrollHint   = mobileFallback.querySelector<HTMLElement>('.absolute.bottom-8')!;
     const mobileTexts  = mobileFallback.querySelectorAll<HTMLElement>('.mobile-text');
 
-    // ── 0. Pin the panel for the full 320vh using GSAP (fixes CSS sticky math) ──
-    // CSS sticky releases early when panel bottom exits the parent container.
-    // GSAP pin uses position:fixed internally and stays locked for the full range.
+    // Pin the panel for the full 320vh
     ScrollTrigger.create({
       trigger: mobileFallback,
       start: 'top top',
@@ -383,7 +276,7 @@ import Logo3D from '../Logo3D.astro';
       anticipatePin: 1,
     });
 
-    // ── 1. Hero: fade + lift out by 16% ──────────────────────────────────
+    // Hero: fade + lift out by 16%
     gsap.to(heroContent, {
       opacity: 0,
       y: -36,
@@ -396,7 +289,7 @@ import Logo3D from '../Logo3D.astro';
       },
     });
 
-    // Scroll hint fades earlier (users have started scrolling)
+    // Scroll hint fades early
     gsap.to(scrollHint, {
       opacity: 0,
       ease: 'none',
@@ -408,13 +301,11 @@ import Logo3D from '../Logo3D.astro';
       },
     });
 
-    // ── 2. Sequential text scenes: 18% → 86% (each scene = ~13.6%) ──────
-    // Layout: in(35%) — hold(30%) — out(35%) per scene
-    // Finale (last): in(40%) only — then panel dissolves
-    const totalTexts = mobileTexts.length;  // 5
+    // Sequential text scenes: 18% -> 86%
+    const totalTexts = mobileTexts.length;
     const RANGE_START = 18;
     const RANGE_END   = 86;
-    const sceneStep   = (RANGE_END - RANGE_START) / totalTexts; // ≈13.6 %
+    const sceneStep   = (RANGE_END - RANGE_START) / totalTexts;
 
     mobileTexts.forEach((el, i) => {
       const isFinale   = i === totalTexts - 1;
@@ -422,7 +313,6 @@ import Logo3D from '../Logo3D.astro';
       const sceneEnd   = sceneStart + sceneStep;
 
       if (isFinale) {
-        // WHERE AI MEETS REALITY — fade in, stay; panel handles the exit
         gsap.fromTo(el,
           { opacity: 0, y: 22, scale: 0.97 },
           {
@@ -437,7 +327,6 @@ import Logo3D from '../Logo3D.astro';
           },
         );
       } else {
-        // in → hold → out (proportional durations inside timeline)
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: mobileFallback,
@@ -456,9 +345,7 @@ import Logo3D from '../Logo3D.astro';
       }
     });
 
-    // ── 3. Cinematic dissolve → next section (87% → 100%) ────────────────
-    // Fades the entire sticky panel so content below is revealed as the
-    // user scrolls through the final stretch of the hero section.
+    // Cinematic dissolve at end
     gsap.to(stickyPanel, {
       opacity: 0,
       ease: 'none',
@@ -468,64 +355,6 @@ import Logo3D from '../Logo3D.astro';
         end: '100% top',
         scrub: 0.6,
       },
-    });
-  }
-
-  async function initCinematicHero() {
-    const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement;
-    const particleCount = deviceTier === 'mobile' ? 200 : deviceTier === 'tablet' ? 400 : 800;
-    const dpr: [number, number] = deviceTier === 'mobile' ? [1, 1] : deviceTier === 'tablet' ? [1, 1.5] : [1, 2];
-
-
-    const { CinematicEngine } = await import('./cinematic-engine');
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(() => resolve());
-        } else {
-          resolve();
-        }
-      }, 1500);
-    });
-
-    const engine = new CinematicEngine({
-      canvas,
-      scrollContainer,
-      particleCount,
-      dpr,
-      onLoaded: () => {
-        // Use queueMicrotask to avoid TDZ — on mobile, onLoaded fires synchronously
-        // during the CinematicEngine constructor, before `engine` is assigned.
-        queueMicrotask(() => {
-          // Start engine but keep canvas hidden — render warm-up frames
-          // so GPU compiles shaders before the user sees anything (prevents lag).
-          engine.start();
-
-          // Wait for a few frames to render off-screen, then reveal
-          let warmupFrames = 0;
-          const warmupTarget = deviceTier === 'mobile' ? 8 : 4;
-          function onWarmup() {
-            warmupFrames++;
-            if (warmupFrames < warmupTarget) {
-              requestAnimationFrame(onWarmup);
-              return;
-            }
-            // GPU is warm — reveal everything
-            loader.style.opacity = '0';
-            setTimeout(() => loader.remove(), 600);
-            triggerLogoShatter();
-            setupScrollDrivenTransition(engine);
-          }
-          requestAnimationFrame(onWarmup);
-        });
-      },
-    });
-
-    canvasWrapper.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = (e.clientY / window.innerHeight) * 2 - 1;
-      engine.onMouseMove(x, y);
     });
   }
 </script>
