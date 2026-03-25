@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import SpaceModel from './SpaceModel';
 import SpaceCamera from './SpaceCamera';
+import SpaceStars from './SpaceStars';
 
 interface SpaceSceneProps {
   scrollProgress: number;
@@ -65,6 +66,8 @@ export default function SpaceScene({ scrollProgress }: SpaceSceneProps) {
       <SpaceCamera progress={scrollProgress} />
 
       <fogExp2 ref={fogRef} attach="fog" args={[fogColor, 0.015]} />
+
+      <SpaceStars />
 
       <ambientLight intensity={0.3} />
       <directionalLight position={[5, 10, 5]} intensity={1.2} castShadow />
