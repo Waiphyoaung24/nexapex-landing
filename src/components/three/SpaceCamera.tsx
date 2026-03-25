@@ -10,15 +10,15 @@ interface SpaceCameraProps {
 // Camera keyframes along the flight path
 // Each keyframe: { at: scrollProgress, pos: [x,y,z], lookAt: [x,y,z] }
 const KEYFRAMES = [
-  { at: 0.0, pos: [0, 2, 12], lookAt: [0, 1, 0] },
-  { at: 0.15, pos: [0, 2, 6], lookAt: [0, 1, 0] },
-  { at: 0.25, pos: [0, 3, -10], lookAt: [0, 2, -20] },
-  { at: 0.35, pos: [-2, 2, -50], lookAt: [0, 1, -60] },
-  { at: 0.50, pos: [-2, 2, -54], lookAt: [0, 1, -60] },
-  { at: 0.60, pos: [0, 3, -75], lookAt: [0, 2, -90] },
-  { at: 0.70, pos: [2, 2, -110], lookAt: [0, 1, -120] },
-  { at: 0.85, pos: [2, 2, -114], lookAt: [0, 1, -120] },
-  { at: 1.0, pos: [0, 3, -125], lookAt: [0, 2, -130] },
+  { at: 0.0, pos: [0, 3, 18], lookAt: [0, 0, 0] },        // Far back — model 1 framed
+  { at: 0.12, pos: [3, 2, 8], lookAt: [0, 0, 0] },         // Closer orbit of model 1
+  { at: 0.25, pos: [0, 4, -15], lookAt: [0, 0, -30] },     // Pulling away, transitioning
+  { at: 0.35, pos: [-3, 3, -48], lookAt: [0, 0, -60] },    // Approaching model 2
+  { at: 0.50, pos: [-3, 2, -52], lookAt: [0, 0, -60] },    // Close to model 2
+  { at: 0.60, pos: [0, 4, -80], lookAt: [0, 0, -100] },    // Transitioning to model 3
+  { at: 0.72, pos: [3, 3, -108], lookAt: [0, 0, -120] },   // Approaching model 3
+  { at: 0.85, pos: [3, 2, -112], lookAt: [0, 0, -120] },   // Close to model 3
+  { at: 1.0, pos: [0, 4, -128], lookAt: [0, 0, -135] },    // Final pullback
 ] as const;
 
 function lerpKeyframes(progress: number) {
@@ -47,8 +47,8 @@ export default function SpaceCamera({ progress }: SpaceCameraProps) {
 
   useFrame(() => {
     const { pos, lookAt } = lerpKeyframes(progress);
-    camera.position.lerp(new THREE.Vector3(pos[0], pos[1], pos[2]), 0.08);
-    lookAtTarget.current.lerp(new THREE.Vector3(lookAt[0], lookAt[1], lookAt[2]), 0.08);
+    camera.position.lerp(new THREE.Vector3(pos[0], pos[1], pos[2]), 0.12);
+    lookAtTarget.current.lerp(new THREE.Vector3(lookAt[0], lookAt[1], lookAt[2]), 0.12);
     camera.lookAt(lookAtTarget.current);
   });
 
