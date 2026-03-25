@@ -1,0 +1,191 @@
+---
+// Spiral 3D visualization — generative instanced mesh tunnel with text overlay
+---
+
+<section id="spiral" class="relative w-full h-screen overflow-hidden">
+  <!-- Three.js canvas mount -->
+  <div id="spiral-canvas" class="absolute inset-0 z-0"></div>
+
+  <!-- Gradient overlay for text legibility -->
+  <div class="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-bg via-bg/40 to-transparent"></div>
+
+  <!-- Text overlay -->
+  <div class="absolute inset-0 z-20 flex flex-col items-center justify-end px-5 md:px-10 lg:px-14 pb-20 md:pb-28">
+    <div class="text-center max-w-3xl">
+      <p class="spiral-text font-m text-[11px] text-cyan-dim uppercase tracking-[0.3em] mb-4 opacity-0">
+        Beyond the Horizon
+      </p>
+      <h2 class="spiral-text font-d text-[clamp(1.8rem,4.5vw,3.5rem)] text-white leading-[1.05] tracking-[-0.02em] mb-5 opacity-0">
+        Where Data Meets<br />
+        <span class="italic text-cyan-dim">Intelligence</span>
+      </h2>
+      <p class="spiral-text font-b text-base md:text-lg text-dim leading-relaxed max-w-xl mx-auto opacity-0">
+        We transform raw data into systems that see patterns, predict outcomes,
+        and make decisions — at the speed your business demands.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import * as THREE from 'three';
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const container = document.getElementById('spiral-canvas');
+  if (!container) throw new Error('spiral-canvas not found');
+
+  // --- Three.js spiral setup ---
+  const rowCount = 20;
+  const columnCount = 64;
+  const layerCount = 2;
+
+  const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 1, 1000);
+  camera.position.set(0, 6, 6);
+  camera.lookAt(0, 0, 1);
+
+  const scene = new THREE.Scene();
+
+  // BoxBufferGeometry renamed to BoxGeometry in Three.js 0.183
+  const geom = new THREE.BoxGeometry();
+  const rowCol: number[] = [];
+
+  for (let i = 0; i < rowCount; i++) {
+    for (let j = 0; j < layerCount; j++) {
+      for (let k = 0; k < columnCount; k++) {
+        rowCol.push(i);
+        rowCol.push(k);
+        rowCol.push(j);
+      }
+    }
+  }
+
+  geom.setAttribute('rcl', new THREE.InstancedBufferAttribute(new Float32Array(rowCol), 3));
+
+  // Canvas texture for box faces (white outline)
+  const texCanvas = document.createElement('canvas');
+  const size = texCanvas.height = texCanvas.width = 128;
+  const ctx = texCanvas.getContext('2d')!;
+  ctx.fillStyle = '#5ac8cb'; // Brand cyan-dim
+  ctx.fillRect(0, 0, size, size);
+  ctx.clearRect(3, 3, size - 6, size - 6);
+
+  const map = new THREE.CanvasTexture(texCanvas);
+  map.anisotropy = 4;
+  const material = new THREE.MeshBasicMaterial({ map });
+
+  const time = { value: 0 };
+
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.time = time;
+
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `
+        uniform float time;
+        attribute vec3 rcl;
+        #include <common>
+      `)
+      .replace('#include <project_vertex>', `
+        const float colCount = float(${columnCount});
+        const float arc = 2.0 * 3.14159265359 / colCount;
+        const float oneStep = 0.283;
+
+        float shift = 3.0 - fract(time) * oneStep;
+        float radius = shift;
+        float zShift = 0.0;
+        int x = int(rcl.x);
+        for (int i = 0; i < x; i++) {
+          radius += radius * arc;
+          zShift += radius * arc;
+        }
+
+        vec4 mvPosition = vec4(transformed, 1.0);
+
+        if (mvPosition.z > 0.0) {
+          radius += radius * arc;
+        }
+
+        mvPosition.xz *= radius * arc;
+        mvPosition.z += zShift + shift;
+
+        float t = sin(rcl.y / 5.3) * 1.1
+                + sin(rcl.y / 1.3) * 1.5
+                + cos(rcl.y / 1.7) * 2.5;
+
+        t = 2.0 - rcl.x + abs(t) + fract(time);
+        t += rcl.z * abs(sin(rcl.y));
+        t = max(t, 0.);
+        mvPosition.y -= t * t * t + rcl.z;
+
+        float angle = rcl.y * arc;
+        float sn = sin(angle);
+        float cs = cos(angle);
+        mvPosition.xz = mvPosition.xz * mat2(cs, -sn, sn, cs);
+
+        mvPosition = modelViewMatrix * mvPosition;
+        gl_Position = projectionMatrix * mvPosition;
+      `);
+  };
+
+  scene.add(new THREE.InstancedMesh(geom, material, rowCount * columnCount * layerCount));
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setClearColor(0x0e1418, 1);
+  container.appendChild(renderer.domElement);
+
+  // --- Resize handler ---
+  function onResize() {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  }
+  addEventListener('resize', onResize);
+
+  // --- Animation loop (only when in view) ---
+  let isInView = false;
+  let rafId: number;
+
+  function animate(t: number) {
+    if (!isInView) return;
+    time.value = t / 1000;
+    scene.rotation.y = -t / 10000;
+    renderer.render(scene, camera);
+    rafId = requestAnimationFrame(animate);
+  }
+
+  // Use IntersectionObserver to only animate when visible
+  const observer = new IntersectionObserver(([entry]) => {
+    isInView = entry.isIntersecting;
+    if (isInView) {
+      rafId = requestAnimationFrame(animate);
+    }
+  }, { threshold: 0.1 });
+  observer.observe(container);
+
+  // --- GSAP text reveal ---
+  const spiralTexts = document.querySelectorAll('.spiral-text');
+
+  if (prefersReducedMotion) {
+    gsap.set(spiralTexts, { opacity: 1 });
+  } else {
+    gsap.fromTo(spiralTexts,
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#spiral',
+          start: 'top 60%',
+          end: 'top 20%',
+          scrub: 1,
+        },
+      }
+    );
+  }
+</script>
