@@ -1,44 +1,75 @@
 ---
-// Navbar — fixed top, logo left, action buttons right
+// Navbar — fixed top, brand logo + action buttons
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 lg:px-14 py-5">
-  <!-- Logo -->
-  <a href="/" class="block relative z-10">
-    <span class="font-b font-bold text-white text-lg md:text-xl tracking-wide uppercase">NexApex</span>
-  </a>
-
-  <!-- Right side actions -->
-  <div class="flex items-center gap-3">
-    <!-- Icon button -->
-    <a
-      href="/#work"
-      class="hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/40"
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-      </svg>
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-14 py-5">
+  <div class="flex items-center justify-between">
+    <!-- Brand logo mark -->
+    <a href="/" class="nav-item block relative z-10 opacity-0" aria-label="NexApex Home">
+      <img
+        src="/outline_iconmark.png"
+        alt="NexApex"
+        class="h-9 md:h-10 w-auto"
+      />
     </a>
 
-    <!-- Let's Talk button -->
-    <a
-      href="mailto:hello@nexapex.ai"
-      class="hidden md:flex items-center gap-2 px-5 h-11 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm font-m text-sm font-medium text-white uppercase tracking-wider transition-all duration-300 hover:bg-white/10 hover:border-white/40"
-    >
-      Let's Talk
-      <span class="w-1.5 h-1.5 rounded-full bg-cyan-dim"></span>
-    </a>
+    <!-- Right side actions -->
+    <div class="flex items-center gap-3">
+      <!-- Pulse icon -->
+      <a
+        href="/#work"
+        class="nav-item opacity-0 hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md transition-all duration-500 hover:bg-white/10 hover:border-cyan-dim/40 hover:shadow-[0_0_20px_rgba(90,200,203,0.15)]"
+        aria-label="Our work"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/80">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+        </svg>
+      </a>
 
-    <!-- Menu button -->
-    <button
-      id="menu-toggle"
-      class="flex items-center gap-2.5 px-5 h-11 rounded-full bg-white text-bg font-m text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white/90"
-    >
-      Menu
-      <span class="flex gap-1">
-        <span class="w-1.5 h-1.5 rounded-full bg-bg"></span>
-        <span class="w-1.5 h-1.5 rounded-full bg-bg"></span>
-      </span>
-    </button>
+      <!-- Let's Talk -->
+      <a
+        href="mailto:hello@nexapex.ai"
+        class="nav-item opacity-0 hidden md:flex items-center gap-2.5 px-6 h-11 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md font-m text-[13px] font-medium text-white/90 uppercase tracking-[0.15em] transition-all duration-500 hover:bg-white/10 hover:border-cyan-dim/40 hover:shadow-[0_0_20px_rgba(90,200,203,0.15)]"
+      >
+        Let's Talk
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-dim animate-pulse"></span>
+      </a>
+
+      <!-- Menu -->
+      <button
+        id="menu-toggle"
+        class="nav-item opacity-0 flex items-center gap-2.5 px-6 h-11 rounded-full bg-white text-bg font-m text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-500 hover:bg-cyan hover:text-bg"
+      >
+        Menu
+        <span class="flex gap-[3px]">
+          <span class="w-[5px] h-[5px] rounded-full bg-bg"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-bg"></span>
+        </span>
+      </button>
+    </div>
   </div>
 </nav>
+
+<!-- Navbar entrance animation -->
+<script>
+  import gsap from 'gsap';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const navItems = document.querySelectorAll('.nav-item');
+
+  if (prefersReducedMotion) {
+    gsap.set(navItems, { opacity: 1 });
+  } else {
+    gsap.fromTo(navItems,
+      { opacity: 0, y: -20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.08,
+        ease: 'power3.out',
+        delay: 0.2,
+      }
+    );
+  }
+</script>
