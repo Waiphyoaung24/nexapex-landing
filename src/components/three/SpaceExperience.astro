@@ -1,0 +1,75 @@
+---
+// Full-page immersive 3D scroll experience
+import SpaceOverlays from './SpaceOverlays.astro';
+---
+
+<!-- Fixed 3D canvas behind everything -->
+<div id="space-canvas-mount" class="fixed inset-0 z-0"></div>
+
+<!-- Scrollable content container — height drives the entire experience -->
+<div id="space-scroll-container" class="relative z-10">
+  <!-- Spacer for entry (camera starts pulled back) -->
+  <div class="h-[50vh]" aria-hidden="true"></div>
+
+  <SpaceOverlays />
+
+  <!-- Spacer for final pullback -->
+  <div class="h-[80vh]" aria-hidden="true"></div>
+</div>
+
+<!-- Loading overlay -->
+<div id="space-loader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg transition-opacity duration-700">
+  <p class="font-d text-2xl text-white mb-4">Loading Experience</p>
+  <div class="w-48 h-[2px] bg-surface2 rounded-full overflow-hidden">
+    <div id="space-loader-bar" class="h-full bg-cyan-dim rounded-full transition-all duration-300" style="width: 0%"></div>
+  </div>
+  <p id="space-loader-pct" class="font-m text-dim text-sm mt-3">0%</p>
+</div>
+
+<!-- Mount React canvas client-side -->
+<script>
+  import { createElement } from 'react';
+  import { createRoot } from 'react-dom/client';
+  import SpaceCanvas from './SpaceCanvas';
+
+  const mount = document.getElementById('space-canvas-mount');
+  if (mount) {
+    const root = createRoot(mount);
+    root.render(createElement(SpaceCanvas));
+  }
+</script>
+
+<!-- Loading progress watcher -->
+<script>
+  function watchLoading() {
+    const loader = document.getElementById('space-loader');
+    const bar = document.getElementById('space-loader-bar') as HTMLElement;
+    const pct = document.getElementById('space-loader-pct');
+    if (!loader || !bar || !pct) return;
+
+    // Listen for real progress from drei useProgress
+    window.addEventListener('space-load-progress', ((e: CustomEvent) => {
+      const p = Math.round(e.detail.progress);
+      bar.style.width = p + '%';
+      pct.textContent = p + '%';
+      if (p >= 100) {
+        setTimeout(() => {
+          loader.style.opacity = '0';
+          loader.style.pointerEvents = 'none';
+          setTimeout(() => loader.remove(), 700);
+        }, 400);
+      }
+    }) as EventListener);
+
+    // Timeout fallback — remove loader after 8s regardless
+    setTimeout(() => {
+      if (loader.parentNode) {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => loader.remove(), 700);
+      }
+    }, 8000);
+  }
+
+  watchLoading();
+</script>
