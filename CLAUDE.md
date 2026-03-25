@@ -24,7 +24,7 @@
 | Agent | Location | Preloaded Skills (local) | Plugin Skills (via Skill tool) | Purpose |
 |-------|----------|--------------------------|-------------------------------|---------|
 | `rebrand-3d-agent` | `.claude/agents/rebrand-3d-agent.md` | `3d-web`, `threejs-fundamentals`, `threejs-loaders`, `threejs-materials`, `threejs-lighting`, `threejs-animation`, `threejs-interaction`, `threejs-geometry`, `threejs-textures`, `threejs-shaders`, `threejs-postprocessing` | — | Replace Logo3D with scroll-driven spacestation 3D scene |
-| `rebrand-ui-agent` | `.claude/agents/rebrand-ui-agent.md` | `frontend-design`, `react-expert`, `taste-skill`, `soft-skill`, `redesign-skill`, `coding-standards` | `ui-ux-pro-max:ui-ux-pro-max` | Polish all UI components to match 3D visual identity |
+| `rebrand-ui-agent` | `.claude/agents/rebrand-ui-agent.md` | `frontend-design`, `react-expert`, `taste-skill`, `soft-skill`, `redesign-skill`, `coding-standards`, `gsap-core`, `gsap-timeline`, `gsap-scrolltrigger`, `gsap-plugins`, `gsap-utils`, `gsap-react`, `gsap-performance`, `gsap-frameworks` | `ui-ux-pro-max:ui-ux-pro-max`, `frontend-design:frontend-design`, `frontend-developer`, `ui-skills`, `ui-ux-pro-max` | Polish all UI components to match 3D visual identity |
 | `rebrand-review-agent` | `.claude/agents/rebrand-review-agent.md` | `playwright-skill`, `code-reviewer`, `coding-standards` | `superpowers:verification-before-completion` | Visual + code validation with Playwright screenshots |
 
 ### Skill Types
@@ -43,9 +43,20 @@
 | `soft-skill` | Preloaded | `.claude/skills/soft-skill/SKILL.md` |
 | `redesign-skill` | Preloaded | `.claude/skills/redesign-skill/SKILL.md` |
 | `coding-standards` | Preloaded | `.claude/skills/coding-standards/SKILL.md` |
+| `gsap-core` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-core/SKILL.md` |
+| `gsap-timeline` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-timeline/SKILL.md` |
+| `gsap-scrolltrigger` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-scrolltrigger/SKILL.md` |
+| `gsap-plugins` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-plugins/SKILL.md` |
+| `gsap-utils` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-utils/SKILL.md` |
+| `gsap-react` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-react/SKILL.md` |
+| `gsap-performance` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-performance/SKILL.md` |
+| `gsap-frameworks` | Preloaded | `.claude/skills/gsap-skills/skills/gsap-frameworks/SKILL.md` |
 | `playwright-skill` | Preloaded | `.claude/skills/playwright-skill/SKILL.md` |
 | `code-reviewer` | Preloaded | `.claude/skills/code-reviewer/SKILL.md` |
 | `ui-ux-pro-max:ui-ux-pro-max` | Plugin | `ui-ux-pro-max-skill` marketplace |
+| `frontend-design:frontend-design` | Plugin | `frontend-design` marketplace |
+| `frontend-developer` | Plugin | `frontend-developer` marketplace |
+| `ui-skills` | Plugin | `ui-skills` marketplace |
 | `superpowers:brainstorming` | Plugin | `superpowers-marketplace` |
 | `superpowers:verification-before-completion` | Plugin | `superpowers-marketplace` |
 
@@ -87,8 +98,10 @@
          │  Model: opus                                        │
          │  Preloaded: frontend-design, react-expert,          │
          │    taste-skill, soft-skill, redesign-skill,         │
-         │    coding-standards                                 │
-         │  Plugin: ui-ux-pro-max:ui-ux-pro-max (via Skill)   │
+         │    coding-standards, gsap-* (8 skills)              │
+         │  Plugin: ui-ux-pro-max:ui-ux-pro-max,              │
+         │    frontend-design:frontend-design,                 │
+         │    frontend-developer, ui-skills (via Skill)        │
          │  Tools: Read, Write, Edit, Glob, Grep, Bash         │
          │  MCP: context7, shadcn                              │
          └─────────────────────────┬───────────────────────────┘
@@ -159,6 +172,23 @@ new GLTFLoader().load('/models/spacestation_brand.glb', (gltf) => {
 - **0-30% scroll**: Model at initial position, slow auto-rotate
 - **30-60% scroll**: Camera zooms closer, model tilts to reveal detail
 - **60-100% scroll**: Camera pulls back, model fades as content takes over
+
+## GSAP Skills (Preloaded for UI Agent)
+
+All 8 GSAP skills are preloaded from `.claude/skills/gsap-skills/skills/`:
+
+| Skill | Purpose |
+|-------|---------|
+| `gsap-core` | Core API: `gsap.to()` / `from()` / `fromTo()`, easing, duration, stagger |
+| `gsap-timeline` | Timelines: sequencing, position parameter, labels, nesting |
+| `gsap-scrolltrigger` | ScrollTrigger: scroll-linked animations, pinning, scrub, triggers |
+| `gsap-plugins` | Plugins: ScrollSmoother, Flip, Draggable, SplitText, etc. |
+| `gsap-utils` | Utilities: clamp, mapRange, normalize, interpolate, snap, toArray |
+| `gsap-react` | React: useGSAP hook, refs, `gsap.context()`, cleanup, SSR |
+| `gsap-performance` | Performance: transforms over layout props, will-change, batching |
+| `gsap-frameworks` | Vue, Svelte: lifecycle, scoping selectors, cleanup |
+
+**When to use:** The `rebrand-ui-agent` must consult these skills for all GSAP animation work. Additionally invoke plugin skills `/frontend-design`, `/frontend-developer`, `/ui-skills`, `/ui-ux-pro-max` via the Skill tool for UI polish decisions.
 
 ## Rules
 
