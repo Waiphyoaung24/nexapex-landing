@@ -1,44 +1,31 @@
 import { useEffect, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, PerspectiveCamera, Preload, Environment } from '@react-three/drei';
+import { useGLTF, PerspectiveCamera, Preload } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Camera much closer to fill viewport with the model
+// Camera perspectives — adapted from Codrops Demo 2 scene-data.ts
+// 3 perspectives for 3 capabilities, orbiting the cyberpunk skyscraper
 const PERSPECTIVES = [
-  { camera: { x: 5, y: 5, z: 18 }, target: { x: 0, y: 3, z: 0 } },      // Front close
-  { camera: { x: -14, y: 8, z: 10 }, target: { x: 0, y: 5, z: 0 } },    // Left orbit close
-  { camera: { x: 12, y: 12, z: -6 }, target: { x: 0, y: 6, z: 0 } },    // Right rear close
+  { camera: { x: 0, y: 2, z: 10 }, target: { x: 0, y: 5, z: 0 } },       // Front — looking up
+  { camera: { x: -10, y: 15, z: 0 }, target: { x: 0, y: 15, z: 0 } },     // Left side — mid height
+  { camera: { x: 5, y: 25, z: 10 }, target: { x: 0, y: 20, z: 0 } },      // Right elevated — near top
 ];
 
-// --- Model component — auto-scales to target size ---
-function SpaceModel() {
-  const { scene } = useGLTF('/models/products_space.glb');
+// Cyberpunk skyscraper model — same as Codrops Demo 2
+function CyberpunkBuilding() {
+  const { scene } = useGLTF('/models/cyberpunk_skyscraper.glb');
 
   useEffect(() => {
-    if (!scene) return;
-
-    // Compute bounding box and auto-scale to ~30 units tall
-    const box = new THREE.Box3().setFromObject(scene);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-    box.getSize(size);
-    box.getCenter(center);
-
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const targetSize = 30;
-    const s = targetSize / maxDim;
-
-    scene.scale.set(s, s, s);
-    // Center the model at origin
-    scene.position.set(-center.x * s, -center.y * s, -center.z * s);
-
-    // Model auto-scaled to ~30 units tall
+    if (scene) {
+      scene.scale.set(3, 3, 3);
+      scene.position.set(0, 0, 0);
+    }
   }, [scene]);
 
   return <primitive object={scene} />;
 }
 
-// --- Animated camera driven by refs ---
+// Animated camera driven by GSAP refs
 function AnimatedCamera({
   cameraRef: cameraAnimRef,
   targetRef: targetAnimRef,
@@ -74,14 +61,14 @@ function AnimatedCamera({
       ref={camRef}
       makeDefault
       fov={45}
-      near={0.1}
+      near={1}
       far={1000}
       position={[PERSPECTIVES[0].camera.x, PERSPECTIVES[0].camera.y, PERSPECTIVES[0].camera.z]}
     />
   );
 }
 
-// --- Scene setup ---
+// Scene setup — matches Codrops Demo 2 lighting + fog
 function SceneContent({
   cameraRef,
   targetRef,
@@ -92,26 +79,24 @@ function SceneContent({
   const { scene } = useThree();
 
   useEffect(() => {
-    scene.fog = new THREE.Fog(0x0e1418, 25, 60);
-    scene.background = null;
+    const fogColor = new THREE.Color('#0e1418');
+    scene.fog = new THREE.Fog(fogColor, 12, 28);
+    scene.background = new THREE.Color('#0e1418');
   }, [scene]);
 
   return (
     <>
       <AnimatedCamera cameraRef={cameraRef} targetRef={targetRef} />
-      <Environment preset="night" />
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[30, 60, 30]} intensity={3} castShadow />
-      <directionalLight position={[-30, 30, -30]} intensity={1.5} />
-      <pointLight position={[0, 30, 40]} color="#94fcff" intensity={4} distance={120} />
-      <pointLight position={[-20, 20, -20]} color="#5ac8cb" intensity={3} distance={100} />
-      <pointLight position={[20, 10, 20]} color="#ffffff" intensity={2} distance={80} />
-      <SpaceModel />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[10, 20, 10]} intensity={1.2} castShadow />
+      <directionalLight position={[-10, 10, -10]} intensity={0.6} />
+      <pointLight position={[0, 50, 20]} intensity={0.8} color="#00ffff" />
+      <CyberpunkBuilding />
     </>
   );
 }
 
-// --- Exported canvas component ---
+// Exported canvas
 export default function CapabilitiesScene({
   cameraRef,
   targetRef,
@@ -123,11 +108,11 @@ export default function CapabilitiesScene({
     <Canvas
       gl={{
         antialias: true,
-        alpha: true,
+        alpha: false,
         powerPreference: 'high-performance',
       }}
-      dpr={[1, 1.5]}
-      style={{ background: 'transparent' }}
+      dpr={[1, 2]}
+      style={{ background: '#0e1418' }}
     >
       <SceneContent cameraRef={cameraRef} targetRef={targetRef} />
       <Preload all />
@@ -137,4 +122,4 @@ export default function CapabilitiesScene({
 
 export { PERSPECTIVES };
 
-useGLTF.preload('/models/products_space.glb');
+useGLTF.preload('/models/cyberpunk_skyscraper.glb');
