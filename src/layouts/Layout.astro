@@ -187,32 +187,6 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
       }
     </script>
 
-    <!-- Scroll reveal animations for landing sections -->
-    <script>
-      import { initAllAnimations } from '../components/cinematic/scroll-animations';
-      import { initAmbientEffects } from '../components/cinematic/ambient-effects';
-      import { initProductAnimations } from '../components/cinematic/product-animations';
-
-      function startAnimations() {
-        initAllAnimations();
-        initAmbientEffects();
-        initProductAnimations();
-      }
-
-      function initWhenReady() {
-        if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(startAnimations);
-        } else {
-          startAnimations();
-        }
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initWhenReady);
-      } else {
-        initWhenReady();
-      }
-    </script>
   </body>
 </html>
 
