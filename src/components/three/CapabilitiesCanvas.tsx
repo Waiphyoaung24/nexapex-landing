@@ -1,12 +1,18 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import CapabilitiesScene, { PERSPECTIVES } from './CapabilitiesScene';
 
 export default function CapabilitiesCanvas() {
   const cameraRef = useRef({ ...PERSPECTIVES[0].camera });
   const targetRef = useRef({ ...PERSPECTIVES[0].target });
   const containerRef = useRef<HTMLDivElement>(null);
+  const [modelReady, setModelReady] = useState(false);
 
+  const handleModelReady = useCallback(() => setModelReady(true), []);
+
+  // Init GSAP only after model has loaded
   useEffect(() => {
+    if (!modelReady) return;
+
     let cleanup: (() => void) | undefined;
 
     async function setup() {
@@ -19,13 +25,14 @@ export default function CapabilitiesCanvas() {
       const trigger = '#capabilities-scroll';
       const triggers: any[] = [];
 
-      // Master timeline: camera orbits through 3 perspectives
+      // Master timeline: camera orbits through perspectives
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1.5,
+          scrub: 0.4,
+          invalidateOnRefresh: true,
         },
       });
 
@@ -53,7 +60,7 @@ export default function CapabilitiesCanvas() {
 
       triggers.push(tl.scrollTrigger);
 
-      // Tight fade-in: only when capabilities section hits the top of viewport
+      // Fade-in: when capabilities section enters viewport
       const fadeInST = ScrollTrigger.create({
         trigger,
         start: 'top bottom',
@@ -67,7 +74,7 @@ export default function CapabilitiesCanvas() {
       });
       triggers.push(fadeInST);
 
-      // Tight fade-out: starts fading as bottom of section approaches viewport bottom
+      // Fade-out: as bottom of section leaves viewport
       const fadeOutST = ScrollTrigger.create({
         trigger,
         start: 'bottom bottom',
@@ -81,6 +88,9 @@ export default function CapabilitiesCanvas() {
       });
       triggers.push(fadeOutST);
 
+      // Recalculate positions now that model + scene are ready
+      ScrollTrigger.refresh();
+
       cleanup = () => {
         triggers.forEach((t) => t?.kill?.());
         tl.kill();
@@ -89,7 +99,7 @@ export default function CapabilitiesCanvas() {
 
     setup();
     return () => cleanup?.();
-  }, []);
+  }, [modelReady]);
 
   return (
     <div
@@ -102,7 +112,11 @@ export default function CapabilitiesCanvas() {
         opacity: 0,
       }}
     >
-      <CapabilitiesScene cameraRef={cameraRef} targetRef={targetRef} />
+      <CapabilitiesScene
+        cameraRef={cameraRef}
+        targetRef={targetRef}
+        onModelReady={handleModelReady}
+      />
     </div>
   );
 }
