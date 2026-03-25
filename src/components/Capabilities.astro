@@ -1,92 +1,125 @@
 ---
-// Capabilities — three blocks with scrub reveals
+// Capabilities — cinematic 3D section with scroll-driven camera + text overlays
+import CapabilitiesCanvas from './three/CapabilitiesCanvas';
+
 const capabilities = [
-  { num: '01', title: 'Computer Vision', desc: 'Quality control that never blinks' },
-  { num: '02', title: 'Predictive Intelligence', desc: 'Demand forecasting that learns your market' },
-  { num: '03', title: 'Natural Language', desc: 'Systems that speak your customers\' language' },
+  {
+    num: '01',
+    title: 'Computer Vision',
+    desc: 'Quality control that never blinks',
+    position: 'left' as const,
+  },
+  {
+    num: '02',
+    title: 'Predictive Intelligence',
+    desc: 'Demand forecasting that learns your market',
+    position: 'right' as const,
+  },
+  {
+    num: '03',
+    title: 'Natural Language',
+    desc: "Systems that speak your customers' language",
+    position: 'center' as const,
+  },
 ];
 ---
 
-<section id="capabilities" class="relative py-32 md:py-48">
-  {capabilities.map((cap) => (
-    <div class="cap-block relative px-6 md:px-10 lg:px-14 py-20 md:py-32 min-h-[70vh] flex items-center">
-      <!-- Large faint number -->
-      <span class="cap-num absolute top-1/2 -translate-y-1/2 left-6 md:left-10 lg:left-14 font-d text-[clamp(6rem,15vw,12rem)] leading-none text-cyan-dim/[0.06] pointer-events-none select-none">
-        {cap.num}
-      </span>
+<!-- Fixed 3D canvas — renders behind everything, fades in/out via GSAP -->
+<CapabilitiesCanvas client:only="react" />
 
-      <!-- Text content -->
-      <div class="relative z-10 max-w-2xl ml-0 md:ml-20 lg:ml-32">
-        <div class="overflow-hidden">
-          <h3 class="cap-title font-d text-[clamp(2rem,5vw,4rem)] text-white leading-[0.95] tracking-[-0.02em]">
-            {cap.title}
-          </h3>
-        </div>
-        <p class="cap-desc font-b text-lg md:text-xl text-dim mt-4 md:mt-6 leading-relaxed">
+<!-- Scroll container — height drives the camera animation -->
+<section id="capabilities-scroll" class="relative z-10" style="height: 400vh;">
+  {capabilities.map((cap, i) => (
+    <div
+      class:list={[
+        'cap-overlay sticky top-0 h-screen flex items-center pointer-events-none',
+        'px-6 md:px-10 lg:px-14',
+        cap.position === 'right' ? 'justify-end' : cap.position === 'center' ? 'justify-center' : 'justify-start',
+      ]}
+      data-cap-index={i}
+    >
+      <div
+        class:list={[
+          'max-w-lg',
+          cap.position === 'right' ? 'text-right' : cap.position === 'center' ? 'text-center' : 'text-left',
+        ]}
+      >
+        <!-- Large faint number -->
+        <span class="cap-num block font-d text-[clamp(5rem,12vw,10rem)] leading-none text-cyan-dim/[0.08] select-none">
+          {cap.num}
+        </span>
+
+        <!-- Title -->
+        <h3 class="cap-title font-d text-[clamp(1.8rem,4.5vw,3.5rem)] text-white leading-[0.95] tracking-[-0.02em] -mt-8 md:-mt-12 drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
+          {cap.title}
+        </h3>
+
+        <!-- Description -->
+        <p class="cap-desc font-b text-base md:text-lg text-dim mt-3 md:mt-4 leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
           {cap.desc}
         </p>
       </div>
-
-      <!-- Divider line -->
-      <div class="cap-line absolute bottom-0 left-6 md:left-10 lg:left-14 right-6 md:right-10 lg:right-14 h-px bg-white/[0.08] origin-left scale-x-0"></div>
     </div>
   ))}
 </section>
 
+<!-- GSAP text overlay animations -->
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const overlays = document.querySelectorAll('.cap-overlay');
 
-  document.querySelectorAll('.cap-block').forEach((block) => {
-    const num = block.querySelector('.cap-num');
-    const title = block.querySelector('.cap-title');
-    const desc = block.querySelector('.cap-desc');
-    const line = block.querySelector('.cap-line');
-
-    if (prefersReducedMotion) {
-      gsap.set([num, title, desc], { opacity: 1, x: 0, y: 0 });
-      gsap.set(line, { scaleX: 1 });
-      return;
-    }
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: block,
-        start: 'top 80%',
-        end: 'top 30%',
-        scrub: 1,
-      },
+  if (prefersReducedMotion) {
+    overlays.forEach((o) => {
+      gsap.set(o.querySelectorAll('.cap-num, .cap-title, .cap-desc'), { opacity: 1 });
     });
+  } else {
+    overlays.forEach((overlay, i) => {
+      const num = overlay.querySelector('.cap-num');
+      const title = overlay.querySelector('.cap-title');
+      const desc = overlay.querySelector('.cap-desc');
+      const total = overlays.length;
 
-    // Number slides in from left
-    tl.fromTo(num,
-      { x: -80, opacity: 0 },
-      { x: 0, opacity: 1, ease: 'power3.out' },
-      0
-    );
+      // Each capability gets 1/total of the scroll range
+      const segmentStart = (i / total) * 100;
+      const segmentEnd = ((i + 1) / total) * 100;
+      const midPoint = segmentStart + (segmentEnd - segmentStart) * 0.5;
 
-    // Title clip-path reveal
-    tl.fromTo(title,
-      { yPercent: 100, opacity: 0 },
-      { yPercent: 0, opacity: 1, ease: 'power4.out' },
-      0.1
-    );
+      // Fade in
+      gsap.fromTo([num, title, desc],
+        { x: i === 0 ? 0 : -60, opacity: i === 0 ? 1 : 0 },
+        {
+          x: 0,
+          opacity: 1,
+          stagger: 0.05,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '#capabilities-scroll',
+            start: `${segmentStart}% top`,
+            end: `${segmentStart + 8}% top`,
+            scrub: 0.5,
+          },
+        }
+      );
 
-    // Description fade up
-    tl.fromTo(desc,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, ease: 'power3.out' },
-      0.2
-    );
-
-    // Line draws left to right
-    tl.fromTo(line,
-      { scaleX: 0 },
-      { scaleX: 1, ease: 'power2.inOut' },
-      0.3
-    );
-  });
+      // Fade out (except last — let section fade handle it)
+      if (i < total - 1) {
+        gsap.to([num, title, desc], {
+          x: 60,
+          opacity: 0,
+          stagger: -0.03,
+          ease: 'power2.in',
+          scrollTrigger: {
+            trigger: '#capabilities-scroll',
+            start: `${midPoint + 10}% top`,
+            end: `${segmentEnd - 2}% top`,
+            scrub: 0.5,
+          },
+        });
+      }
+    });
+  }
 </script>
