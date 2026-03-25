@@ -3,12 +3,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, PerspectiveCamera, Preload, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
-// --- Camera perspectives for 3 capabilities ---
-// Camera perspectives for auto-scaled model (~30 units)
+// Camera much closer to fill viewport with the model
 const PERSPECTIVES = [
-  { camera: { x: 0, y: 8, z: 45 }, target: { x: 0, y: 5, z: 0 } },      // Front view
-  { camera: { x: -35, y: 15, z: 25 }, target: { x: 0, y: 8, z: 0 } },    // Left orbit
-  { camera: { x: 25, y: 20, z: -15 }, target: { x: 0, y: 10, z: 0 } },   // Right rear
+  { camera: { x: 5, y: 5, z: 18 }, target: { x: 0, y: 3, z: 0 } },      // Front close
+  { camera: { x: -14, y: 8, z: 10 }, target: { x: 0, y: 5, z: 0 } },    // Left orbit close
+  { camera: { x: 12, y: 12, z: -6 }, target: { x: 0, y: 6, z: 0 } },    // Right rear close
 ];
 
 // --- Model component — auto-scales to target size ---
@@ -93,7 +92,7 @@ function SceneContent({
   const { scene } = useThree();
 
   useEffect(() => {
-    scene.fog = new THREE.Fog(0x0e1418, 50, 150);
+    scene.fog = new THREE.Fog(0x0e1418, 25, 60);
     scene.background = null;
   }, [scene]);
 

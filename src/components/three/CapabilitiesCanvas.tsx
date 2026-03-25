@@ -53,12 +53,12 @@ export default function CapabilitiesCanvas() {
 
       triggers.push(tl.scrollTrigger);
 
-      // Fade in the canvas container when capabilities section starts
+      // Tight fade-in: only when capabilities section hits the top of viewport
       const fadeInST = ScrollTrigger.create({
         trigger,
-        start: 'top 80%',
-        end: 'top 20%',
-        scrub: 1,
+        start: 'top bottom',
+        end: 'top top',
+        scrub: 0.5,
         onUpdate: (self) => {
           if (containerRef.current) {
             containerRef.current.style.opacity = String(self.progress);
@@ -67,12 +67,12 @@ export default function CapabilitiesCanvas() {
       });
       triggers.push(fadeInST);
 
-      // Fade out the canvas container before it hits the next section
+      // Tight fade-out: starts fading as bottom of section approaches viewport bottom
       const fadeOutST = ScrollTrigger.create({
         trigger,
-        start: 'bottom 80%',
-        end: 'bottom 20%',
-        scrub: 1,
+        start: 'bottom bottom',
+        end: 'bottom 60%',
+        scrub: 0.5,
         onUpdate: (self) => {
           if (containerRef.current) {
             containerRef.current.style.opacity = String(1 - self.progress);
