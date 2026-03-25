@@ -6,7 +6,7 @@ import * as THREE from 'three';
 // Camera perspectives — adapted from Codrops Demo 2 scene-data.ts
 // 3 perspectives for 3 capabilities, orbiting the cyberpunk skyscraper
 const PERSPECTIVES = [
-  { camera: { x: 5, y: 32, z: 10 }, target: { x: 0, y: 30, z: 0 } },      // 1. Rooftop — looking at summit
+  { camera: { x: 3, y: 22, z: 8 }, target: { x: 0, y: 20, z: 0 } },       // 1. Top floors — close to glowing windows
   { camera: { x: -8, y: 25, z: 8 }, target: { x: 0, y: 24, z: 0 } },      // 2. Upper floors — left orbit
   { camera: { x: 10, y: 18, z: 6 }, target: { x: 0, y: 17, z: 0 } },      // 3. Mid-high — right swing
   { camera: { x: -6, y: 12, z: 10 }, target: { x: 0, y: 11, z: 0 } },     // 4. Mid section — left close
