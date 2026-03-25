@@ -17,8 +17,26 @@ const capabilities = [
   },
   {
     num: '03',
+    title: 'Autonomous Systems',
+    desc: 'Self-optimizing operations that run 24/7',
+    position: 'left' as const,
+  },
+  {
+    num: '04',
     title: 'Natural Language',
     desc: "Systems that speak your customers' language",
+    position: 'right' as const,
+  },
+  {
+    num: '05',
+    title: 'Edge AI',
+    desc: 'On-device intelligence for real-time decisions',
+    position: 'center' as const,
+  },
+  {
+    num: '06',
+    title: 'AI Infrastructure',
+    desc: 'Scalable pipelines from prototype to production',
     position: 'center' as const,
   },
 ];
@@ -28,7 +46,7 @@ const capabilities = [
 <CapabilitiesCanvas client:only="react" />
 
 <!-- Scroll container — height drives the camera animation -->
-<section id="capabilities-scroll" class="relative z-10" style="height: 400vh;">
+<section id="capabilities-scroll" class="relative z-10" style="height: 700vh;">
   {capabilities.map((cap, i) => (
     <div
       class:list={[
