@@ -1,0 +1,139 @@
+---
+// Products — three alternating image/text cards with scroll animations
+const products = [
+  {
+    name: 'NexFactory',
+    desc: 'AI-powered visual inspection for manufacturing quality control',
+    image: '/product-factory.jpg',
+    align: 'left',
+  },
+  {
+    name: 'NexHotel',
+    desc: 'Dynamic pricing optimization for hospitality revenue',
+    image: '/product-hotel.jpg',
+    align: 'right',
+  },
+  {
+    name: 'NexPOS',
+    desc: 'Retail customer intelligence and demand prediction',
+    image: '/product-pos.jpg',
+    align: 'left',
+  },
+];
+---
+
+<section id="products" class="relative py-20 md:py-32">
+  {products.map((product, i) => (
+    <div
+      class:list={[
+        'product-card relative px-6 md:px-10 lg:px-14 py-10 md:py-16',
+        'flex flex-col gap-8',
+        product.align === 'right' ? 'md:flex-row-reverse' : 'md:flex-row',
+        'items-center min-h-[70vh]',
+      ]}
+    >
+      <!-- Image -->
+      <div class="product-img-wrap relative w-full md:w-1/2 aspect-[4/3] rounded-2xl overflow-hidden">
+        <img
+          src={product.image}
+          alt={product.name}
+          class="product-img w-full h-full object-cover scale-[1.15]"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- Text -->
+      <div class:list={[
+        'relative w-full md:w-1/2 flex flex-col justify-center',
+        product.align === 'right' ? 'md:text-right md:items-end' : '',
+      ]}>
+        <!-- Cyan accent line -->
+        <div class:list={[
+          'product-accent w-px h-0 bg-cyan-dim/60 mb-6 origin-top',
+          product.align === 'right' ? 'md:self-end' : '',
+        ]}></div>
+
+        <div class="overflow-hidden">
+          <h3 class="product-title font-d text-[clamp(2rem,4vw,3rem)] text-white leading-[0.95] tracking-[-0.02em]">
+            {product.name}
+          </h3>
+        </div>
+
+        <p class="product-desc font-b text-lg text-dim mt-4 leading-relaxed max-w-md">
+          {product.desc}
+        </p>
+
+        <a
+          href={`/#products`}
+          class="product-link inline-flex items-center gap-2 mt-6 font-m text-sm text-cyan-dim uppercase tracking-[0.15em] transition-colors duration-300 hover:text-cyan"
+        >
+          Learn More
+          <span class="text-lg leading-none">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  ))}
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.product-card').forEach((card) => {
+    const img = card.querySelector('.product-img');
+    const accent = card.querySelector('.product-accent');
+    const title = card.querySelector('.product-title');
+    const desc = card.querySelector('.product-desc');
+    const link = card.querySelector('.product-link');
+
+    if (prefersReducedMotion) {
+      gsap.set(img, { scale: 1 });
+      gsap.set(accent, { height: 60 });
+      gsap.set([title, desc, link], { opacity: 1, y: 0 });
+      return;
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 75%',
+        end: 'top 25%',
+        scrub: 1,
+      },
+    });
+
+    // Image zooms out
+    tl.to(img, { scale: 1, ease: 'none' }, 0);
+
+    // Accent line draws down
+    tl.fromTo(accent,
+      { height: 0 },
+      { height: 60, ease: 'power2.out' },
+      0
+    );
+
+    // Title clip reveal
+    tl.fromTo(title,
+      { yPercent: 100, opacity: 0 },
+      { yPercent: 0, opacity: 1, ease: 'power4.out' },
+      0.1
+    );
+
+    // Description fade up
+    tl.fromTo(desc,
+      { y: 25, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power3.out' },
+      0.2
+    );
+
+    // Link fade up
+    tl.fromTo(link,
+      { y: 15, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power3.out' },
+      0.3
+    );
+  });
+</script>

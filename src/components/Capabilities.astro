@@ -1,0 +1,92 @@
+---
+// Capabilities — three blocks with scrub reveals
+const capabilities = [
+  { num: '01', title: 'Computer Vision', desc: 'Quality control that never blinks' },
+  { num: '02', title: 'Predictive Intelligence', desc: 'Demand forecasting that learns your market' },
+  { num: '03', title: 'Natural Language', desc: 'Systems that speak your customers\' language' },
+];
+---
+
+<section id="capabilities" class="relative py-32 md:py-48">
+  {capabilities.map((cap) => (
+    <div class="cap-block relative px-6 md:px-10 lg:px-14 py-20 md:py-32 min-h-[70vh] flex items-center">
+      <!-- Large faint number -->
+      <span class="cap-num absolute top-1/2 -translate-y-1/2 left-6 md:left-10 lg:left-14 font-d text-[clamp(6rem,15vw,12rem)] leading-none text-cyan-dim/[0.06] pointer-events-none select-none">
+        {cap.num}
+      </span>
+
+      <!-- Text content -->
+      <div class="relative z-10 max-w-2xl ml-0 md:ml-20 lg:ml-32">
+        <div class="overflow-hidden">
+          <h3 class="cap-title font-d text-[clamp(2rem,5vw,4rem)] text-white leading-[0.95] tracking-[-0.02em]">
+            {cap.title}
+          </h3>
+        </div>
+        <p class="cap-desc font-b text-lg md:text-xl text-dim mt-4 md:mt-6 leading-relaxed">
+          {cap.desc}
+        </p>
+      </div>
+
+      <!-- Divider line -->
+      <div class="cap-line absolute bottom-0 left-6 md:left-10 lg:left-14 right-6 md:right-10 lg:right-14 h-px bg-white/[0.08] origin-left scale-x-0"></div>
+    </div>
+  ))}
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.cap-block').forEach((block) => {
+    const num = block.querySelector('.cap-num');
+    const title = block.querySelector('.cap-title');
+    const desc = block.querySelector('.cap-desc');
+    const line = block.querySelector('.cap-line');
+
+    if (prefersReducedMotion) {
+      gsap.set([num, title, desc], { opacity: 1, x: 0, y: 0 });
+      gsap.set(line, { scaleX: 1 });
+      return;
+    }
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: block,
+        start: 'top 80%',
+        end: 'top 30%',
+        scrub: 1,
+      },
+    });
+
+    // Number slides in from left
+    tl.fromTo(num,
+      { x: -80, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'power3.out' },
+      0
+    );
+
+    // Title clip-path reveal
+    tl.fromTo(title,
+      { yPercent: 100, opacity: 0 },
+      { yPercent: 0, opacity: 1, ease: 'power4.out' },
+      0.1
+    );
+
+    // Description fade up
+    tl.fromTo(desc,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'power3.out' },
+      0.2
+    );
+
+    // Line draws left to right
+    tl.fromTo(line,
+      { scaleX: 0 },
+      { scaleX: 1, ease: 'power2.inOut' },
+      0.3
+    );
+  });
+</script>

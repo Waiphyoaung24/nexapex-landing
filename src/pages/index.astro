@@ -2,11 +2,19 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import HeroSection from '../components/HeroSection.astro';
+import Manifesto from '../components/Manifesto.astro';
+import Capabilities from '../components/Capabilities.astro';
+import Products from '../components/Products.astro';
+import FooterCTA from '../components/FooterCTA.astro';
 ---
 
 <Layout>
   <Navbar />
-  <main id="main-content" class="w-full bg-bg text-white min-h-screen">
+  <main id="main-content" class="w-full bg-bg text-white">
     <HeroSection />
+    <Manifesto />
+    <Capabilities />
+    <Products />
+    <FooterCTA />
   </main>
 </Layout>
