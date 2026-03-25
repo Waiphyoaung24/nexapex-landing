@@ -1,10 +1,11 @@
 ---
 // Full-page immersive 3D scroll experience
 import SpaceOverlays from './SpaceOverlays.astro';
+import SpaceCanvas from './SpaceCanvas';
 ---
 
-<!-- Fixed 3D canvas behind everything -->
-<div id="space-canvas-mount" class="fixed inset-0 z-0"></div>
+<!-- Fixed 3D canvas behind everything — client:only skips SSR (required for WebGL) -->
+<SpaceCanvas client:only="react" />
 
 <!-- Scrollable content container — height drives the entire experience -->
 <div id="space-scroll-container" class="relative z-10">
@@ -25,19 +26,6 @@ import SpaceOverlays from './SpaceOverlays.astro';
   </div>
   <p id="space-loader-pct" class="font-m text-dim text-sm mt-3">0%</p>
 </div>
-
-<!-- Mount React canvas client-side -->
-<script>
-  import { createElement } from 'react';
-  import { createRoot } from 'react-dom/client';
-  import SpaceCanvas from './SpaceCanvas';
-
-  const mount = document.getElementById('space-canvas-mount');
-  if (mount) {
-    const root = createRoot(mount);
-    root.render(createElement(SpaceCanvas));
-  }
-</script>
 
 <!-- Loading progress watcher -->
 <script>
