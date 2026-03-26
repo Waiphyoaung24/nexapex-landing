@@ -68,7 +68,7 @@ const capabilities = [
         </span>
 
         <!-- Title -->
-        <h3 class="cap-title font-d text-[clamp(1.8rem,4.5vw,3.5rem)] text-white leading-[0.95] tracking-[-0.02em] -mt-8 md:-mt-12 drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
+        <h3 class="cap-title font-d text-[clamp(1.8rem,4.5vw,3.5rem)] text-overlay-display leading-[0.95] tracking-[-0.02em] -mt-8 md:-mt-12 drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
           {cap.title}
         </h3>
 
@@ -123,21 +123,19 @@ const capabilities = [
         }
       );
 
-      // Fade out (except last — let section fade handle it)
-      if (i < total - 1) {
-        gsap.to([num, title, desc], {
-          x: 60,
-          opacity: 0,
-          stagger: -0.03,
-          ease: 'power2.in',
-          scrollTrigger: {
-            trigger: '#capabilities-scroll',
-            start: `${midPoint + 10}% top`,
-            end: `${segmentEnd - 2}% top`,
-            scrub: 0.5,
-          },
-        });
-      }
+      // Fade out — all cards including the last one
+      gsap.to([num, title, desc], {
+        x: 60,
+        opacity: 0,
+        stagger: -0.03,
+        ease: 'power2.in',
+        scrollTrigger: {
+          trigger: '#capabilities-scroll',
+          start: `${midPoint + 10}% top`,
+          end: `${segmentEnd - 2}% top`,
+          scrub: 0.5,
+        },
+      });
     });
   }
 </script>

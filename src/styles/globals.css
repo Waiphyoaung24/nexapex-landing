@@ -208,6 +208,14 @@
     background-clip: text;
   }
 
+  /* Display heading overlay: white → ice-cyan (vertical, matching reference) */
+  .text-overlay-display {
+    background: linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
 }
 
 /* ── Custom Sci-Fi Cursor ── */

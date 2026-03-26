@@ -22,7 +22,7 @@ const products = [
 ];
 ---
 
-<section id="products" class="relative py-20 md:py-32">
+<section id="products" class="relative z-20 py-20 md:py-32 bg-bg">
   {products.map((product, i) => (
     <div
       class:list={[
@@ -54,7 +54,7 @@ const products = [
         ]}></div>
 
         <div class="overflow-hidden">
-          <h3 class="product-title font-d text-[clamp(2rem,4vw,3rem)] text-white leading-[0.95] tracking-[-0.02em]">
+          <h3 class="product-title font-d text-[clamp(2rem,4vw,3rem)] text-overlay-display leading-[0.95] tracking-[-0.02em]">
             {product.name}
           </h3>
         </div>

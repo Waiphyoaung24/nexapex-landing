@@ -2,7 +2,7 @@
 // Spiral 3D visualization — generative instanced mesh tunnel with text overlay
 ---
 
-<section id="spiral" class="relative w-full h-screen overflow-hidden">
+<section id="spiral" class="relative z-20 w-full h-screen overflow-hidden">
   <!-- Three.js canvas mount -->
   <div id="spiral-canvas" class="absolute inset-0 z-0"></div>
 
@@ -15,8 +15,8 @@
       <p class="spiral-text font-m text-[11px] text-cyan-dim uppercase tracking-[0.3em] mb-4 opacity-0">
         Beyond the Horizon
       </p>
-      <h2 class="spiral-text font-d text-[clamp(1.8rem,4.5vw,3.5rem)] text-white leading-[1.05] tracking-[-0.02em] mb-5 opacity-0">
-        Where Data Meets<br />
+      <h2 class="spiral-text font-d text-[clamp(1.8rem,4.5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] mb-5 opacity-0">
+        <span class="text-overlay-display">Where Data Meets</span><br />
         <span class="italic text-cyan-dim">Intelligence</span>
       </h2>
       <p class="spiral-text font-b text-base md:text-lg text-dim leading-relaxed max-w-xl mx-auto opacity-0">
