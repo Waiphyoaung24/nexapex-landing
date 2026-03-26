@@ -14,6 +14,11 @@ const BRAND = {
   teal: new THREE.Color('#1a2630'),
 };
 
+// Hero zoom-out: Lusion-style — station as cinematic backdrop, gentle pull-back on scroll
+// Hero zoom-out: station fills upper half as cinematic backdrop
+const HERO_START = { camera: { x: 0, y: -2, z: 24 }, target: { x: 0, y: -3, z: -1 } };
+const HERO_END   = { camera: { x: 0, y: 6, z: 34 }, target: { x: 0, y: -4, z: -1 } };
+
 // Camera waypoints — starts far, zooms into station, then orbits through details
 // Bounding box at scale 1: center (-0.18, -3.42, -1.61), size (14.53, 22.45, 17.5)
 const PERSPECTIVES = [
@@ -175,7 +180,7 @@ function AnimatedCamera({
       fov={45}
       near={0.1}
       far={500}
-      position={[PERSPECTIVES[0].camera.x, PERSPECTIVES[0].camera.y, PERSPECTIVES[0].camera.z]}
+      position={[HERO_START.camera.x, HERO_START.camera.y, HERO_START.camera.z]}
     />
   );
 }
@@ -194,7 +199,7 @@ function SceneContent({
 
   useEffect(() => {
     const fogColor = new THREE.Color('#0e1820');
-    scene.fog = new THREE.Fog(fogColor, 15, 50);
+    scene.fog = new THREE.Fog(fogColor, 20, 60);
     scene.background = fogColor;
   }, [scene]);
 
@@ -265,6 +270,6 @@ export default function CapabilitiesScene({
   );
 }
 
-export { PERSPECTIVES };
+export { PERSPECTIVES, HERO_START, HERO_END };
 
 useGLTF.preload(MODEL_PATH);
