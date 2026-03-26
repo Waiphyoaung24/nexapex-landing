@@ -130,8 +130,14 @@ const FACE_NAMES = ['TEAM', ...team.map(m => m.short), 'JOIN US'];
   const N = STOPS.length;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.innerWidth <= 768;
 
-  if (!prefersReducedMotion && section && cube && panels) {
+  // Mobile: show all panels visible (CSS handles vertical stacking)
+  if (isMobile && panels) {
+    panels.forEach((p) => p.classList.add('ct-active'));
+  }
+
+  if (!prefersReducedMotion && !isMobile && section && cube && panels) {
     let smooth = 0;
     let lastIdx = -1;
     let rafId = 0;

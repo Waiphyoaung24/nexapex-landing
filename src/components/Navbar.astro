@@ -2,19 +2,19 @@
 // Navbar — fixed top, brand logo + action buttons + mobile menu overlay
 ---
 
-<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-14 py-5 transition-all duration-500">
-  <div class="flex items-center justify-between">
-    <!-- Brand logo mark -->
-    <a href="/" class="nav-item block relative z-[60] opacity-0" aria-label="NexApex Home">
+<nav id="main-nav" class="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 md:px-10 lg:px-14 py-3 sm:py-4 md:py-5 transition-all duration-500">
+  <div class="flex items-center justify-between max-w-full">
+    <!-- Brand logo mark — min 44px touch target -->
+    <a href="/" class="nav-item relative z-[60] opacity-0 flex items-center justify-center min-w-[44px] min-h-[44px]" aria-label="NexApex Home">
       <img
         src="/outline_iconmark.png"
         alt="NexApex"
-        class="h-9 md:h-10 w-auto"
+        class="h-8 sm:h-9 md:h-10 w-auto"
       />
     </a>
 
     <!-- Right side actions -->
-    <div class="flex items-center gap-3 relative z-[60]">
+    <div class="flex items-center gap-2 sm:gap-3 relative z-[60]">
       <!-- Pulse icon (desktop only) -->
       <a
         href="/#work"
@@ -35,15 +35,21 @@
         <span class="w-1.5 h-1.5 rounded-full bg-cyan-dim animate-pulse"></span>
       </a>
 
-      <!-- Menu toggle -->
+      <!-- Menu toggle — hamburger icon on mobile, pill button on sm+ -->
       <button
         id="menu-toggle"
-        class="nav-item opacity-0 flex items-center gap-2.5 px-6 h-11 rounded-full bg-white text-bg font-m text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:bg-cyan hover:text-bg cursor-pointer"
+        class="nav-item opacity-0 flex items-center justify-center min-w-[44px] min-h-[44px] sm:gap-2.5 sm:px-6 sm:h-11 rounded-full bg-white text-bg font-m text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:bg-cyan hover:text-bg cursor-pointer"
         aria-label="Toggle menu"
         aria-expanded="false"
       >
-        <span id="menu-label">Menu</span>
-        <span id="menu-dots" class="flex gap-[3px]">
+        <!-- Hamburger icon — mobile only -->
+        <span id="menu-hamburger" class="sm:hidden flex flex-col justify-center items-center w-5 h-5 gap-[5px]">
+          <span class="hamburger-line block w-full h-[1.5px] bg-bg transition-all duration-300 origin-center"></span>
+          <span class="hamburger-line block w-full h-[1.5px] bg-bg transition-all duration-300 origin-center"></span>
+        </span>
+        <!-- Text label — sm+ -->
+        <span id="menu-label" class="hidden sm:inline">Menu</span>
+        <span id="menu-dots" class="hidden sm:flex gap-[3px]">
           <span class="w-[5px] h-[5px] rounded-full bg-bg transition-transform duration-300"></span>
           <span class="w-[5px] h-[5px] rounded-full bg-bg transition-transform duration-300"></span>
         </span>
@@ -52,38 +58,47 @@
   </div>
 </nav>
 
-<!-- Full-screen mobile menu overlay -->
-<div id="menu-overlay" class="fixed inset-0 z-[55] pointer-events-none opacity-0">
+<!-- Full-screen menu overlay -->
+<div id="menu-overlay" class="fixed inset-0 z-[55] pointer-events-none opacity-0 overflow-y-auto">
   <!-- Backdrop -->
   <div class="absolute inset-0 bg-bg/95 backdrop-blur-xl"></div>
 
-  <!-- Menu content -->
-  <div class="relative z-10 flex flex-col justify-center items-center h-full px-6">
-    <!-- Nav links -->
-    <div class="flex flex-col items-center gap-6 mb-16">
-      <a href="/#capabilities-scroll" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+  <!-- Menu content — safe area insets for notched phones -->
+  <div class="relative z-10 flex flex-col justify-center items-center min-h-[100dvh] px-6 sm:px-8 py-24 sm:py-28" style="padding-top: max(6rem, env(safe-area-inset-top, 0px) + 5rem); padding-bottom: max(3rem, env(safe-area-inset-bottom, 0px) + 2rem);">
+    <!-- Nav links — 44px+ touch targets -->
+    <div class="flex flex-col items-center gap-2 sm:gap-5 mb-10 sm:mb-16 w-full max-w-md">
+      <a href="/#capabilities-scroll" class="menu-link block w-full text-center py-3 sm:py-2 font-d text-[clamp(1.75rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">
         Capabilities
       </a>
-      <a href="/#products" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+      <a href="/#products" class="menu-link block w-full text-center py-3 sm:py-2 font-d text-[clamp(1.75rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">
         Products
       </a>
-      <a href="/#core-team" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+      <a href="/#core-team" class="menu-link block w-full text-center py-3 sm:py-2 font-d text-[clamp(1.75rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">
         Team
       </a>
-      <a href="/#contact" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+      <a href="/#contact" class="menu-link block w-full text-center py-3 sm:py-2 font-d text-[clamp(1.75rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">
         Contact
       </a>
     </div>
 
+    <!-- Let's Talk — visible in menu on mobile only -->
+    <a
+      href="mailto:hello@nexapex.com"
+      class="menu-link md:hidden flex items-center justify-center gap-2.5 px-8 h-12 mb-10 rounded-full border border-cyan-dim/30 bg-cyan-dim/5 font-m text-sm font-medium text-cyan-dim uppercase tracking-[0.15em] opacity-0 translate-y-8 transition-colors duration-300 hover:bg-cyan-dim/15 active:bg-cyan-dim/20"
+    >
+      Let's Talk
+      <span class="w-1.5 h-1.5 rounded-full bg-cyan-dim animate-pulse"></span>
+    </a>
+
     <!-- Bottom info -->
-    <div class="flex flex-col items-center gap-3">
-      <a href="mailto:hello@nexapex.com" class="menu-link font-b text-sm text-cyan-dim opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan">
+    <div class="flex flex-col items-center gap-4 sm:gap-3">
+      <a href="mailto:hello@nexapex.com" class="menu-link hidden md:block font-b text-sm text-cyan-dim opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan">
         hello@nexapex.com
       </a>
-      <div class="menu-link flex gap-6 opacity-0 translate-y-8">
-        <a href="https://x.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">Twitter / X</a>
-        <a href="https://linkedin.com/company/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">LinkedIn</a>
-        <a href="https://github.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">GitHub</a>
+      <div class="menu-link flex flex-wrap justify-center gap-5 sm:gap-6 opacity-0 translate-y-8">
+        <a href="https://x.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.7rem] sm:text-[0.65rem] text-dim uppercase tracking-[0.2em] py-1 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">Twitter / X</a>
+        <a href="https://linkedin.com/company/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.7rem] sm:text-[0.65rem] text-dim uppercase tracking-[0.2em] py-1 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">LinkedIn</a>
+        <a href="https://github.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.7rem] sm:text-[0.65rem] text-dim uppercase tracking-[0.2em] py-1 transition-colors duration-300 hover:text-cyan-dim active:text-cyan-dim">GitHub</a>
       </div>
     </div>
   </div>
@@ -164,6 +179,12 @@
     if (menuLabel) menuLabel.textContent = isOpen ? 'Close' : 'Menu';
     menuToggle.setAttribute('aria-expanded', String(isOpen));
 
+    // Hamburger → X morph on mobile
+    const hamburger = document.getElementById('menu-hamburger');
+    if (hamburger) {
+      hamburger.classList.toggle('is-open', isOpen);
+    }
+
     if (prefersReducedMotion && menuOverlay) {
       menuOverlay.style.opacity = isOpen ? '1' : '0';
       menuOverlay.style.pointerEvents = isOpen ? 'auto' : 'none';
@@ -191,6 +212,8 @@
         if (menuLabel) menuLabel.textContent = 'Menu';
         menuToggle?.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        const hamburger = document.getElementById('menu-hamburger');
+        if (hamburger) hamburger.classList.remove('is-open');
 
         if (prefersReducedMotion && menuOverlay) {
           menuOverlay.style.opacity = '0';

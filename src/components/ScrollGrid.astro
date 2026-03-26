@@ -32,7 +32,7 @@
       </div>
       <!-- Center scaler image -->
       <div class="sg-scaler">
-        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&auto=format&fit=crop&q=80" alt="Artificial intelligence" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&auto=format&fit=crop&q=80" alt="Artificial intelligence" />
       </div>
     </div>
   </div>
@@ -45,33 +45,45 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!prefersReducedMotion) {
+  if (!prefersReducedMotion && window.innerWidth > 768) {
     const image = document.querySelector<HTMLImageElement>('.sg-scaler img');
     const section = document.querySelector<HTMLElement>('.sg-wrap');
     const layers = document.querySelectorAll<HTMLElement>('.sg-layer');
 
     if (image && section && layers.length > 0) {
-      // Measure the natural (CSS-determined) size before animating
-      const naturalWidth = image.offsetWidth;
-      const naturalHeight = image.offsetHeight;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+      // Wait for image to load before measuring natural size
+      const initScaler = () => {
+        const naturalWidth = image.offsetWidth;
+        const naturalHeight = image.offsetHeight;
 
-      // Scaler: shrink from fullscreen to grid-cell size
-      gsap.fromTo(image,
-        { width: vw, height: vh },
-        {
-          width: naturalWidth,
-          height: naturalHeight,
-          ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: '80% bottom',
-            scrub: true,
-          },
-        }
-      );
+        // Guard: skip if dimensions are 0 (image not rendered yet)
+        if (naturalWidth < 10 || naturalHeight < 10) return;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        gsap.fromTo(image,
+          { width: vw, height: vh },
+          {
+            width: naturalWidth,
+            height: naturalHeight,
+            ease: 'power2.inOut',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: '80% bottom',
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      };
+
+      if (image.complete && image.naturalWidth > 0) {
+        initScaler();
+      } else {
+        image.addEventListener('load', initScaler);
+      }
 
       // Each layer: fade in + scale up with staggered timing
       const scaleEasings = ['power1.inOut', 'power3.inOut', 'power4.inOut'];

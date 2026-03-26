@@ -177,6 +177,20 @@
   }
 }
 
+/* ── Hamburger → X morph (mobile nav toggle) ── */
+#menu-hamburger .hamburger-line:first-child {
+  transform: translateY(0) rotate(0);
+}
+#menu-hamburger .hamburger-line:last-child {
+  transform: translateY(0) rotate(0);
+}
+#menu-hamburger.is-open .hamburger-line:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+#menu-hamburger.is-open .hamburger-line:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
 @layer utilities {
   .animate-float {
     animation: float 7s var(--ease-in-out) infinite;
@@ -517,7 +531,12 @@
   .products-panel {
     width: 100% !important;
     height: auto !important;
-    min-height: 100dvh;
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .products-panel.product-slide {
+    padding: 1.5rem 0;
   }
 
   /* Product slide text content visible by default on mobile */
@@ -874,8 +893,53 @@
   line-height: 1;
 }
 
-/* Core Team responsive */
-@media (max-width: 56.25em) {
+/* Core Team responsive — mobile: hide cube, stack cards */
+@media (max-width: 768px) {
+  .ct-wrap {
+    min-height: auto;
+  }
+  .ct-viewport {
+    position: relative;
+    height: auto;
+  }
+  .ct-scene {
+    display: none;
+  }
+  .ct-overlay {
+    position: relative;
+  }
+  .ct-panel {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+    min-height: auto;
+    padding: 1.5rem 1.25rem;
+  }
+  .ct-panel:first-child {
+    padding-top: 2.5rem;
+  }
+  .ct-panel.ct-active {
+    opacity: 1;
+  }
+  .ct-card,
+  .ct-card--right {
+    max-width: 100%;
+    padding: 1.25rem 1rem;
+    text-align: left;
+    border-left: 1px solid rgba(90, 200, 203, 0.15);
+    border-right: none;
+    margin-left: 0;
+  }
+  .ct-card--right .ct-accent {
+    margin-left: 0;
+  }
+  .ct-heading {
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+  }
+}
+
+/* Core Team responsive — tablet */
+@media (min-width: 769px) and (max-width: 56.25em) {
   .ct-panel {
     align-items: flex-end;
     padding: 0 1.5rem 4rem;
@@ -887,9 +951,6 @@
   }
   .ct-cube {
     --s: min(70vw, 50vh, 360px);
-  }
-  .ct-caption {
-    bottom: 1rem;
   }
 }
 
@@ -1280,12 +1341,32 @@
   height: 100%;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .sg-wrap {
+    min-height: auto;
+    padding: 3rem 1rem;
+  }
+  .sg-sticky {
+    position: relative;
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+  }
   .sg-grid {
     grid-template-columns: repeat(3, 1fr);
     --offset: -1;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
   }
   .sg-grid > .sg-layer:nth-of-type(1) {
+    display: none;
+  }
+  /* Hide the scaler on mobile — it breaks the layout */
+  .sg-scaler {
     display: none;
   }
 }
@@ -1298,6 +1379,30 @@
   .sg-scaler img {
     width: 100% !important;
     height: 100% !important;
+  }
+}
+
+/* ── Global Mobile Section Padding ── */
+@media (max-width: 768px) {
+  /* Ensure all major sections have consistent horizontal padding */
+  .ws,
+  #manifesto,
+  #capabilities-scroll,
+  .ct-wrap,
+  .contact-section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  /* Products mobile cards need inner padding */
+  .products-panel {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Section connectors: smaller on mobile */
+  .section-connector {
+    height: 50px;
   }
 }
 
