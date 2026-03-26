@@ -1,13 +1,17 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import CapabilitiesScene, { PERSPECTIVES } from './CapabilitiesScene';
+import CapabilitiesScene, { PERSPECTIVES, HERO_START, HERO_END } from './CapabilitiesScene';
 
 export default function CapabilitiesCanvas() {
-  const cameraRef = useRef({ ...PERSPECTIVES[0].camera });
-  const targetRef = useRef({ ...PERSPECTIVES[0].target });
+  // Camera starts at the hero close-up position (not capabilities perspective 0)
+  const cameraRef = useRef({ ...HERO_START.camera });
+  const targetRef = useRef({ ...HERO_START.target });
   const containerRef = useRef<HTMLDivElement>(null);
   const [modelReady, setModelReady] = useState(false);
 
-  const handleModelReady = useCallback(() => setModelReady(true), []);
+  const handleModelReady = useCallback(() => {
+    setModelReady(true);
+    window.dispatchEvent(new CustomEvent('nexapex:model-ready'));
+  }, []);
 
   // Init GSAP only after model has loaded
   useEffect(() => {
@@ -22,8 +26,58 @@ export default function CapabilitiesCanvas() {
       const ScrollTrigger = stModule.ScrollTrigger;
       gsap.registerPlugin(ScrollTrigger);
 
-      const trigger = '#capabilities-scroll';
       const triggers: any[] = [];
+
+      // Canvas reveal — after loader overlay exits
+      gsap.to(containerRef.current, {
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.out',
+        delay: 1.6,
+      });
+
+      // ── Hero phase: zoom-out + fade as user scrolls through hero ──
+      const heroTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Camera pulls back from close to far wide
+      heroTl.fromTo(cameraRef.current,
+        { x: HERO_START.camera.x, y: HERO_START.camera.y, z: HERO_START.camera.z },
+        { x: HERO_END.camera.x, y: HERO_END.camera.y, z: HERO_END.camera.z, ease: 'power2.inOut' },
+        0,
+      );
+      heroTl.fromTo(targetRef.current,
+        { x: HERO_START.target.x, y: HERO_START.target.y, z: HERO_START.target.z },
+        { x: HERO_END.target.x, y: HERO_END.target.y, z: HERO_END.target.z, ease: 'power2.inOut' },
+        0,
+      );
+
+      triggers.push(heroTl.scrollTrigger);
+
+      // Hero fade-out: opacity 1 → 0 in the last 30% of hero scroll
+      // Keeps 3D visible longer as a backdrop (Lusion-style)
+      const heroFadeST = ScrollTrigger.create({
+        trigger: '#hero',
+        start: '70% top',
+        end: 'bottom top',
+        scrub: 0.5,
+        onUpdate: (self) => {
+          if (containerRef.current) {
+            containerRef.current.style.opacity = String(1 - self.progress);
+          }
+        },
+      });
+      triggers.push(heroFadeST);
+
+      // ── Capabilities phase: existing orbit behavior ──
+      const trigger = '#capabilities-scroll';
 
       // Master timeline: camera orbits through perspectives
       const tl = gsap.timeline({
@@ -61,6 +115,7 @@ export default function CapabilitiesCanvas() {
       triggers.push(tl.scrollTrigger);
 
       // Fade-in: when capabilities section enters viewport
+      // Also snap camera to PERSPECTIVES[0] so the orbit starts cleanly
       const fadeInST = ScrollTrigger.create({
         trigger,
         start: 'top bottom',
@@ -70,6 +125,11 @@ export default function CapabilitiesCanvas() {
           if (containerRef.current) {
             containerRef.current.style.opacity = String(self.progress);
           }
+        },
+        onEnter: () => {
+          // Reset camera to capabilities start position
+          Object.assign(cameraRef.current, PERSPECTIVES[0].camera);
+          Object.assign(targetRef.current, PERSPECTIVES[0].target);
         },
       });
       triggers.push(fadeInST);
