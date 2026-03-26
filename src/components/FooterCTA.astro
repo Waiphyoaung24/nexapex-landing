@@ -1,30 +1,123 @@
 ---
-// Footer CTA — closing statement with word illuminate + contact button
+// FooterCTA — Contact section + Footer bar
+// Lusion-inspired layout: 3-column contact grid + minimal footer strip
 ---
 
-<section id="footer-cta" class="relative z-20 w-full h-[150vh] bg-bg">
-  <div class="sticky top-0 h-screen flex flex-col items-center justify-center px-6 md:px-10 lg:px-14">
-    <!-- CTA text — word illuminate -->
-    <p id="cta-text" class="font-d text-center text-[clamp(2rem,5vw,4rem)] leading-[1.2] tracking-[-0.01em] max-w-[800px] mb-12">
-    </p>
+<!-- Contact Section -->
+<section id="contact" class="contact-section relative z-20 bg-bg">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14 py-24 md:py-32 lg:py-40">
 
-    <!-- CTA button -->
-    <a
-      id="cta-button"
-      href="mailto:hello@nexapex.ai"
-      class="inline-flex items-center px-10 py-4 rounded-full border border-cyan-dim/60 font-m text-sm font-bold text-cyan-dim uppercase tracking-[0.2em] transition-all duration-500 hover:bg-cyan-dim hover:text-bg opacity-0 scale-95"
-    >
-      Get in Touch
-    </a>
+    <!-- Section eyebrow -->
+    <div class="contact-eyebrow mb-16 md:mb-24">
+      <div class="w-[50px] h-px bg-cyan-dim mb-6"></div>
+      <p class="font-m text-[0.6rem] uppercase tracking-[0.25em] text-cyan-dim">Contact</p>
+    </div>
+
+    <!-- 3-column grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
+
+      <!-- Column 1: Location -->
+      <div class="contact-col">
+        <h3 class="font-d text-white text-[clamp(1.4rem,2.5vw,1.8rem)] leading-[1.15] tracking-[0.02em] mb-8">
+          NexApex<br/>AI Lab
+        </h3>
+        <div class="space-y-1.5">
+          <p class="font-b text-[0.82rem] text-dim leading-relaxed">Yangon, Myanmar</p>
+          <p class="font-b text-[0.82rem] text-dim leading-relaxed">Southeast Asia</p>
+        </div>
+      </div>
+
+      <!-- Column 2: Links + Emails -->
+      <div class="contact-col">
+        <!-- Social links -->
+        <div class="mb-10">
+          <nav class="flex flex-col gap-3" aria-label="Social links">
+            <a href="https://x.com/nexapex" target="_blank" rel="noopener noreferrer" class="contact-link font-b text-[0.82rem] text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">
+              Twitter / X
+            </a>
+            <a href="https://linkedin.com/company/nexapex" target="_blank" rel="noopener noreferrer" class="contact-link font-b text-[0.82rem] text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">
+              LinkedIn
+            </a>
+            <a href="https://github.com/nexapex" target="_blank" rel="noopener noreferrer" class="contact-link font-b text-[0.82rem] text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">
+              GitHub
+            </a>
+          </nav>
+        </div>
+
+        <!-- Email addresses -->
+        <div class="space-y-6">
+          <div>
+            <p class="font-m text-[0.58rem] uppercase tracking-[0.25em] text-dim mb-2">General enquiries</p>
+            <a href="mailto:hello@nexapex.com" class="contact-link font-b text-[0.82rem] text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">
+              hello@nexapex.com
+            </a>
+          </div>
+          <div>
+            <p class="font-m text-[0.58rem] uppercase tracking-[0.25em] text-dim mb-2">New business</p>
+            <a href="mailto:business@nexapex.com" class="contact-link font-b text-[0.82rem] text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">
+              business@nexapex.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 3: Newsletter -->
+      <div class="contact-col">
+        <h3 class="font-d text-white text-[clamp(1.4rem,2.5vw,1.8rem)] leading-[1.15] tracking-[0.02em] mb-8">
+          Subscribe to<br/>our newsletter
+        </h3>
+        <form id="newsletter-form" action="#" class="newsletter-form" aria-label="Newsletter subscription">
+          <div class="relative flex items-center border-b border-dim/40 pb-2 transition-colors duration-300 focus-within:border-cyan-dim/60">
+            <label for="newsletter-email" class="sr-only">Email address</label>
+            <input
+              id="newsletter-email"
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              required
+              autocomplete="email"
+              class="flex-1 bg-transparent font-b text-[0.82rem] text-text placeholder:text-dim/60 outline-none"
+            />
+            <button
+              type="submit"
+              aria-label="Subscribe to newsletter"
+              class="newsletter-submit ml-4 w-10 h-10 rounded-full border border-cyan-dim/40 flex items-center justify-center text-cyan-dim transition-all duration-300 hover:bg-cyan-dim hover:text-bg cursor-pointer shrink-0"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p id="newsletter-feedback" class="font-m text-[0.65rem] mt-3 h-4 text-cyan-dim opacity-0 transition-opacity duration-300" aria-live="polite"></p>
+        </form>
+      </div>
+
+    </div>
   </div>
 </section>
 
-<!-- Footer bar -->
-<footer class="relative z-10 px-6 md:px-10 lg:px-14 py-8 flex items-center justify-between border-t border-white/[0.06]">
-  <p id="footer-copy" class="font-m text-sm text-dim opacity-0">&copy; 2026 NexApex. Bangkok, Thailand.</p>
-  <div id="footer-links" class="flex items-center gap-6 opacity-0">
-    <a href="mailto:hello@nexapex.ai" class="font-m text-sm text-dim transition-colors duration-300 hover:text-cyan-dim">Email</a>
-    <a href="https://linkedin.com" class="font-m text-sm text-dim transition-colors duration-300 hover:text-cyan-dim">LinkedIn</a>
+<!-- Footer Bar -->
+<footer class="footer-bar relative z-20 bg-bg border-t border-surface2/60">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+
+    <p id="footer-copy" class="font-m text-[0.72rem] text-dim tracking-[0.02em] opacity-0">
+      &copy; 2026 NexApex AI Lab
+    </p>
+
+    <p id="footer-lab" class="font-m text-[0.72rem] text-dim tracking-[0.02em] opacity-0">
+      R&amp;D: <a href="https://labs.nexapex.com" target="_blank" rel="noopener noreferrer" class="text-text transition-colors duration-300 hover:text-cyan-dim cursor-pointer">labs.nexapex.com</a>
+    </p>
+
+    <button
+      id="back-to-top"
+      aria-label="Back to top"
+      class="w-10 h-10 rounded-full border border-dim/30 flex items-center justify-center text-dim transition-all duration-300 hover:border-cyan-dim/60 hover:text-cyan-dim cursor-pointer opacity-0"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 12.5V3.5M8 3.5L4 7.5M8 3.5L12 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
   </div>
 </footer>
 
@@ -35,78 +128,78 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Build word spans for CTA
-  const ctaContainer = document.getElementById('cta-text');
-  const sentence = "Let's build something intelligent.";
-  const words = sentence.split(' ');
-
-  words.forEach((word) => {
-    const span = document.createElement('span');
-    span.className = 'cta-word inline-block mr-[0.3em]';
-    span.textContent = word;
-    if (word === 'intelligent.') span.dataset.accent = 'true';
-    ctaContainer?.appendChild(span);
-  });
-
-  const ctaWords = document.querySelectorAll('.cta-word');
-  const ctaButton = document.getElementById('cta-button');
   const footerCopy = document.getElementById('footer-copy');
-  const footerLinks = document.getElementById('footer-links');
+  const footerLab = document.getElementById('footer-lab');
+  const backToTop = document.getElementById('back-to-top');
 
   if (prefersReducedMotion) {
-    ctaWords.forEach((w) => {
-      const el = w as HTMLElement;
-      el.style.color = el.dataset.accent ? '#5ac8cb' : '#f0f1ef';
-      el.style.fontStyle = el.dataset.accent ? 'italic' : 'normal';
-    });
-    gsap.set([ctaButton, footerCopy, footerLinks], { opacity: 1, scale: 1 });
+    gsap.set([footerCopy, footerLab, backToTop], { opacity: 1 });
+    gsap.set('.contact-eyebrow, .contact-col', { opacity: 1, y: 0 });
   } else {
-    // Dim all words initially
-    gsap.set(ctaWords, { color: 'rgba(240, 241, 239, 0.12)' });
+    /* ── Contact section reveal ── */
+    gsap.set('.contact-eyebrow', { opacity: 0, y: 24 });
+    gsap.set('.contact-col', { opacity: 0, y: 32 });
 
-    // Illuminate words on scroll (faster than manifesto — shorter pin)
-    ctaWords.forEach((word, i) => {
-      const el = word as HTMLElement;
-      const isAccent = el.dataset.accent === 'true';
-      const targetColor = isAccent ? '#5ac8cb' : '#f0f1ef';
-
-      gsap.to(word, {
-        color: targetColor,
-        fontStyle: isAccent ? 'italic' : 'normal',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#footer-cta',
-          start: () => `top+=${(i / words.length) * window.innerHeight * 0.8} top`,
-          end: () => `top+=${((i + 1) / words.length) * window.innerHeight * 0.8} top`,
-          scrub: 1,
-        },
-      });
-    });
-
-    // Button scales in after words
-    gsap.to(ctaButton, {
+    gsap.to('.contact-eyebrow', {
       opacity: 1,
-      scale: 1,
+      y: 0,
+      duration: 0.8,
       ease: 'power3.out',
       scrollTrigger: {
-        trigger: '#footer-cta',
-        start: 'top+=80% top',
-        end: 'top+=100% top',
-        scrub: 1,
+        trigger: '#contact',
+        start: 'top 80%',
+        toggleActions: 'play none none none',
       },
     });
 
-    // Footer bar fades in
-    gsap.to([footerCopy, footerLinks], {
+    gsap.to('.contact-col', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '#contact',
+        start: 'top 70%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    /* ── Footer bar fade-in ── */
+    gsap.to([footerCopy, footerLab, backToTop], {
       opacity: 1,
       stagger: 0.1,
       ease: 'power2.out',
       scrollTrigger: {
-        trigger: '#footer-cta',
-        start: 'bottom 90%',
-        end: 'bottom 50%',
+        trigger: '.footer-bar',
+        start: 'top 90%',
+        end: 'top 60%',
         scrub: 1,
       },
     });
   }
+
+  /* ── Back to top ── */
+  backToTop?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ── Newsletter form (visual only) ── */
+  const newsletterForm = document.getElementById('newsletter-form') as HTMLFormElement | null;
+  const feedback = document.getElementById('newsletter-feedback');
+
+  newsletterForm?.addEventListener('submit', (e: Event) => {
+    e.preventDefault();
+    const emailInput = newsletterForm.querySelector('input[type="email"]') as HTMLInputElement;
+
+    if (emailInput && emailInput.value && feedback) {
+      feedback.textContent = 'Subscribed. Welcome aboard.';
+      feedback.style.opacity = '1';
+      emailInput.value = '';
+
+      setTimeout(() => {
+        feedback.style.opacity = '0';
+      }, 3000);
+    }
+  });
 </script>
