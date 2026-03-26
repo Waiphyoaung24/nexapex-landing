@@ -424,6 +424,134 @@
   }
 }
 
+/* ── Products Horizontal Scroll ── */
+.products-section {
+  /* ScrollTrigger will pin this section; overflow hidden prevents flash */
+  will-change: transform;
+}
+
+.products-track {
+  /* Track width set inline via Astro; flex row of 100vw panels */
+  will-change: transform;
+}
+
+.products-panel {
+  /* Each panel is 100vw via Tailwind w-screen + shrink-0 */
+}
+
+/* Product slide background image: slight overscale for parallax headroom */
+.product-slide-img {
+  will-change: transform;
+  transition: none; /* GSAP handles transforms */
+}
+
+/* Product slide text content: initial state for GSAP reveal */
+.product-slide-accent {
+  will-change: height;
+}
+
+/* Subtle vignette on product slides for depth */
+.product-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: radial-gradient(
+    ellipse at 30% 80%,
+    transparent 40%,
+    rgba(14, 20, 24, 0.3) 100%
+  );
+}
+
+/* ── Products: Reduced Motion Fallback ── */
+@media (prefers-reduced-motion: reduce) {
+  .products-track {
+    flex-direction: column !important;
+    width: 100% !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  .products-panel {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 80vh;
+  }
+
+  .product-slide-inner {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .product-slide-accent {
+    height: 60px !important;
+  }
+
+  .product-slide-num,
+  .product-slide-name,
+  .product-slide-desc,
+  .product-slide-link {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .product-slide-img {
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  .products-heading,
+  .products-eyebrow,
+  .products-title,
+  .products-subtitle,
+  .products-scroll-hint {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ── Products: Mobile (< 768px) -- disable horizontal scroll, stack vertically ── */
+@media (max-width: 767px) {
+  .products-section {
+    overflow: visible;
+  }
+
+  .products-track {
+    flex-direction: column !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .products-panel {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100dvh;
+  }
+
+  /* Product slide text content visible by default on mobile */
+  .product-slide-inner {
+    opacity: 1;
+    transform: none;
+  }
+
+  .product-slide-accent {
+    height: 40px;
+  }
+
+  .product-slide-num,
+  .product-slide-name,
+  .product-slide-desc,
+  .product-slide-link {
+    opacity: 1;
+    transform: none;
+  }
+
+  .product-slide-img {
+    transform: none;
+  }
+}
+
 /* ── Phase B: Particle Transition Bridge ── */
 #particle-bridge {
   position: relative;

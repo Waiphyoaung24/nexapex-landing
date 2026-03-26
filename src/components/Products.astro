@@ -1,139 +1,302 @@
 ---
-// Products — three alternating image/text cards with scroll animations
+// Products -- horizontal scroll section with GSAP ScrollTrigger pin + scrub
+// Each panel is 100vw wide. The heading panel leads, followed by full-bleed product cards.
 const products = [
   {
     name: 'NexFactory',
     desc: 'AI-powered visual inspection for manufacturing quality control',
-    image: '/product-factory.jpg',
+    image: '/product-factory-hero.jpg',
     align: 'left',
   },
   {
     name: 'NexHotel',
     desc: 'Dynamic pricing optimization for hospitality revenue',
-    image: '/product-hotel.jpg',
+    image: '/product-hotel-hero.jpg',
     align: 'right',
   },
   {
     name: 'NexPOS',
     desc: 'Retail customer intelligence and demand prediction',
-    image: '/product-pos.jpg',
+    image: '/product-pos-hero.jpg',
     align: 'left',
   },
 ];
+
+const PANEL_COUNT = products.length + 1; // +1 for heading panel
 ---
 
-<section id="products" class="relative z-20 py-20 md:py-32 bg-bg">
-  {products.map((product, i) => (
-    <div
-      class:list={[
-        'product-card relative px-6 md:px-10 lg:px-14 py-10 md:py-16',
-        'flex flex-col gap-8',
-        product.align === 'right' ? 'md:flex-row-reverse' : 'md:flex-row',
-        'items-center min-h-[70vh]',
-      ]}
-    >
-      <!-- Image -->
-      <div class="product-img-wrap relative w-full md:w-1/2 aspect-[4/3] rounded-2xl overflow-hidden">
-        <img
-          src={product.image}
-          alt={product.name}
-          class="product-img w-full h-full object-cover scale-[1.15]"
-          loading="lazy"
-        />
-      </div>
+<section id="products" class="products-section relative z-20 overflow-hidden bg-bg">
+  <!-- Horizontal scroll track -->
+  <div class="products-track flex" style={`width: ${PANEL_COUNT * 100}vw;`}>
 
-      <!-- Text -->
-      <div class:list={[
-        'relative w-full md:w-1/2 flex flex-col justify-center',
-        product.align === 'right' ? 'md:text-right md:items-end' : '',
-      ]}>
-        <!-- Cyan accent line -->
-        <div class:list={[
-          'product-accent w-px h-0 bg-cyan-dim/60 mb-6 origin-top',
-          product.align === 'right' ? 'md:self-end' : '',
-        ]}></div>
-
-        <div class="overflow-hidden">
-          <h3 class="product-title font-d text-[clamp(2rem,4vw,3rem)] text-overlay-display leading-[0.95] tracking-[-0.02em]">
-            {product.name}
-          </h3>
-        </div>
-
-        <p class="product-desc font-b text-lg text-dim mt-4 leading-relaxed max-w-md">
-          {product.desc}
+    <!-- Panel 0: Heading -->
+    <div class="products-panel flex items-center justify-center w-screen h-screen shrink-0 px-6 md:px-14 lg:px-20">
+      <div class="products-heading max-w-4xl">
+        <span class="products-eyebrow block font-m text-[11px] text-cyan-dim uppercase tracking-[0.3em] mb-6">
+          What We Build
+        </span>
+        <h2 class="products-title font-d text-[clamp(2.8rem,8vw,7rem)] leading-[0.92] tracking-[-0.03em] text-overlay-display">
+          Our Products
+        </h2>
+        <p class="products-subtitle font-b text-lg md:text-xl text-dim mt-6 max-w-xl leading-relaxed">
+          Intelligence embedded where it matters most --
+          factory floors, hotel lobbies, retail counters.
         </p>
-
-        <a
-          href={`/#products`}
-          class="product-link inline-flex items-center gap-2 mt-6 font-m text-sm text-cyan-dim uppercase tracking-[0.15em] transition-colors duration-300 hover:text-cyan"
-        >
-          Learn More
-          <span class="text-lg leading-none">&rarr;</span>
-        </a>
+        <div class="products-scroll-hint mt-12 flex items-center gap-3 text-cyan-dim/60">
+          <span class="block w-8 h-px bg-current"></span>
+          <span class="font-m text-[10px] uppercase tracking-[0.2em]">Scroll to explore</span>
+          <span class="block w-8 h-px bg-current"></span>
+        </div>
       </div>
     </div>
-  ))}
+
+    <!-- Product cards -->
+    {products.map((product, i) => (
+      <div
+        class="products-panel product-slide relative w-screen h-screen shrink-0 overflow-hidden"
+        data-product-index={i}
+      >
+        <!-- Full-bleed background image -->
+        <div class="absolute inset-0 z-0">
+          <img
+            src={product.image}
+            alt={`${product.name} -- ${product.desc}`}
+            class="product-slide-img w-full h-full object-cover"
+            loading="lazy"
+          />
+          <!-- Gradient scrim for text legibility -->
+          <div class="absolute inset-0 bg-gradient-to-r from-bg/90 via-bg/60 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-bg/30"></div>
+        </div>
+
+        <!-- Text content -->
+        <div class:list={[
+          'product-slide-inner relative z-10 flex flex-col justify-end h-full px-8 md:px-16 lg:px-24 pb-16 md:pb-24',
+        ]}>
+          <!-- Cyan accent line -->
+          <div class="product-slide-accent w-px h-0 bg-cyan-dim/50 mb-6 origin-top"></div>
+
+          <!-- Numbered index -->
+          <span class="product-slide-num block font-m text-[11px] text-cyan-dim uppercase tracking-[0.3em] mb-3">
+            {`0${i + 1}`}
+          </span>
+
+          <h3 class="product-slide-name font-d text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.95] tracking-[-0.02em] text-white mb-4">
+            {product.name}
+          </h3>
+
+          <p class="product-slide-desc font-b text-lg md:text-xl text-text max-w-lg leading-relaxed mb-8">
+            {product.desc}
+          </p>
+
+          <a
+            href={`/#products`}
+            class="product-slide-link group inline-flex items-center gap-3 w-max font-m text-sm text-cyan-dim uppercase tracking-[0.15em] transition-colors duration-300 hover:text-cyan"
+          >
+            Learn More
+            <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
 </section>
+
+<!-- Reduced-motion fallback: vertical stack -->
+<noscript>
+  <style>
+    .products-track {
+      flex-direction: column !important;
+      width: 100% !important;
+    }
+    .products-panel {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 80vh;
+    }
+  </style>
+</noscript>
 
 <script>
   import gsap from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MOBILE_BREAKPOINT = 768;
 
-  document.querySelectorAll('.product-card').forEach((card) => {
-    const img = card.querySelector('.product-img');
-    const accent = card.querySelector('.product-accent');
-    const title = card.querySelector('.product-title');
-    const desc = card.querySelector('.product-desc');
-    const link = card.querySelector('.product-link');
+  function initProductsScroll() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+    const section = document.querySelector<HTMLElement>('#products');
+    const track = document.querySelector<HTMLElement>('.products-track');
+    const slides = gsap.utils.toArray<HTMLElement>('.product-slide');
+    const headingPanel = document.querySelector<HTMLElement>('.products-heading');
 
-    if (prefersReducedMotion) {
-      gsap.set(img, { scale: 1 });
-      gsap.set(accent, { height: 60 });
-      gsap.set([title, desc, link], { opacity: 1, y: 0 });
+    if (!section || !track) return;
+
+    // ── Reduced motion or mobile: vertical stack, no horizontal scroll ──
+    if (prefersReducedMotion || isMobile) {
+      // CSS handles the vertical stacking via media query or reduced-motion rules.
+      // Just ensure all elements are visible (GSAP initial states would hide them).
+      gsap.set('.product-slide-num, .product-slide-name, .product-slide-desc, .product-slide-link', {
+        opacity: 1,
+        y: 0,
+      });
+      gsap.set('.product-slide-accent', { height: 40 });
+      gsap.set('.product-slide-img', { xPercent: 0, scale: 1 });
+      gsap.set('.products-eyebrow, .products-title, .products-subtitle, .products-scroll-hint', {
+        opacity: 1,
+        y: 0,
+      });
+
+      // On mobile, add simple scroll-triggered fade-up for each card
+      if (isMobile && !prefersReducedMotion) {
+        slides.forEach((slide) => {
+          gsap.from(slide, {
+            opacity: 0,
+            y: 60,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: slide,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          });
+        });
+      }
       return;
     }
 
-    const tl = gsap.timeline({
+    // ── Desktop: Horizontal scroll tween ──
+    const scrollTween = gsap.to(track, {
+      x: () => -(track.scrollWidth - window.innerWidth),
+      ease: 'none',
       scrollTrigger: {
-        trigger: card,
-        start: 'top 75%',
-        end: 'top 25%',
+        trigger: section,
+        pin: true,
         scrub: 1,
+        end: () => `+=${track.scrollWidth - window.innerWidth}`,
+        invalidateOnRefresh: true,
       },
     });
 
-    // Image zooms out
-    tl.to(img, { scale: 1, ease: 'none' }, 0);
+    // ── Heading panel entrance ──
+    if (headingPanel) {
+      const eyebrow = headingPanel.querySelector('.products-eyebrow');
+      const title = headingPanel.querySelector('.products-title');
+      const subtitle = headingPanel.querySelector('.products-subtitle');
+      const hint = headingPanel.querySelector('.products-scroll-hint');
 
-    // Accent line draws down
-    tl.fromTo(accent,
-      { height: 0 },
-      { height: 60, ease: 'power2.out' },
-      0
-    );
+      gsap.set([eyebrow, title, subtitle, hint], { opacity: 0, y: 30 });
 
-    // Title clip reveal
-    tl.fromTo(title,
-      { yPercent: 100, opacity: 0 },
-      { yPercent: 0, opacity: 1, ease: 'power4.out' },
-      0.1
-    );
+      const headingTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          end: 'top 20%',
+          scrub: false,
+          once: true,
+        },
+      });
 
-    // Description fade up
-    tl.fromTo(desc,
-      { y: 25, opacity: 0 },
-      { y: 0, opacity: 1, ease: 'power3.out' },
-      0.2
-    );
+      headingTl
+        .to(eyebrow, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0)
+        .to(title, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.1)
+        .to(subtitle, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.25)
+        .to(hint, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.4);
+    }
 
-    // Link fade up
-    tl.fromTo(link,
-      { y: 15, opacity: 0 },
-      { y: 0, opacity: 1, ease: 'power3.out' },
-      0.3
-    );
-  });
+    // ── Per-card entrance animations via containerAnimation ──
+    slides.forEach((slide) => {
+      const accent = slide.querySelector('.product-slide-accent');
+      const num = slide.querySelector('.product-slide-num');
+      const slideName = slide.querySelector('.product-slide-name');
+      const desc = slide.querySelector('.product-slide-desc');
+      const link = slide.querySelector('.product-slide-link');
+      const img = slide.querySelector('.product-slide-img');
+
+      // Image parallax (subtle horizontal shift)
+      if (img) {
+        gsap.fromTo(img,
+          { xPercent: -5, scale: 1.1 },
+          {
+            xPercent: 5,
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slide,
+              containerAnimation: scrollTween,
+              start: 'left right',
+              end: 'right left',
+              scrub: true,
+            },
+          },
+        );
+      }
+
+      // Card content staggered reveal
+      const cardTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: slide,
+          containerAnimation: scrollTween,
+          start: 'left 75%',
+          end: 'left 35%',
+          scrub: true,
+        },
+      });
+
+      // Accent line draws down
+      if (accent) {
+        cardTl.fromTo(accent,
+          { height: 0 },
+          { height: 60, ease: 'none' },
+          0,
+        );
+      }
+
+      // Number fades in
+      if (num) {
+        cardTl.fromTo(num,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, ease: 'none' },
+          0,
+        );
+      }
+
+      // Name slides up
+      if (slideName) {
+        cardTl.fromTo(slideName,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, ease: 'none' },
+          0.05,
+        );
+      }
+
+      // Description fades in
+      if (desc) {
+        cardTl.fromTo(desc,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, ease: 'none' },
+          0.15,
+        );
+      }
+
+      // Link fades in
+      if (link) {
+        cardTl.fromTo(link,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, ease: 'none' },
+          0.25,
+        );
+      }
+    });
+  }
+
+  // Initialize after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProductsScroll);
+  } else {
+    initProductsScroll();
+  }
 </script>
