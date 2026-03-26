@@ -1,0 +1,62 @@
+---
+// WordScroll — scroll-driven rotating word list showcasing what NexApex engineers
+// Adapted from vanilla word-scroll pattern, branded for NexApex
+---
+
+<section class="word-scroll relative z-20 w-full bg-bg" id="word-scroll">
+  <div class="scroll-spacer"></div>
+
+  <div class="word-scroll-inner">
+    <h2 class="word-scroll-heading font-d">
+      <span aria-hidden="true">We engineer&nbsp;</span>
+      <span class="sr-only">We engineer intelligent systems, computer vision, predictive analytics, and more.</span>
+    </h2>
+    <ul class="word-scroll-list font-d">
+      <li>intelligent systems.</li>
+      <li>computer vision.</li>
+      <li>predictive analytics.</li>
+      <li>factory automation.</li>
+      <li>dynamic pricing.</li>
+      <li>quality inspection.</li>
+      <li>demand forecasting.</li>
+      <li>smart hospitality.</li>
+      <li>retail intelligence.</li>
+      <li>real-time monitoring.</li>
+      <li>edge AI solutions.</li>
+      <li>data pipelines.</li>
+      <li>autonomous agents.</li>
+      <li>decision engines.</li>
+      <li>scalable platforms.</li>
+      <li>the future.</li>
+    </ul>
+  </div>
+
+  <div class="scroll-spacer"></div>
+</section>
+
+<script>
+  const root = document.querySelector('.word-scroll') as HTMLElement | null;
+  if (root) {
+    const list = root.querySelector('ul');
+    const items = list ? [...list.children] as HTMLElement[] : [];
+
+    list?.style.setProperty('--count', String(items.length));
+    items.forEach((item, i) => item.style.setProperty('--i', String(i)));
+
+    root.dataset.snap = 'true';
+    root.dataset.animate = 'true';
+    root.style.setProperty('--start', '180');
+    root.style.setProperty('--hue', '180');
+    root.style.setProperty('--end', '220');
+
+    // Scroll to a middle item on init
+    const startIndex = Math.min(4, items.length - 1);
+    const target = items[startIndex];
+    if (target) {
+      requestAnimationFrame(() => {
+        const offset = target.offsetTop - (root.clientHeight / 2) + (target.clientHeight / 2);
+        root.scrollTop = offset;
+      });
+    }
+  }
+</script>
