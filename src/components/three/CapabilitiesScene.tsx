@@ -31,6 +31,7 @@ const PERSPECTIVES = [
 ];
 
 const MODEL_PATH = '/models/space_1.glb';
+const DRACO_CDN = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
 
 // Custom shader for animated brand-colored edge glow on station hull
 const brandGlowVertexShader = `
@@ -79,7 +80,8 @@ const brandGlowFragmentShader = `
 
 // Spacestation model with brand-colored material enhancement
 function SpaceshipModel({ onReady }: { onReady?: () => void }) {
-  const { scene } = useGLTF(MODEL_PATH);
+  const { scene } = useGLTF(MODEL_PATH, DRACO_CDN);
+  const { gl, camera } = useThree();
   const [signaled, setSignaled] = useState(false);
   const timeRef = useRef({ value: 0 });
 
@@ -100,39 +102,40 @@ function SpaceshipModel({ onReady }: { onReady?: () => void }) {
   }), []);
 
   useEffect(() => {
-    if (scene) {
-      scene.scale.set(1, 1, 1);
-      scene.position.set(0, 0, 0);
+    if (!scene || signaled) return;
 
-      // Enhance existing materials with brand colors
-      scene.traverse((child) => {
-        if (!(child instanceof THREE.Mesh)) return;
+    scene.scale.set(1, 1, 1);
+    scene.position.set(0, 0, 0);
 
-        const mat = child.material as THREE.MeshStandardMaterial;
-        if (!mat.isMeshStandardMaterial) return;
+    // Enhance existing materials with brand colors
+    scene.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return;
 
-        // Emissive parts (emit_low*) — bright cyan glow
-        if (child.name.includes('emit_low')) {
-          mat.emissive = BRAND.cyan.clone();
-          mat.emissiveIntensity = 2.5;
-          mat.toneMapped = false;
-          return;
-        }
+      const mat = child.material as THREE.MeshStandardMaterial;
+      if (!mat.isMeshStandardMaterial) return;
 
-        // Station hull — visible cyan emissive + enhanced metalness
-        mat.emissive = BRAND.cyanDim.clone();
-        mat.emissiveIntensity = 0.25;
-        mat.metalness = Math.min(mat.metalness + 0.15, 1.0);
-        mat.roughness = Math.max(mat.roughness - 0.1, 0.0);
-        mat.envMapIntensity = 1.5;
-      });
-
-      if (!signaled) {
-        setSignaled(true);
-        onReady?.();
+      // Emissive parts (emit_low*) — bright cyan glow
+      if (child.name.includes('emit_low')) {
+        mat.emissive = BRAND.cyan.clone();
+        mat.emissiveIntensity = 2.5;
+        mat.toneMapped = false;
+        return;
       }
-    }
-  }, [scene, signaled, onReady]);
+
+      // Station hull — visible cyan emissive + enhanced metalness
+      mat.emissive = BRAND.cyanDim.clone();
+      mat.emissiveIntensity = 0.25;
+      mat.metalness = Math.min(mat.metalness + 0.15, 1.0);
+      mat.roughness = Math.max(mat.roughness - 0.1, 0.0);
+      mat.envMapIntensity = 1.5;
+    });
+
+    // Pre-compile all shaders before first render — prevents jank
+    gl.compileAsync(scene, camera).then(() => {
+      setSignaled(true);
+      onReady?.();
+    });
+  }, [scene, signaled, onReady, gl, camera]);
 
   // Animate shader time uniform
   useFrame((_, delta) => {
@@ -272,4 +275,4 @@ export default function CapabilitiesScene({
 
 export { PERSPECTIVES, HERO_START, HERO_END };
 
-useGLTF.preload(MODEL_PATH);
+useGLTF.preload(MODEL_PATH, DRACO_CDN);
