@@ -58,6 +58,15 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
     })}></script>
   </head>
   <body class="font-b bg-bg text-white overflow-x-hidden antialiased">
+    <!-- Loading overlay — covers page until 3D model is ready -->
+    <div id="loader-overlay" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg">
+      <!-- Brand loader bar -->
+      <div class="relative w-48 h-px bg-white/10 overflow-hidden rounded-full">
+        <div id="loader-bar" class="absolute inset-y-0 left-0 w-0 bg-cyan-dim rounded-full"></div>
+      </div>
+      <p id="loader-text" class="font-m text-[11px] text-dim uppercase tracking-[0.3em] mt-4 opacity-0">Loading</p>
+    </div>
+
     <!-- Custom sci-fi cursor (desktop only) -->
     <div id="cursor-small" class="cursor-dot"></div>
     <div id="cursor-big" class="cursor-ring"></div>
@@ -184,6 +193,46 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
         });
 
         document.documentElement.classList.add('custom-cursor');
+      }
+    </script>
+
+    <!-- Loader animation — GSAP brand bar + reveal -->
+    <script>
+      import gsap from 'gsap';
+
+      const overlay = document.getElementById('loader-overlay');
+      const bar = document.getElementById('loader-bar');
+      const text = document.getElementById('loader-text');
+
+      if (overlay && bar && text) {
+        // Animate bar + text while loading
+        const loadTl = gsap.timeline();
+        loadTl.to(text, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+        loadTl.to(bar, { width: '70%', duration: 2, ease: 'power1.inOut' }, 0);
+
+        // Listen for model ready
+        window.addEventListener('nexapex:model-ready', () => {
+          // Complete the bar
+          gsap.to(bar, { width: '100%', duration: 0.3, ease: 'power2.out' });
+
+          // Exit animation — overlay slides up
+          const exitTl = gsap.timeline({ delay: 0.4 });
+          exitTl
+            .to(text, { opacity: 0, y: -10, duration: 0.2, ease: 'power2.in' })
+            .to(overlay, {
+              yPercent: -100,
+              duration: 1.2,
+              ease: 'expo.inOut',
+            }, 0.1)
+            .set(overlay, { display: 'none' });
+        }, { once: true });
+
+        // Fallback: if model takes >6s, dismiss loader anyway
+        setTimeout(() => {
+          if (overlay.style.display !== 'none') {
+            window.dispatchEvent(new CustomEvent('nexapex:model-ready'));
+          }
+        }, 6000);
       }
     </script>
 
