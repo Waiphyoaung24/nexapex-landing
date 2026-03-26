@@ -112,6 +112,14 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
         },
       });
 
+      // Start with scroll locked until model is ready
+      lenis.stop();
+
+      window.addEventListener('nexapex:model-ready', () => {
+        // Resume scroll after loader exit animation (1.6s)
+        setTimeout(() => lenis.start(), 1600);
+      }, { once: true });
+
       // Sync Lenis scroll position → GSAP ScrollTrigger
       lenis.on('scroll', ScrollTrigger.update);
       // Handle initial hash scroll
