@@ -1,11 +1,11 @@
 ---
-// Navbar — fixed top, brand logo + action buttons
+// Navbar — fixed top, brand logo + action buttons + mobile menu overlay
 ---
 
-<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-14 py-5">
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 lg:px-14 py-5 transition-all duration-500">
   <div class="flex items-center justify-between">
     <!-- Brand logo mark -->
-    <a href="/" class="nav-item block relative z-10 opacity-0" aria-label="NexApex Home">
+    <a href="/" class="nav-item block relative z-[60] opacity-0" aria-label="NexApex Home">
       <img
         src="/outline_iconmark.png"
         alt="NexApex"
@@ -14,8 +14,8 @@
     </a>
 
     <!-- Right side actions -->
-    <div class="flex items-center gap-3">
-      <!-- Pulse icon -->
+    <div class="flex items-center gap-3 relative z-[60]">
+      <!-- Pulse icon (desktop only) -->
       <a
         href="/#work"
         class="nav-item opacity-0 hidden md:flex items-center justify-center w-11 h-11 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md transition-all duration-500 hover:bg-white/10 hover:border-cyan-dim/40 hover:shadow-[0_0_20px_rgba(90,200,203,0.15)]"
@@ -26,37 +26,83 @@
         </svg>
       </a>
 
-      <!-- Let's Talk -->
+      <!-- Let's Talk (desktop only) -->
       <a
-        href="mailto:hello@nexapex.ai"
+        href="mailto:hello@nexapex.com"
         class="nav-item opacity-0 hidden md:flex items-center gap-2.5 px-6 h-11 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md font-m text-[13px] font-medium text-white/90 uppercase tracking-[0.15em] transition-all duration-500 hover:bg-white/10 hover:border-cyan-dim/40 hover:shadow-[0_0_20px_rgba(90,200,203,0.15)]"
       >
         Let's Talk
         <span class="w-1.5 h-1.5 rounded-full bg-cyan-dim animate-pulse"></span>
       </a>
 
-      <!-- Menu -->
+      <!-- Menu toggle -->
       <button
         id="menu-toggle"
-        class="nav-item opacity-0 flex items-center gap-2.5 px-6 h-11 rounded-full bg-white text-bg font-m text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-500 hover:bg-cyan hover:text-bg"
+        class="nav-item opacity-0 flex items-center gap-2.5 px-6 h-11 rounded-full bg-white text-bg font-m text-[13px] font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:bg-cyan hover:text-bg cursor-pointer"
+        aria-label="Toggle menu"
+        aria-expanded="false"
       >
-        Menu
-        <span class="flex gap-[3px]">
-          <span class="w-[5px] h-[5px] rounded-full bg-bg"></span>
-          <span class="w-[5px] h-[5px] rounded-full bg-bg"></span>
+        <span id="menu-label">Menu</span>
+        <span id="menu-dots" class="flex gap-[3px]">
+          <span class="w-[5px] h-[5px] rounded-full bg-bg transition-transform duration-300"></span>
+          <span class="w-[5px] h-[5px] rounded-full bg-bg transition-transform duration-300"></span>
         </span>
       </button>
     </div>
   </div>
 </nav>
 
-<!-- Navbar entrance animation -->
+<!-- Full-screen mobile menu overlay -->
+<div id="menu-overlay" class="fixed inset-0 z-[55] pointer-events-none opacity-0">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-bg/95 backdrop-blur-xl"></div>
+
+  <!-- Menu content -->
+  <div class="relative z-10 flex flex-col justify-center items-center h-full px-6">
+    <!-- Nav links -->
+    <div class="flex flex-col items-center gap-6 mb-16">
+      <a href="/#capabilities-scroll" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+        Capabilities
+      </a>
+      <a href="/#products" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+        Products
+      </a>
+      <a href="/#core-team" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+        Team
+      </a>
+      <a href="/#contact" class="menu-link font-d text-[clamp(2rem,6vw,3.5rem)] text-white leading-[1.1] tracking-[0.02em] opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan-dim">
+        Contact
+      </a>
+    </div>
+
+    <!-- Bottom info -->
+    <div class="flex flex-col items-center gap-3">
+      <a href="mailto:hello@nexapex.com" class="menu-link font-b text-sm text-cyan-dim opacity-0 translate-y-8 transition-colors duration-300 hover:text-cyan">
+        hello@nexapex.com
+      </a>
+      <div class="menu-link flex gap-6 opacity-0 translate-y-8">
+        <a href="https://x.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">Twitter / X</a>
+        <a href="https://linkedin.com/company/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">LinkedIn</a>
+        <a href="https://github.com/nexapex" target="_blank" rel="noopener noreferrer" class="font-m text-[0.65rem] text-dim uppercase tracking-[0.2em] transition-colors duration-300 hover:text-cyan-dim">GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nav = document.getElementById('main-nav');
   const navItems = document.querySelectorAll('.nav-item');
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuLabel = document.getElementById('menu-label');
+  const menuOverlay = document.getElementById('menu-overlay');
+  const menuLinks = document.querySelectorAll('.menu-link');
 
+  // ── Entrance animation ──
   if (prefersReducedMotion) {
     gsap.set(navItems, { opacity: 1 });
   } else {
@@ -72,4 +118,94 @@
       }
     );
   }
+
+  // ── Backdrop blur on scroll ──
+  if (nav) {
+    ScrollTrigger.create({
+      start: 'top -50',
+      onUpdate: (self) => {
+        if (self.direction === 1 && self.scroll() > 50) {
+          nav.style.background = 'rgba(14, 20, 24, 0.6)';
+          nav.style.backdropFilter = 'blur(12px)';
+          nav.style.webkitBackdropFilter = 'blur(12px)';
+        } else if (self.scroll() <= 50) {
+          nav.style.background = 'transparent';
+          nav.style.backdropFilter = 'none';
+          nav.style.webkitBackdropFilter = 'none';
+        }
+      },
+    });
+  }
+
+  // ── Menu toggle ──
+  let isOpen = false;
+  const menuTl = gsap.timeline({ paused: true });
+
+  if (menuOverlay && !prefersReducedMotion) {
+    menuTl
+      .to(menuOverlay, {
+        opacity: 1,
+        pointerEvents: 'auto',
+        duration: 0.4,
+        ease: 'power2.out',
+      })
+      .to(menuLinks, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.06,
+        ease: 'power3.out',
+      }, '-=0.15');
+  }
+
+  menuToggle?.addEventListener('click', () => {
+    isOpen = !isOpen;
+
+    if (menuLabel) menuLabel.textContent = isOpen ? 'Close' : 'Menu';
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+
+    if (prefersReducedMotion && menuOverlay) {
+      menuOverlay.style.opacity = isOpen ? '1' : '0';
+      menuOverlay.style.pointerEvents = isOpen ? 'auto' : 'none';
+      menuLinks.forEach((l) => {
+        (l as HTMLElement).style.opacity = isOpen ? '1' : '0';
+        (l as HTMLElement).style.transform = 'translateY(0)';
+      });
+    } else {
+      if (isOpen) {
+        menuTl.play();
+      } else {
+        menuTl.reverse();
+      }
+    }
+
+    // Lock body scroll when menu is open
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close menu when clicking a link
+  menuLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      if (isOpen) {
+        isOpen = false;
+        if (menuLabel) menuLabel.textContent = 'Menu';
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+
+        if (prefersReducedMotion && menuOverlay) {
+          menuOverlay.style.opacity = '0';
+          menuOverlay.style.pointerEvents = 'none';
+        } else {
+          menuTl.reverse();
+        }
+      }
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      menuToggle?.click();
+    }
+  });
 </script>

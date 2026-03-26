@@ -41,6 +41,8 @@ const FACE_NAMES = ['TEAM', ...team.map(m => m.short), 'JOIN US'];
 ---
 
 <section class="ct-wrap" id="core-team">
+  <!-- Top gradient bridge for smooth entry -->
+  <div class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-bg to-transparent pointer-events-none z-30"></div>
   <div class="ct-viewport">
     <!-- 3D Cube -->
     <div class="ct-scene">
@@ -99,7 +101,7 @@ const FACE_NAMES = ['TEAM', ...team.map(m => m.short), 'JOIN US'];
             who want to shape the future of AI.
           </p>
           <a
-            href="/#products"
+            href="#contact"
             class="ct-cta font-m group"
           >
             Get in Touch
@@ -132,16 +134,19 @@ const FACE_NAMES = ['TEAM', ...team.map(m => m.short), 'JOIN US'];
   if (!prefersReducedMotion && section && cube && panels) {
     let smooth = 0;
     let lastIdx = -1;
+    let rafId = 0;
+    let isVisible = false;
 
     const easeIO = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
     const tick = () => {
+      if (!isVisible) return;
+
       const rect = section.getBoundingClientRect();
       const scrollable = section.offsetHeight - window.innerHeight;
       const scrolled = Math.max(0, -rect.top);
       const target = Math.min(1, scrolled / Math.max(1, scrollable));
 
-      // Smooth lerp
       smooth += (target - smooth) * 0.08;
 
       // Cube rotation
@@ -160,9 +165,19 @@ const FACE_NAMES = ['TEAM', ...team.map(m => m.short), 'JOIN US'];
         panels.forEach((p, j) => p.classList.toggle('ct-active', j === si));
       }
 
-      requestAnimationFrame(tick);
+      rafId = requestAnimationFrame(tick);
     };
 
-    requestAnimationFrame(tick);
+    // Only run RAF when section is in viewport
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        cancelAnimationFrame(rafId);
+      }
+    }, { rootMargin: '100px' });
+
+    observer.observe(section);
   }
 </script>
