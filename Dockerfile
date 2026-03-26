@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Debug: verify build output exists
-RUN echo "=== Build output ===" && ls -la dist/ && ls -la dist/work/ && echo "=== Done ==="
+RUN echo "=== Build output ===" && ls -la dist/ && echo "=== Done ==="
 
 # Serve stage (nginx for static files)
 FROM nginx:alpine
