@@ -12,7 +12,7 @@ const products = [
     name: 'NexHotel',
     desc: 'Dynamic pricing optimization for hospitality revenue',
     image: '/product-hotel-hero.jpg',
-    align: 'right',
+    align: 'left',
   },
   {
     name: 'NexPOS',
@@ -56,8 +56,13 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
         class="products-panel product-slide relative w-screen h-screen shrink-0 overflow-hidden flex items-center"
         data-product-index={i}
       >
+        <!-- Left edge fade — clean panel transitions -->
+        <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-bg to-transparent pointer-events-none z-10 hidden md:block" aria-hidden="true"></div>
+        <!-- Right edge fade -->
+        <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-bg to-transparent pointer-events-none z-10 hidden md:block" aria-hidden="true"></div>
+
         <div class:list={[
-          'relative w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 flex gap-8 md:gap-12 lg:gap-16 items-center',
+          'product-slide-content relative w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 flex gap-8 md:gap-12 lg:gap-16 items-center',
           product.align === 'right' ? 'flex-row-reverse' : 'flex-row',
         ]}>
           <!-- Contained image -->
@@ -66,7 +71,7 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
               <img
                 src={product.image}
                 alt={`${product.name} -- ${product.desc}`}
-                class="product-slide-img w-full h-full object-cover scale-[1.08]"
+                class="product-slide-img w-full h-full object-cover scale-[1.1]"
                 loading="lazy"
               />
               <!-- Subtle vignette -->
@@ -159,7 +164,7 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
         y: 0,
       });
       gsap.set('.product-slide-accent', { height: 40 });
-      gsap.set('.product-slide-img', { xPercent: 0, scale: 1 });
+      gsap.set('.product-slide-img', { xPercent: 0, scale: 1.1 });
       gsap.set('.products-eyebrow, .products-title, .products-subtitle, .products-scroll-hint', {
         opacity: 1,
         y: 0,
@@ -184,14 +189,21 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
       return;
     }
 
-    // ── Desktop: Horizontal scroll tween ──
+    // ── Desktop: Horizontal scroll tween with snap ──
+    const panelCount = slides.length + 1; // +1 for heading panel
     const scrollTween = gsap.to(track, {
       x: () => -(track.scrollWidth - window.innerWidth),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
         pin: true,
-        scrub: 1,
+        scrub: 0.8,
+        snap: {
+          snapTo: 1 / (panelCount - 1),
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.08,
+          ease: 'power1.inOut',
+        },
         end: () => `+=${track.scrollWidth - window.innerWidth}`,
         invalidateOnRefresh: true,
       },
@@ -223,22 +235,25 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
         .to(hint, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.4);
     }
 
-    // ── Per-card entrance animations via containerAnimation ──
+    // ── Per-card entrance + exit animations via containerAnimation ──
     slides.forEach((slide) => {
+      const inner = slide.querySelector('.product-slide-inner');
       const accent = slide.querySelector('.product-slide-accent');
       const num = slide.querySelector('.product-slide-num');
       const slideName = slide.querySelector('.product-slide-name');
       const desc = slide.querySelector('.product-slide-desc');
       const link = slide.querySelector('.product-slide-link');
+      const imgContainer = slide.querySelector('.product-slide-content > div:first-child');
       const img = slide.querySelector('.product-slide-img');
 
-      // Image parallax (subtle horizontal shift)
-      if (img) {
+      // ── Image: parallax + entrance/exit opacity ──
+      if (img && imgContainer) {
+        // Parallax shift
         gsap.fromTo(img,
-          { xPercent: -5, scale: 1.1 },
+          { xPercent: -3, scale: 1.1 },
           {
-            xPercent: 5,
-            scale: 1,
+            xPercent: 3,
+            scale: 1.1,
             ease: 'none',
             scrollTrigger: {
               trigger: slide,
@@ -249,9 +264,38 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
             },
           },
         );
+
+        // Image container entrance fade
+        gsap.fromTo(imgContainer,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slide,
+              containerAnimation: scrollTween,
+              start: 'left 85%',
+              end: 'left 55%',
+              scrub: true,
+            },
+          },
+        );
+
+        // Image container exit fade
+        gsap.to(imgContainer, {
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slide,
+            containerAnimation: scrollTween,
+            start: 'right 55%',
+            end: 'right 25%',
+            scrub: true,
+          },
+        });
       }
 
-      // Card content staggered reveal
+      // ── Text entrance: staggered reveal ──
       const cardTl = gsap.timeline({
         scrollTrigger: {
           trigger: slide,
@@ -262,49 +306,36 @@ const PANEL_COUNT = products.length + 1; // +1 for heading panel
         },
       });
 
-      // Accent line draws down
       if (accent) {
-        cardTl.fromTo(accent,
-          { height: 0 },
-          { height: 60, ease: 'none' },
-          0,
-        );
+        cardTl.fromTo(accent, { height: 0 }, { height: 60, ease: 'none' }, 0);
       }
-
-      // Number fades in
       if (num) {
-        cardTl.fromTo(num,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, ease: 'none' },
-          0,
-        );
+        cardTl.fromTo(num, { opacity: 0, y: 20 }, { opacity: 1, y: 0, ease: 'none' }, 0);
       }
-
-      // Name slides up
       if (slideName) {
-        cardTl.fromTo(slideName,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, ease: 'none' },
-          0.05,
-        );
+        cardTl.fromTo(slideName, { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none' }, 0.05);
       }
-
-      // Description fades in
       if (desc) {
-        cardTl.fromTo(desc,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, ease: 'none' },
-          0.15,
-        );
+        cardTl.fromTo(desc, { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: 'none' }, 0.15);
+      }
+      if (link) {
+        cardTl.fromTo(link, { opacity: 0, y: 20 }, { opacity: 1, y: 0, ease: 'none' }, 0.25);
       }
 
-      // Link fades in
-      if (link) {
-        cardTl.fromTo(link,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, ease: 'none' },
-          0.25,
-        );
+      // ── Text exit: inner content fades out ──
+      if (inner) {
+        gsap.to(inner, {
+          opacity: 0,
+          y: -20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: slide,
+            containerAnimation: scrollTween,
+            start: 'right 65%',
+            end: 'right 35%',
+            scrub: true,
+          },
+        });
       }
     });
   }
