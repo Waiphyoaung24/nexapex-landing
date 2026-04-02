@@ -15,11 +15,10 @@ COPY . .
 # Build the Next.js application
 RUN npm run build
 
-# Expose port 3001
-EXPOSE 3001
+# App listens on 3000 internally, mapped to 3001 externally
+EXPOSE 3000
 
-# Next.js reads PORT and HOSTNAME env vars automatically
-ENV PORT=3001
+ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["npm", "start"]
