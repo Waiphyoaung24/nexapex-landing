@@ -16,9 +16,9 @@ COPY . .
 RUN npm run build
 
 # App listens on 3000 internally, mapped to 3001 externally
-EXPOSE 3000
+EXPOSE 3001
 
-ENV PORT=3000
+ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["npm", "start"]
