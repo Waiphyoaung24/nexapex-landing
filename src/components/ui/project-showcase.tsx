@@ -15,11 +15,11 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "Nexus AI Tarot (NAT)",
-    description: "AI-powered tarot reading experience blending ancient wisdom with modern artificial intelligence.",
+    title: "VisionForge",
+    description: "Custom-trained object detection for quality control, inventory tracking, and defect inspection.",
     year: "In Development",
-    link: "http://nat.nexapex.ai/",
-    image: "https://images.pexels.com/photos/7130560/pexels-photo-7130560.jpeg?auto=compress&cs=tinysrgb&w=2670",
+    link: "#",
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2670&auto=format&fit=crop",
   },
   {
     title: "NexChat",
@@ -98,7 +98,7 @@ export function ProjectShowcase() {
             Selected Work
           </h2>
         </div>
-        <p className="max-w-[280px] text-[11px] font-medium uppercase tracking-[1px] text-[#f0f1ef]/40 md:text-right">
+        <p className="max-w-[280px] text-[11px] font-medium uppercase tracking-[1px] text-[#f0f1ef]/55 md:text-right">
           AI products built in-house, deployed for businesses across Southeast Asia.
         </p>
       </div>

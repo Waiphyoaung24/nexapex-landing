@@ -1,46 +1,46 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Lenis from "lenis";
+import { useEffect, useState, createContext, useContext } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { initScrollPauses, resetPauseState } from "@/lib/scroll-pause";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 }
 
-export function SmoothScroll() {
-  const lenisRef = useRef<Lenis | null>(null);
+// Shared context so any component can access smoother.paused(), scrollTo(), etc.
+const SmootherContext = createContext<ScrollSmoother | null>(null);
+export const useSmoother = () => useContext(SmootherContext);
+
+export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
+  const [smoother, setSmoother] = useState<ScrollSmoother | null>(null);
 
   useEffect(() => {
-    const mainEl = document.querySelector("main");
-    if (!mainEl) return;
-
-    const lenis = new Lenis({
-      wrapper: mainEl,
-      content: mainEl,
-      smoothWheel: true,
-      lerp: 0.1,             // balanced smoothness without reverse-scroll lag
-      wheelMultiplier: 0.7,   // reduce scroll speed per wheel tick
-      touchMultiplier: 1.5,
+    const instance = ScrollSmoother.create({
+      wrapper: "#smooth-wrapper",
+      content: "#smooth-content",
+      smooth: 1.5,
+      effects: true,
+      normalizeScroll: true,
+      smoothTouch: 0.1,
     });
-    lenisRef.current = lenis;
 
-    // Connect Lenis scroll events to GSAP ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
+    setSmoother(instance);
 
-    // Drive Lenis from GSAP's ticker for perfectly synced animation frames
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerCallback);
-    gsap.ticker.lagSmoothing(0);
+    // Initialize scroll pause points (Brand, Capabilities, CTA)
+    initScrollPauses(instance);
 
     return () => {
-      gsap.ticker.remove(tickerCallback);
-      lenis.destroy();
+      resetPauseState();
+      instance.kill();
     };
   }, []);
 
-  return null;
+  return (
+    <SmootherContext.Provider value={smoother}>
+      {children}
+    </SmootherContext.Provider>
+  );
 }

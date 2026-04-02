@@ -11,6 +11,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { useSmoother } from "./SmoothScroll";
+import { checkThreeShowcasePause } from "@/lib/scroll-pause";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
@@ -177,28 +179,30 @@ export function ThreeShowcase() {
   const canvasWrapRef = useRef<HTMLDivElement>(null);
   const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const [activePanel, setActivePanel] = useState(0);
+  const smoother = useSmoother();
 
   const onScrollProgress = useCallback((p: number) => {
     scrollState.progress = p;
     setActivePanel(Math.min(Math.floor(p * 4), 3));
-  }, []);
+    // Check if we should pause at panel entry points
+    if (smoother) {
+      checkThreeShowcasePause(smoother, p);
+    }
+  }, [smoother]);
 
   useGSAP(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const scroller = document.querySelector("main");
-    if (!scroller) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        scroller,
         pin: true,
         start: "top top",
-        end: "+=4000",
-        scrub: 2,
+        end: "+=2500",
+        scrub: 1.5,
         onUpdate: (self) => onScrollProgress(self.progress),
       },
     });
@@ -256,9 +260,9 @@ export function ThreeShowcase() {
       }
     });
 
-    // Final fade-out at end
+    // Final fade-out — starts at 0.90 and fills to end (no dead scroll after)
     if (fadeOverlayRef.current) {
-      tl.to(fadeOverlayRef.current, { autoAlpha: 1, duration: 0.15, ease: "power2.in" }, 0.88);
+      tl.to(fadeOverlayRef.current, { autoAlpha: 1, duration: 0.10, ease: "power2.in" }, 0.90);
     }
   }, { scope: sectionRef });
 
@@ -313,7 +317,7 @@ export function ThreeShowcase() {
             <h2 className="panel-title text-3xl md:text-[56px] font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[0.9] mb-4 whitespace-pre-line">
               {panel.title}
             </h2>
-            <p className="panel-body text-[13px] leading-relaxed text-white/40 max-w-[340px]">
+            <p className="panel-body text-[13px] leading-relaxed text-white/60 max-w-[340px]">
               {panel.body}
             </p>
           </div>

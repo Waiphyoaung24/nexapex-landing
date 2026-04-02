@@ -21,7 +21,7 @@ function FloatingPaths({ position }: { position: number }) {
       152 - i * 12 * position
     } ${343 - i * 15}C${616 - i * 12 * position} ${470 - i * 15} ${
       684 - i * 12 * position
-    } ${875 - i * 15}`,
+    } ${875 - i * 15} ${220 - i * 12 * position} ${600 - i * 15}`,
     width: 0.4 + i * 0.06,
     // Stagger duration per path so they don't all sync up
     duration: 20 + i * 3,

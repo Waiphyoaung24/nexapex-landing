@@ -6,29 +6,52 @@ import { FooterSection } from "@/components/FooterSection";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { Preloader } from "@/components/Preloader";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { ThreeShowcase } from "@/components/ThreeShowcase";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
+import { ScrollPauseIndicator } from "@/components/ScrollPauseIndicator";
+import { PageSlideSection } from "@/components/PageSlideSection";
 
 export default function Home() {
   return (
     <>
       <Preloader />
-      <SmoothScroll />
       <Header />
-      <main className="h-screen overflow-y-auto overflow-x-hidden">
-        <HeroSection />
-     
-        <div id="three-showcase"><ThreeShowcase /></div>
-        <div id="brand-section"><BrandSection /></div>
-        <div id="clients-section"><ClientsSection /></div>
-        <div id="project-showcase" className="bg-[#0e1418]">
-          <ProjectShowcase />
+      <ScrollPauseIndicator />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <HeroSection />
+          <div id="three-showcase"><ThreeShowcase /></div>
+
+          {/* Clip 1: Who We Are */}
+          <PageSlideSection id="brand-section" zIndex={10} scrollLength="+=50%">
+            <BrandSection />
+          </PageSlideSection>
+
+          {/* Clip 2: Technologies We Work With */}
+          <PageSlideSection id="clients-section" zIndex={20} scrollLength="+=50%">
+            <ClientsSection />
+          </PageSlideSection>
+
+          {/* Clip 3: Selected Work / Portfolio */}
+          <PageSlideSection id="project-showcase" zIndex={30} scrollLength="+=50%">
+            <div className="bg-[#0e1418] min-h-screen flex items-center">
+              <ProjectShowcase />
+            </div>
+          </PageSlideSection>
+
+          {/* Clip 4: What We Do */}
+          <PageSlideSection id="capabilities-section" zIndex={40} scrollLength="+=50%">
+            <CapabilitiesSection />
+          </PageSlideSection>
+
+          {/* Clip 5: Let's Build Something Real */}
+          <PageSlideSection id="cta-section" zIndex={50} scrollLength="+=50%">
+            <CTASection />
+          </PageSlideSection>
+
+          <FooterSection />
         </div>
-        <div id="capabilities-section"><CapabilitiesSection /></div>
-        <div id="cta-section"><CTASection /></div>
-        <FooterSection />
-      </main>
+      </div>
     </>
   );
 }

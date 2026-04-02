@@ -107,8 +107,6 @@ export function CTASection() {
   useGSAP(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const scroller = document.querySelector("main");
-    if (!scroller) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
@@ -116,7 +114,7 @@ export function CTASection() {
     if (tagline) {
       gsap.from(tagline, {
         y: 20, autoAlpha: 0, duration: 0.6, ease: "power2.out",
-        scrollTrigger: { trigger: section, scroller, start: "top 60%", toggleActions: "play none none reverse" },
+        scrollTrigger: { trigger: section, start: "top 60%", toggleActions: "play none none reverse" },
       });
     }
 
@@ -124,8 +122,13 @@ export function CTASection() {
     if (heading) {
       const split = SplitText.create(heading, { type: "words" });
       gsap.from(split.words, {
-        y: 60, autoAlpha: 0, rotateX: -40, stagger: 0.06, duration: 0.8, ease: "power4.out",
-        scrollTrigger: { trigger: section, scroller, start: "top 55%", toggleActions: "play none none reverse" },
+        y: 80,
+        autoAlpha: 0,
+        rotateX: -60,
+        stagger: 0.08,
+        duration: 1.0,
+        ease: "power4.out",
+        scrollTrigger: { trigger: section, start: "top 55%", toggleActions: "play none none reverse" },
       });
     }
 
@@ -133,7 +136,7 @@ export function CTASection() {
     if (cta) {
       gsap.from(cta, {
         y: 30, autoAlpha: 0, duration: 0.6, delay: 0.4, ease: "power3.out",
-        scrollTrigger: { trigger: section, scroller, start: "top 55%", toggleActions: "play none none reverse" },
+        scrollTrigger: { trigger: section, start: "top 55%", toggleActions: "play none none reverse" },
       });
     }
   }, { scope: sectionRef });
@@ -141,17 +144,16 @@ export function CTASection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#c63518] text-white"
+      className="relative overflow-hidden bg-[#0e1418] text-white"
     >
-      {/* 3D Canvas — full background, receives pointer events */}
+      {/* 3D Canvas — transparent so section bg-[#c63518] shows through */}
       <div className="absolute inset-0 z-0">
         <Canvas
-          gl={{ antialias: false }}
+          gl={{ antialias: false, alpha: true }}
           dpr={[1, 1.5]}
           camera={{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }}
-          style={{ background: "#c63518" }}
+          style={{ background: "transparent" }}
         >
-          <color attach="background" args={["#c63518"]} />
           <Suspense fallback={null}>
             <Scene />
           </Suspense>
@@ -161,7 +163,7 @@ export function CTASection() {
       {/* Content overlay — pointer-events-none so mouse passes through to Canvas */}
       <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center min-h-screen px-5 py-32 md:py-48 md:px-[60px]">
         {/* Tagline */}
-        <p className="cta-tagline text-[11px] font-mono uppercase tracking-[4px] text-white/60 mb-6">
+        <p className="cta-tagline text-[11px] font-mono uppercase tracking-[4px] text-white/70 mb-6">
           Ready to see AI in action?
         </p>
 
@@ -180,11 +182,13 @@ export function CTASection() {
             "cta-button mt-12 z-10 group pointer-events-auto",
             "flex items-center gap-3",
             "rounded-full bg-white px-8 py-4",
-            "font-mono text-[12px] font-medium uppercase tracking-[1px] text-[#c63518]",
-            "cursor-pointer transition-all duration-300 ease-out",
-            "hover:bg-white/90 hover:shadow-lg hover:scale-105",
+            "font-mono text-[12px] font-medium uppercase tracking-[1px] text-[#0e1418]",
+            "cursor-pointer transition-all duration-300",
+            "hover:bg-white/95 hover:shadow-[0_4px_24px_rgba(255,255,255,0.2)] hover:scale-[1.03]",
+            "active:scale-[0.97]",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           )}
+          style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
         >
           Book a Consultation
           <ArrowUpRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

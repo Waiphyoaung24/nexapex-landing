@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SmoothScrollProvider } from "@/components/SmoothScroll";
 
 const nevera = localFont({
   src: "../../public/fonts/nevera-font/Nevera-Regular.otf",
@@ -33,8 +34,10 @@ export default function RootLayout({
       lang="en"
       className={`${nevera.variable} ${nexa.variable} dark h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full bg-[#0e1418] text-[#f0f1ef] overflow-hidden">
-        {children}
+      <body suppressHydrationWarning className="grain-overlay min-h-full bg-[#0e1418] text-[#f0f1ef]">
+        <SmoothScrollProvider>
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );

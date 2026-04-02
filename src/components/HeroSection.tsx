@@ -85,9 +85,6 @@ export function HeroSection({ className }: { className?: string }) {
     const section = sectionRef.current;
     if (!section) return;
 
-    const scroller = document.querySelector("main");
-    if (!scroller) return;
-
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -104,7 +101,7 @@ export function HeroSection({ className }: { className?: string }) {
         ease: "none",
         scrollTrigger: {
           trigger: section,
-          scroller,
+
           start: "top top",
           end: "bottom top",
           scrub: true,
@@ -137,7 +134,7 @@ export function HeroSection({ className }: { className?: string }) {
         ease: "power4.out",
         scrollTrigger: {
           trigger: section,
-          scroller,
+
           start: "top 80%",
           end: "top 20%",
           toggleActions: "play none none reverse",
@@ -152,7 +149,7 @@ export function HeroSection({ className }: { className?: string }) {
         ease: "none",
         scrollTrigger: {
           trigger: section,
-          scroller,
+
           start: "top top",
           end: "40% top",
           scrub: true,
@@ -168,7 +165,7 @@ export function HeroSection({ className }: { className?: string }) {
         ease: "none",
         scrollTrigger: {
           trigger: section,
-          scroller,
+
           start: "top top",
           end: "20% top",
           scrub: true,
@@ -182,7 +179,7 @@ export function HeroSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       className={cn(
-        "relative h-screen w-full overflow-hidden bg-[#0e1418]",
+        "relative min-h-[100dvh] h-screen w-full overflow-hidden bg-[#0e1418]",
         className,
       )}
     >

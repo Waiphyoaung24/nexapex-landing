@@ -38,7 +38,7 @@ function MarqueeRow({ logos, direction, duration }: {
   return (
     <div className="overflow-hidden">
       <div
-        className="flex w-max gap-4 md:gap-5"
+        className="flex w-max gap-3 md:gap-5"
         style={{
           animation: `marquee-${direction} ${duration}s linear infinite`,
         }}
@@ -46,12 +46,12 @@ function MarqueeRow({ logos, direction, duration }: {
         {allLogos.map((logo, i) => (
           <div
             key={`${logo.alt}-${i}`}
-            className="group flex items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.02] w-[160px] h-[100px] md:w-[220px] md:h-[130px] shrink-0 hover:border-[#94fcff]/15 hover:bg-white/[0.04] transition-all duration-300"
+            className="group flex items-center justify-center rounded-lg md:rounded-xl border border-white/[0.06] bg-white/[0.02] w-[120px] h-[75px] md:w-[180px] md:h-[100px] shrink-0 hover:border-[#94fcff]/15 hover:bg-white/[0.04] transition-all duration-300"
           >
             <img
               src={logo.src}
               alt={`${logo.alt} logo`}
-              className="max-h-[32px] md:max-h-[40px] w-auto opacity-60 group-hover:opacity-90 transition-opacity duration-300"
+              className="max-h-[24px] md:max-h-[40px] w-auto opacity-60 group-hover:opacity-90 transition-opacity duration-300"
             />
           </div>
         ))}
@@ -66,15 +66,13 @@ export function ClientsSection() {
   useGSAP(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const scroller = document.querySelector("main");
-    if (!scroller) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const heading = section.querySelector(".clients-heading");
     if (heading) {
       gsap.from(heading, {
         y: 40, autoAlpha: 0, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: heading, scroller, start: "top 85%", toggleActions: "play none none reverse" },
+        scrollTrigger: { trigger: heading, start: "top 85%", toggleActions: "play none none reverse" },
       });
     }
 
@@ -82,43 +80,28 @@ export function ClientsSection() {
     if (desc) {
       gsap.from(desc, {
         y: 30, autoAlpha: 0, duration: 0.6, delay: 0.15, ease: "power2.out",
-        scrollTrigger: { trigger: heading, scroller, start: "top 85%", toggleActions: "play none none reverse" },
+        scrollTrigger: { trigger: heading, start: "top 85%", toggleActions: "play none none reverse" },
       });
     }
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="bg-[#0e1418] py-16 md:py-24 overflow-hidden">
-      {/* Marquee keyframes */}
-      <style>{`
-        @keyframes marquee-left {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        @keyframes marquee-right {
-          from { transform: translateX(-50%); }
-          to { transform: translateX(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-row { animation: none !important; }
-        }
-      `}</style>
-
+    <section ref={sectionRef} className="bg-[#0e1418] min-h-screen flex flex-col justify-center overflow-hidden py-10 md:py-0">
       {/* Header row */}
-      <div className="mb-10 md:mb-16 flex flex-col gap-4 px-5 md:flex-row md:items-start md:justify-between md:px-[60px]">
+      <div className="mb-8 md:mb-12 flex flex-col gap-3 px-5 md:flex-row md:items-start md:justify-between md:px-[60px]">
         <h2
           className="clients-heading font-normal uppercase tracking-[2px] text-white font-[family-name:var(--font-display)]"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
+          style={{ fontSize: "clamp(1.25rem, 3vw, 2.5rem)" }}
         >
           Technologies We Work With
         </h2>
-        <p className="clients-desc max-w-[280px] text-[10px] font-medium uppercase tracking-[1.5px] text-white/40 md:text-right leading-[1.8]">
+        <p className="clients-desc max-w-[280px] text-[10px] font-medium uppercase tracking-[1.5px] text-white/55 md:text-right leading-[1.6] md:leading-[1.8]">
           Production-grade tools powering our AI solutions across vision, language, and documents.
         </p>
       </div>
 
       {/* Scrolling logo rows — CSS infinite marquee */}
-      <div className="flex flex-col gap-4 md:gap-5">
+      <div className="flex flex-col gap-3 md:gap-4">
         <MarqueeRow logos={row1} direction="left" duration={30} />
         <MarqueeRow logos={row2} direction="right" duration={35} />
       </div>
