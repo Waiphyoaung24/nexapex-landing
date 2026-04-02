@@ -43,7 +43,14 @@ function SplineEmbed({ url }: { url: string }) {
   if (!url || url === "PASTE_YOUR_SPLINE_URL_HERE") return null;
 
   return (
-    <div className="absolute inset-0 z-[1]">
+    <div
+      className="absolute inset-0 z-[1]"
+      style={{
+        /* Force GPU layer without subpixel blur */
+        backfaceVisibility: "hidden",
+        imageRendering: "auto",
+      }}
+    >
       {!loaded && (
         <div className="absolute inset-0 animate-pulse bg-white/[0.02]" />
       )}
@@ -58,7 +65,13 @@ function SplineEmbed({ url }: { url: string }) {
           "absolute inset-0 h-full w-full border-none transition-opacity duration-700",
           loaded ? "opacity-100" : "opacity-0",
         )}
-        style={{ background: "transparent" }}
+        style={{
+          background: "transparent",
+          /* Crisp rendering: promote to own compositing layer */
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+          imageRendering: "auto",
+        }}
         title="Interactive 3D Tiles"
       />
     </div>

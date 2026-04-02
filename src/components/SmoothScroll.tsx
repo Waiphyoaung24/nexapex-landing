@@ -20,7 +20,7 @@ export function SmoothScroll() {
       wrapper: mainEl,
       content: mainEl,
       smoothWheel: true,
-      lerp: 0.06,            // low = slower, more cinematic (default 0.1)
+      lerp: 0.1,             // balanced smoothness without reverse-scroll lag
       wheelMultiplier: 0.7,   // reduce scroll speed per wheel tick
       touchMultiplier: 1.5,
     });
