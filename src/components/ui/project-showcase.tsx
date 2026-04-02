@@ -15,11 +15,11 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "VisionForge",
-    description: "Custom-trained object detection for quality control, inventory tracking, and defect inspection.",
+    title: "Nexus AI Tarot (NAT)",
+    description: "AI-powered tarot reading experience blending ancient wisdom with modern artificial intelligence.",
     year: "In Development",
-    link: "#",
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2670&auto=format&fit=crop",
+    link: "http://nat.nexapex.ai/",
+    image: "https://images.pexels.com/photos/7130560/pexels-photo-7130560.jpeg?auto=compress&cs=tinysrgb&w=2670",
   },
   {
     title: "NexChat",
