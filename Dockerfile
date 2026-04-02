@@ -18,6 +18,8 @@ RUN npm run build
 # Expose port 3001
 EXPOSE 3001
 
-# Set the port environment variable and start the server
+# Next.js reads PORT and HOSTNAME env vars automatically
 ENV PORT=3001
-CMD ["npx", "next", "start", "-p", "3001"]
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["npm", "start"]
