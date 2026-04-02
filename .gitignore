@@ -46,3 +46,10 @@ dist/
 
 # claude
 .claude/
+
+# Playwright logs
+.playwright-mcp/
+
+# Screenshots from dev testing
+*.png
+!public/**/*.png

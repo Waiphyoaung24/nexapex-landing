@@ -1,0 +1,57 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+function FloatingPaths({ position }: { position: number }) {
+  const paths = Array.from({ length: 14 }, (_, i) => ({
+    id: i,
+    d: `M-${380 - i * 12 * position} -${189 + i * 15}C-${
+      380 - i * 12 * position
+    } -${189 + i * 15} -${312 - i * 12 * position} ${216 - i * 15} ${
+      152 - i * 12 * position
+    } ${343 - i * 15}C${616 - i * 12 * position} ${470 - i * 15} ${
+      684 - i * 12 * position
+    } ${875 - i * 15} ${684 - i * 12 * position} ${875 - i * 15}`,
+    width: 0.4 + i * 0.06,
+  }));
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      <svg
+        className="w-full h-full"
+        viewBox="0 0 696 316"
+        fill="none"
+      >
+        <title>Background Paths</title>
+        {paths.map((path) => (
+          <motion.path
+            key={path.id}
+            d={path.d}
+            stroke="#94fcff"
+            strokeWidth={path.width}
+            initial={{ pathLength: 0.3 }}
+            animate={{
+              pathLength: 1,
+              opacity: [0.08, 0.2, 0.08],
+              pathOffset: [0, 1, 0],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+export function BackgroundPaths() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <FloatingPaths position={1} />
+      <FloatingPaths position={-1} />
+    </div>
+  );
+}
