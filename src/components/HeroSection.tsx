@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,11 +12,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 }
 
-// ──────────────────────────────────────────────
-// Spline 3D embed URL
-// ──────────────────────────────────────────────
-const SPLINE_EMBED_URL = "https://my.spline.design/interactivetiles3dtransformcopycopy-ZwOLjFzO4sF749gAFs5TPRYa-rKS/";
-
 const CROSS_POSITIONS = [5, 25, 50, 72, 95] as const;
 
 function CrossMarker({ xPercent }: { xPercent: number }) {
@@ -27,69 +22,6 @@ function CrossMarker({ xPercent }: { xPercent: number }) {
     >
       <div className="absolute left-1/2 h-full w-px -translate-x-1/2 bg-[#94fcff]" />
       <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#94fcff]" />
-    </div>
-  );
-}
-
-function SplineEmbed({ url }: { url: string }) {
-  const [loaded, setLoaded] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Fallback: force-show after 3s if onLoad doesn't fire (cross-origin iframes)
-  useEffect(() => {
-    const id = setTimeout(() => setLoaded(true), 3000);
-    return () => clearTimeout(id);
-  }, []);
-
-  // Pause iframe when scrolled out of view to stop WebGL render loop
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  if (!url || url === "PASTE_YOUR_SPLINE_URL_HERE") return null;
-
-  return (
-    <div
-      ref={containerRef}
-      className="absolute inset-0 z-[1] overflow-hidden"
-      style={{
-        contain: "strict",
-        isolation: "isolate",
-      }}
-    >
-      {!loaded && (
-        <div className="absolute inset-0 animate-pulse bg-white/[0.02]" />
-      )}
-      {visible && (
-        <iframe
-          src={url}
-          allow="autoplay"
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          className="absolute border-none"
-          style={{
-            background: "transparent",
-            transform: "translateZ(0)",
-            opacity: loaded ? 1 : 0,
-            transition: "opacity 0.7s ease-out",
-            /* Extend iframe beyond container to hide Spline watermark */
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "calc(100% + 60px)",
-          }}
-          title="Interactive 3D Tiles"
-        />
-      )}
     </div>
   );
 }
@@ -201,11 +133,8 @@ export function HeroSection({ className }: { className?: string }) {
         }}
       />
 
-      {/* Spline 3D Interactive Tiles */}
-      <SplineEmbed url={SPLINE_EMBED_URL} />
-
-      {/* Animated SVG paths — bottom-left only, avoids crossing 3D tiles */}
-      <div className="absolute bottom-0 left-0 w-[55%] h-[55%] z-[3] pointer-events-none overflow-hidden">
+      {/* Animated SVG paths */}
+      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
         <BackgroundPaths />
       </div>
 
