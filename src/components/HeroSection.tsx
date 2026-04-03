@@ -1,18 +1,74 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { cn } from "@/lib/utils";
-import { BackgroundPaths } from "@/components/ui/background-paths";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 }
 
+const SPLINE_EMBED_URL = "https://my.spline.design/interactivetiles3dtransformcopycopy-ZwOLjFzO4sF749gAFs5TPRYa-rKS/";
 const CROSS_POSITIONS = [5, 25, 50, 72, 95] as const;
+
+function SplineEmbed({ url }: { url: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = setTimeout(() => setLoaded(true), 3000);
+    return () => clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  if (!url || url === "PASTE_YOUR_SPLINE_URL_HERE") return null;
+
+  return (
+    <div
+      ref={containerRef}
+      className="absolute inset-0 z-[1] overflow-hidden"
+      style={{ contain: "strict", isolation: "isolate" }}
+    >
+      {!loaded && (
+        <div className="absolute inset-0 animate-pulse bg-white/[0.02]" />
+      )}
+      {visible && (
+        <iframe
+          src={url}
+          allow="autoplay"
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          className="absolute border-none"
+          style={{
+            background: "transparent",
+            transform: "translateZ(0)",
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 0.7s ease-out",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "calc(100% + 60px)",
+          }}
+          title="Interactive 3D Tiles"
+        />
+      )}
+    </div>
+  );
+}
 
 function CrossMarker({ xPercent }: { xPercent: number }) {
   return (
@@ -133,10 +189,8 @@ export function HeroSection({ className }: { className?: string }) {
         }}
       />
 
-      {/* Animated SVG paths */}
-      <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-        <BackgroundPaths />
-      </div>
+      {/* Spline 3D Interactive Tiles */}
+      <SplineEmbed url={SPLINE_EMBED_URL} />
 
       {/* Cross markers */}
       <div className="hero-cross-markers pointer-events-none absolute inset-0 z-[2]">
