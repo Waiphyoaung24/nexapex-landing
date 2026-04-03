@@ -1,18 +1,18 @@
 "use client";
 
 import { patchThreeWarnings } from "@/lib/patch-three-clock";
-patchThreeWarnings();
-import * as THREE from "three";
-import { Suspense, useRef, useState, useCallback } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Html } from "@react-three/drei";
-import { SpaceStationModel } from "./SpaceStation";
-import gsap from "gsap";
+import { checkThreeShowcasePause } from "@/lib/scroll-pause";
 import { useGSAP } from "@gsap/react";
+import { Environment, Html } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { Suspense, useCallback, useRef, useState } from "react";
+import * as THREE from "three";
 import { useSmoother } from "./SmoothScroll";
-import { checkThreeShowcasePause } from "@/lib/scroll-pause";
+import { SpaceStationModel } from "./SpaceStation";
+patchThreeWarnings();
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
@@ -201,8 +201,8 @@ export function ThreeShowcase() {
         trigger: section,
         pin: true,
         start: "top top",
-        end: "+=2500",
-        scrub: 1.5,
+        end: "+=1800",
+        scrub: 2.5,
         onUpdate: (self) => onScrollProgress(self.progress),
       },
     });

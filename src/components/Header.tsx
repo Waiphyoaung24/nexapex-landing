@@ -165,11 +165,11 @@ export function Header() {
                       General Enquiries
                     </p>
                     <a
-                      href="mailto:hello@nexapex.co"
+                      href="mailto:nexuslab.dev.mm@gmail.com"
                       className="flex items-center gap-3 text-[16px] text-white/80 hover:text-[#94fcff] transition-colors duration-200 cursor-pointer group"
                     >
                       <Mail size={16} className="text-[#94fcff]/40 group-hover:text-[#94fcff] transition-colors" />
-                      hello@nexapex.co
+                      support@nexapex.ai
                     </a>
                   </div>
                   <div>
@@ -177,11 +177,11 @@ export function Header() {
                       New Business
                     </p>
                     <a
-                      href="mailto:business@nexapex.co"
+                      href="mailto:nexuslab.dev.mm@gmail.com"
                       className="flex items-center gap-3 text-[16px] text-white/80 hover:text-[#94fcff] transition-colors duration-200 cursor-pointer group"
                     >
                       <Briefcase size={16} className="text-[#94fcff]/40 group-hover:text-[#94fcff] transition-colors" />
-                      business@nexapex.co
+                      business@nexapex.ai
                     </a>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ export function Header() {
               <div className="px-8 pb-8">
                 <div className="h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-6" />
                 <a
-                  href="mailto:business@nexapex.co"
+                  href="mailto:nexuslab.dev.mm@gmail.com"
                   className={cn(
                     "flex items-center justify-center gap-2 w-full",
                     "rounded-full bg-[#94fcff] px-6 py-4 cursor-pointer",

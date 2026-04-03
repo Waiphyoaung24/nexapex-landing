@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, createContext, useContext } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { initScrollPauses, resetPauseState } from "@/lib/scroll-pause";
+import gsap from "gsap";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { createContext, useContext, useEffect, useState } from "react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -21,7 +21,8 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     const instance = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.5,
+      smooth: 2,
+      speed: 0.25,
       effects: true,
       normalizeScroll: true,
       smoothTouch: 0.1,

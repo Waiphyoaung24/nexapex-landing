@@ -5,11 +5,11 @@ import { CTASection } from "@/components/CTASection";
 import { FooterSection } from "@/components/FooterSection";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
+import { PageSlideSection } from "@/components/PageSlideSection";
 import { Preloader } from "@/components/Preloader";
+import { ScrollPauseIndicator } from "@/components/ScrollPauseIndicator";
 import { ThreeShowcase } from "@/components/ThreeShowcase";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
-import { ScrollPauseIndicator } from "@/components/ScrollPauseIndicator";
-import { PageSlideSection } from "@/components/PageSlideSection";
 
 export default function Home() {
   return (
@@ -20,10 +20,10 @@ export default function Home() {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <HeroSection />
-          <div id="three-showcase"><ThreeShowcase /></div>
+          <div id="three-showcase" style={{ marginBottom: '-100vh' }}><ThreeShowcase /></div>
 
           {/* Clip 1: Who We Are */}
-          <PageSlideSection id="brand-section" zIndex={10} scrollLength="+=50%">
+          <PageSlideSection id="brand-section" zIndex={10} scrollLength="+=30%">
             <BrandSection />
           </PageSlideSection>
 

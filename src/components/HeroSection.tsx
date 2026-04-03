@@ -44,9 +44,8 @@ function SplineEmbed({ url }: { url: string }) {
 
   return (
     <div
-      className="absolute inset-0 z-[1]"
+      className="absolute inset-0 z-[1] overflow-hidden"
       style={{
-        /* Force GPU layer without subpixel blur */
         backfaceVisibility: "hidden",
         imageRendering: "auto",
       }}
@@ -56,21 +55,23 @@ function SplineEmbed({ url }: { url: string }) {
       )}
       <iframe
         src={url}
-        width="100%"
-        height="100%"
         allow="autoplay"
         loading="eager"
         onLoad={() => setLoaded(true)}
         className={cn(
-          "absolute inset-0 h-full w-full border-none transition-opacity duration-700",
+          "absolute border-none transition-opacity duration-700",
           loaded ? "opacity-100" : "opacity-0",
         )}
         style={{
           background: "transparent",
-          /* Crisp rendering: promote to own compositing layer */
           transform: "translateZ(0)",
           backfaceVisibility: "hidden",
           imageRendering: "auto",
+          /* Extend iframe beyond container to hide Spline watermark */
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "calc(100% + 60px)",
         }}
         title="Interactive 3D Tiles"
       />
@@ -94,29 +95,29 @@ export function HeroSection({ className }: { className?: string }) {
     const heroTitle = section.querySelector(".hero-title");
     const crossMarkers = section.querySelector(".hero-cross-markers");
     const scrollPrompt = section.querySelector(".hero-scroll-prompt");
-    // Title parallax on scroll
+
+    // Title parallax — moves down as user scrolls (opposite direction)
     if (heroTitle) {
       gsap.to(heroTitle, {
-        y: -80,
+        y: 80,
+        autoAlpha: 0,
         ease: "none",
         scrollTrigger: {
           trigger: section,
-
           start: "top top",
-          end: "bottom top",
+          end: "50% top",
           scrub: true,
         },
       });
     }
 
-    // SplitText character reveal animation
-    const titleEl = section.querySelector(".hero-title h1");
+    // SplitText character reveal — plays on page load, not scroll
+    const titleEl = section.querySelector(".hero-title");
     if (titleEl) {
       const split = SplitText.create(titleEl, {
         type: "chars",
       });
 
-      // Apply gradient to each char after SplitText wraps them
       split.chars.forEach((char) => {
         const el = char as HTMLElement;
         el.style.background = "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)";
@@ -126,30 +127,23 @@ export function HeroSection({ className }: { className?: string }) {
       });
 
       gsap.from(split.chars, {
-        y: 80,
+        y: 40,
         autoAlpha: 0,
         rotateX: -90,
         stagger: 0.04,
         duration: 1.2,
         ease: "power4.out",
-        scrollTrigger: {
-          trigger: section,
-
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse",
-        },
+        delay: 0.3,
       });
     }
 
-    // Cross markers fade on scroll
+    // Cross markers fade out on scroll
     if (crossMarkers) {
       gsap.to(crossMarkers, {
         autoAlpha: 0,
         ease: "none",
         scrollTrigger: {
           trigger: section,
-
           start: "top top",
           end: "40% top",
           scrub: true,
@@ -157,15 +151,14 @@ export function HeroSection({ className }: { className?: string }) {
       });
     }
 
-    // Scroll prompt fade on scroll
+    // Scroll prompt fades up on scroll
     if (scrollPrompt) {
       gsap.to(scrollPrompt, {
         autoAlpha: 0,
-        y: 20,
+        y: -20,
         ease: "none",
         scrollTrigger: {
           trigger: section,
-
           start: "top top",
           end: "20% top",
           scrub: true,
@@ -179,7 +172,7 @@ export function HeroSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       className={cn(
-        "relative min-h-[100dvh] h-screen w-full overflow-hidden bg-[#0e1418]",
+        "sticky top-0 min-h-[100dvh] h-screen w-full overflow-hidden bg-[#0e1418] -z-10",
         className,
       )}
     >
@@ -207,21 +200,17 @@ export function HeroSection({ className }: { className?: string }) {
         ))}
       </div>
 
-      {/* NEX APEX title */}
-      <div className="hero-title pointer-events-none absolute inset-x-0 bottom-0 z-10 overflow-hidden px-4 pb-4 md:px-[60px] md:pb-8">
+      {/* AI Lab title + Scroll prompt — bottom right */}
+      <div className="hero-scroll-prompt absolute bottom-6 right-4 z-10 md:bottom-10 md:right-[60px] flex flex-col items-end gap-2">
         <h1
-          className="select-none text-center font-normal uppercase leading-[0.85] tracking-[-0.02em] text-white"
+          className="hero-title select-none font-normal uppercase leading-[0.85] tracking-[-0.02em] text-white"
           style={{
-            fontSize: "clamp(3rem, 12vw, 180px)",
+            fontSize: "clamp(1.5rem, 4vw, 48px)",
             fontFamily: "var(--font-display)",
           }}
         >
-          NEX APEX
+          AI Lab
         </h1>
-      </div>
-
-      {/* Scroll prompt */}
-      <div className="hero-scroll-prompt absolute bottom-6 right-4 z-10 md:bottom-10 md:right-[60px]">
         <span className="text-[10px] font-medium uppercase tracking-[2px] text-[#94fcff]/50">
           SCROLL TO DISCOVER
         </span>

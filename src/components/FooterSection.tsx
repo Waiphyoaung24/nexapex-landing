@@ -134,10 +134,10 @@ export function FooterSection() {
               General enquiries
             </p>
             <a
-              href="mailto:hello@nexapex.co"
+              href="mailto:nexuslab.dev.mm@gmail.com"
               className="text-[14px] cursor-pointer hover:text-[#94fcff] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
             >
-              hello@nexapex.co
+              support@nexapex.ai
             </a>
           </div>
           <div>
@@ -145,10 +145,10 @@ export function FooterSection() {
               New business
             </p>
             <a
-              href="mailto:business@nexapex.co"
+              href="mailto:nexuslab.dev.mm@gmail.com"
               className="text-[14px] cursor-pointer hover:text-[#94fcff] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
             >
-              business@nexapex.co
+              business@nexapex.ai
             </a>
           </div>
         </div>

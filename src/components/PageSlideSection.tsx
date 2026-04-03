@@ -22,13 +22,13 @@ interface PageSlideSectionProps {
 }
 
 /**
- * Pins the section, then clips the NEXT section in from bottom-to-top.
+ * Pins the section, then clips the NEXT section in from top-to-bottom.
  *
  * Flow:
  * 1. User scrolls → this section enters the viewport
  * 2. Section gets PINNED at "top top"
- * 3. Inner content starts fully clipped: clipPath inset(100% 0 0 0)
- * 4. As user scrolls, clip opens upward: inset(0% 0 0 0)
+ * 3. Inner content starts fully clipped: clipPath inset(0 0 100% 0)
+ * 4. As user scrolls, clip opens downward: inset(0 0 0% 0)
  * 5. Section is now fully visible, pin releases, normal scroll continues
  */
 export function PageSlideSection({
@@ -56,12 +56,12 @@ export function PageSlideSection({
     const isMobile = window.matchMedia("(max-width: 767px)").matches;
     const endDistance = isMobile ? "+=40%" : scrollLength;
 
-    // Start fully clipped — hidden from bottom
+    // Start fully clipped — hidden from top, reveal sweeps downward
     gsap.set(inner, {
-      clipPath: "inset(100% 0% 0% 0%)",
+      clipPath: "inset(0% 0% 100% 0%)",
     });
 
-    // Pin + clip reveal
+    // Pin + clip reveal (top-to-bottom)
     gsap.to(inner, {
       clipPath: "inset(0% 0% 0% 0%)",
       ease: "none",

@@ -177,7 +177,7 @@ export function CTASection() {
 
         {/* Primary CTA */}
         <a
-          href="mailto:business@nexapex.co"
+          href="mailto:nexuslab.dev.mm@gmail.com"
           className={cn(
             "cta-button mt-12 z-10 group pointer-events-auto",
             "flex items-center gap-3",
