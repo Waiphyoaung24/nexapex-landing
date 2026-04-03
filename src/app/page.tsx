@@ -50,6 +50,7 @@ export default function Home() {
           </PageSlideSection>
 
           <FooterSection />
+
         </div>
       </div>
     </>
