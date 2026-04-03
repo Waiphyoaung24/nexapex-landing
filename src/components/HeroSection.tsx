@@ -33,6 +33,8 @@ function CrossMarker({ xPercent }: { xPercent: number }) {
 
 function SplineEmbed({ url }: { url: string }) {
   const [loaded, setLoaded] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Fallback: force-show after 3s if onLoad doesn't fire (cross-origin iframes)
   useEffect(() => {
@@ -40,41 +42,54 @@ function SplineEmbed({ url }: { url: string }) {
     return () => clearTimeout(id);
   }, []);
 
+  // Pause iframe when scrolled out of view to stop WebGL render loop
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   if (!url || url === "PASTE_YOUR_SPLINE_URL_HERE") return null;
 
   return (
     <div
+      ref={containerRef}
       className="absolute inset-0 z-[1] overflow-hidden"
       style={{
-        backfaceVisibility: "hidden",
-        imageRendering: "auto",
+        contain: "strict",
+        isolation: "isolate",
       }}
     >
       {!loaded && (
         <div className="absolute inset-0 animate-pulse bg-white/[0.02]" />
       )}
-      <iframe
-        src={url}
-        allow="autoplay"
-        loading="eager"
-        onLoad={() => setLoaded(true)}
-        className={cn(
-          "absolute border-none transition-opacity duration-700",
-          loaded ? "opacity-100" : "opacity-0",
-        )}
-        style={{
-          background: "transparent",
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          imageRendering: "auto",
-          /* Extend iframe beyond container to hide Spline watermark */
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "calc(100% + 60px)",
-        }}
-        title="Interactive 3D Tiles"
-      />
+      {visible && (
+        <iframe
+          src={url}
+          allow="autoplay"
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          className="absolute border-none"
+          style={{
+            background: "transparent",
+            transform: "translateZ(0)",
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 0.7s ease-out",
+            /* Extend iframe beyond container to hide Spline watermark */
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "calc(100% + 60px)",
+          }}
+          title="Interactive 3D Tiles"
+        />
+      )}
     </div>
   );
 }
@@ -175,6 +190,7 @@ export function HeroSection({ className }: { className?: string }) {
         "sticky top-0 min-h-[100dvh] h-screen w-full overflow-hidden bg-[#0e1418] -z-10",
         className,
       )}
+      style={{ contain: "layout style paint", isolation: "isolate" }}
     >
       {/* Atmospheric background gradient */}
       <div

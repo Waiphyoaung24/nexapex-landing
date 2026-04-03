@@ -49,7 +49,6 @@ function FloatingPaths({ position }: { position: number }) {
             pathLength={1}
             style={{
               animation: `bgPathDash ${path.duration}s linear infinite, bgPathFade ${path.duration}s linear infinite`,
-              willChange: "stroke-dashoffset, opacity",
             }}
           />
         ))}

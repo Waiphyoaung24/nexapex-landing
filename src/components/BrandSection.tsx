@@ -42,6 +42,13 @@ export function BrandSection() {
     const headlineWrap = section.querySelector(".section-headline");
     if (headlineTitle) {
       const split = SplitText.create(headlineTitle, { type: "chars" });
+      split.chars.forEach((char) => {
+        const el = char as HTMLElement;
+        el.style.background = "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)";
+        (el.style as unknown as Record<string, string>).webkitBackgroundClip = "text";
+        (el.style as unknown as Record<string, string>).webkitTextFillColor = "transparent";
+        el.style.backgroundClip = "text";
+      });
       gsap.from(split.chars, {
         y: 60,
         autoAlpha: 0,
@@ -78,7 +85,7 @@ export function BrandSection() {
 
       split.words.forEach((word, i) => {
         highlightTl.to(word, {
-          color: "#ffffff",
+          color: "#d4eef0",
           textShadow: "0 0 30px rgba(148, 252, 255, 0.15)",
           duration: 0.3,
           ease: "none",

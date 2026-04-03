@@ -90,8 +90,14 @@ export function ClientsSection() {
       {/* Header row */}
       <div className="mb-8 md:mb-12 flex flex-col gap-3 px-5 md:flex-row md:items-start md:justify-between md:px-[60px]">
         <h2
-          className="clients-heading font-normal uppercase tracking-[2px] text-white font-[family-name:var(--font-display)]"
-          style={{ fontSize: "clamp(1.25rem, 3vw, 2.5rem)" }}
+          className="clients-heading font-normal uppercase tracking-[2px] font-[family-name:var(--font-display)]"
+          style={{
+            fontSize: "clamp(1.25rem, 3vw, 2.5rem)",
+            background: "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
         >
           Technologies We Work With
         </h2>

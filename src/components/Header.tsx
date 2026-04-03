@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Mail, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
+import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Sheet,
   SheetTrigger,
@@ -13,6 +15,10 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+}
 
 const NAV_LINKS = [
   { label: "What We Build", target: "three-showcase" },
@@ -37,11 +43,30 @@ export function Header() {
     const target = document.getElementById(targetId);
     if (!target) return;
     const sm = ScrollSmoother.get();
-    if (sm) {
-      sm.scrollTo(target, true);
-    } else {
+    if (!sm) {
       target.scrollIntoView({ behavior: "smooth" });
+      return;
     }
+
+    // PageSlideSection uses ScrollTrigger pin + clip-path reveal.
+    // Jump native scroll to pin END (clip fully open), then
+    // refresh all triggers so text animations also fire.
+    const pinTrigger = ScrollTrigger.getAll().find(
+      (st) => st.trigger === target && st.pin
+    );
+
+    if (pinTrigger) {
+      pinTrigger.scroll(pinTrigger.end);
+    } else {
+      sm.scrollTo(target, true);
+      return;
+    }
+
+    // Refresh recalculates all trigger positions and applies
+    // the correct state — clip-path AND text toggleActions fire.
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
   }, []);
 
   // Detect scroll position for glassmorphism activation
@@ -291,12 +316,7 @@ export function Header() {
                       <SheetClose
                         className="w-full text-left cursor-pointer group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff] rounded"
                         onClick={() => {
-                          setTimeout(() => {
-                            const target = document.getElementById(link.target);
-                            if (target) {
-                              target.scrollIntoView({ behavior: "smooth" });
-                            }
-                          }, 150);
+                          setTimeout(() => scrollTo(link.target), 300);
                         }}
                       >
                         <div className="flex items-center justify-between py-5 border-b border-white/[0.06] group-hover:border-[#94fcff]/20 transition-colors duration-300">

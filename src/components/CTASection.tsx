@@ -121,6 +121,13 @@ export function CTASection() {
     const heading = section.querySelector(".cta-heading");
     if (heading) {
       const split = SplitText.create(heading, { type: "words" });
+      split.words.forEach((word) => {
+        const el = word as HTMLElement;
+        el.style.background = "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)";
+        (el.style as unknown as Record<string, string>).webkitBackgroundClip = "text";
+        (el.style as unknown as Record<string, string>).webkitTextFillColor = "transparent";
+        el.style.backgroundClip = "text";
+      });
       gsap.from(split.words, {
         y: 80,
         autoAlpha: 0,

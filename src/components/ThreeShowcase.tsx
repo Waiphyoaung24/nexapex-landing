@@ -310,8 +310,14 @@ export function ThreeShowcase() {
           Explore
         </p>
         <h2
-          className="font-normal uppercase tracking-[3px] text-white font-[family-name:var(--font-display)] text-center leading-[1.1]"
-          style={{ fontSize: "clamp(2rem, 5vw, 4rem)" }}
+          className="font-normal uppercase tracking-[3px] font-[family-name:var(--font-display)] text-center leading-[0.95]"
+          style={{
+            fontSize: "clamp(2.5rem, 8vw, 7rem)",
+            background: "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
         >
           What We Build
         </h2>
