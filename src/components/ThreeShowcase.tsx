@@ -183,7 +183,9 @@ export function ThreeShowcase() {
 
   const onScrollProgress = useCallback((p: number) => {
     scrollState.progress = p;
-    setActivePanel(Math.min(Math.floor(p * 4), 3));
+    // Panels start at 0.12, spaced by 0.22 (0.12, 0.34, 0.56, 0.78)
+    const panelIndex = Math.floor(Math.max(0, p - 0.12) / 0.22);
+    setActivePanel(Math.min(panelIndex, 3));
     // Check if we should pause at panel entry points
     if (smoother) {
       checkThreeShowcasePause(smoother, p);
@@ -202,67 +204,80 @@ export function ThreeShowcase() {
         pin: true,
         start: "top top",
         end: "+=1800",
-        scrub: 2.5,
+        scrub: 1,
         onUpdate: (self) => onScrollProgress(self.progress),
+        // Carousel snap — locks on each panel like a carousel
+        snap: {
+          snapTo: "labelsDirectional",
+          duration: { min: 0.3, max: 0.6 },
+          delay: 0.05,
+          ease: "power2.inOut",
+        },
       },
     });
 
-    // Cinematic reveal: horizontal split-open from center
+    // ── Intro: canvas reveal + header fade ──
     const canvasWrap = canvasWrapRef.current;
     if (canvasWrap) {
       gsap.set(canvasWrap, { clipPath: "inset(0% 50%)" });
       tl.to(canvasWrap, {
         clipPath: "inset(0% 0%)",
-        duration: 0.12,
+        duration: 0.10,
         ease: "power3.inOut",
       }, 0);
     }
 
-    // Section header — visible before 3D, fades out as canvas reveals
     const headerEl = sectionHeaderRef.current;
     if (headerEl) {
       tl.to(headerEl, {
-        autoAlpha: 0, scale: 0.95, duration: 0.1, ease: "power2.in",
+        autoAlpha: 0, scale: 0.95, duration: 0.08, ease: "power2.in",
       }, 0.02);
     }
 
-    // Animate each brand panel in sequence
+    // Label for the intro state (canvas reveal)
+    tl.addLabel("intro", 0);
+
+    // ── Panels — each gets a snap label ──
     panelRefs.current.forEach((panel, i) => {
       if (!panel) return;
       const subtitleEl = panel.querySelector(".panel-subtitle");
       const titleEl = panel.querySelector(".panel-title");
       const bodyEl = panel.querySelector(".panel-body");
-      const startAt = i * 0.25;
+      const startAt = 0.12 + i * 0.22; // Tighter spacing, starts after intro
+
+      // Snap label — scroll locks here
+      tl.addLabel(`panel${i}`, startAt);
 
       // Enter
       if (subtitleEl) {
         tl.from(subtitleEl, {
-          y: 20, autoAlpha: 0, duration: 0.2, ease: "power2.out",
+          y: 20, autoAlpha: 0, duration: 0.08, ease: "power2.out",
         }, startAt);
       }
       if (titleEl) {
         const split = SplitText.create(titleEl, { type: "lines, words" });
         tl.from(split.words, {
-          y: 60, autoAlpha: 0, stagger: 0.02, duration: 0.3, ease: "power4.out",
+          y: 60, autoAlpha: 0, stagger: 0.015, duration: 0.12, ease: "power4.out",
         }, startAt);
       }
       if (bodyEl) {
         tl.from(bodyEl, {
-          y: 30, autoAlpha: 0, duration: 0.25, ease: "power2.out",
-        }, startAt + 0.05);
+          y: 30, autoAlpha: 0, duration: 0.10, ease: "power2.out",
+        }, startAt + 0.04);
       }
 
       // Exit (except last panel)
       if (i < brandPanels.length - 1) {
         tl.to(panel, {
-          autoAlpha: 0, y: -40, duration: 0.15,
-        }, startAt + 0.2);
+          autoAlpha: 0, y: -40, duration: 0.08,
+        }, startAt + 0.18);
       }
     });
 
-    // Final fade-out — starts at 0.90 and fills to end (no dead scroll after)
+    // ── Exit label + fade overlay ──
+    tl.addLabel("exit", 0.92);
     if (fadeOverlayRef.current) {
-      tl.to(fadeOverlayRef.current, { autoAlpha: 1, duration: 0.10, ease: "power2.in" }, 0.90);
+      tl.to(fadeOverlayRef.current, { autoAlpha: 1, duration: 0.08, ease: "power2.in" }, 0.92);
     }
   }, { scope: sectionRef });
 

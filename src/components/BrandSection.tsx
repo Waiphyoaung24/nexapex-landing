@@ -37,15 +37,6 @@ export function BrandSection() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
-    // Giant text overlay — slow parallax drift
-    const textOverlay = section.querySelector(".brand-text-overlay");
-    if (textOverlay) {
-      gsap.fromTo(textOverlay, { y: 80, autoAlpha: 0 }, {
-        y: -40, autoAlpha: 1, duration: 1, ease: "none",
-        scrollTrigger: { trigger: section, start: "top 60%", end: "bottom 20%", scrub: 1 },
-      });
-    }
-
     // Section headline -- SplitText char reveal, tuned for scroll-pause impact
     const headlineTitle = section.querySelector(".section-headline-title");
     const headlineWrap = section.querySelector(".section-headline");
@@ -62,32 +53,36 @@ export function BrandSection() {
       });
     }
 
-    // Statement reveal
+    // Statement reveal — scroll-scrubbed word highlight
     const statementTitle = section.querySelector(".brand-statement");
     if (statementTitle) {
       const split = SplitText.create(statementTitle, { type: "lines, words" });
 
-      // Apply gradient to each word after SplitText wraps them
+      // Start all words dim, highlight progressively on scroll
       split.words.forEach((word) => {
         const el = word as HTMLElement;
-        el.style.background = "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)";
-        (el.style as unknown as Record<string, string>).webkitBackgroundClip = "text";
-        (el.style as unknown as Record<string, string>).webkitTextFillColor = "transparent";
-        el.style.backgroundClip = "text";
+        el.style.display = "inline-block";
+        el.style.color = "rgba(255, 255, 255, 0.15)";
+        el.style.transition = "none";
       });
 
-      gsap.from(split.words, {
-        y: 50,
-        autoAlpha: 0,
-        stagger: 0.03,
-        duration: 1,
-        ease: "power4.out",
+      // Scrub-linked timeline — each word lights up as user scrolls
+      const highlightTl = gsap.timeline({
         scrollTrigger: {
           trigger: statementTitle,
-
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+          start: "top 75%",
+          end: "bottom 40%",
+          scrub: 1,
         },
+      });
+
+      split.words.forEach((word, i) => {
+        highlightTl.to(word, {
+          color: "#ffffff",
+          textShadow: "0 0 30px rgba(148, 252, 255, 0.15)",
+          duration: 0.3,
+          ease: "none",
+        }, i * 0.08);
       });
     }
 
@@ -146,25 +141,6 @@ export function BrandSection() {
 
   return (
     <section ref={sectionRef} className="relative bg-[#0e1418] overflow-hidden">
-
-      {/* ── Giant text overlay — hidden on mobile, background texture on desktop ── */}
-      <div
-        aria-hidden="true"
-        className="brand-text-overlay pointer-events-none select-none absolute inset-0 z-0 hidden md:flex items-center justify-center overflow-hidden"
-      >
-        <p
-          className="whitespace-nowrap font-[family-name:var(--font-display)] uppercase leading-[0.85] tracking-[-0.02em] text-center opacity-[0.12]"
-          style={{
-            fontSize: "clamp(6rem, 18vw, 20rem)",
-            background: "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          WE ARE NEXAPEX
-        </p>
-      </div>
 
       {/* ── Section Headline — centered, same style as ThreeShowcase ── */}
       <div className="section-headline flex flex-col items-center justify-center py-8 md:py-20 pointer-events-none">

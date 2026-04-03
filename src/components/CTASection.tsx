@@ -161,16 +161,16 @@ export function CTASection() {
       </div>
 
       {/* Content overlay — pointer-events-none so mouse passes through to Canvas */}
-      <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center min-h-screen px-5 py-32 md:py-48 md:px-[60px]">
+      <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center min-h-screen px-4 py-16 sm:px-6 sm:py-24 md:py-32 md:px-[60px] lg:py-48">
         {/* Tagline */}
-        <p className="cta-tagline text-[11px] font-mono uppercase tracking-[4px] text-white/70 mb-6">
+        <p className="cta-tagline text-[10px] sm:text-[11px] font-mono uppercase tracking-[3px] sm:tracking-[4px] text-white/70 mb-4 sm:mb-6">
           Ready to see AI in action?
         </p>
 
         {/* Main heading */}
         <h2
           className="cta-heading font-[family-name:var(--font-display)] uppercase text-center leading-[0.95] tracking-[-0.01em] text-white"
-          style={{ fontSize: "clamp(2.5rem, 8vw, 7rem)" }}
+          style={{ fontSize: "clamp(1.8rem, 7vw, 7rem)" }}
         >
           Let&apos;s build<br />something real.
         </h2>
@@ -179,14 +179,14 @@ export function CTASection() {
         <a
           href="mailto:nexuslab.dev.mm@gmail.com"
           className={cn(
-            "cta-button mt-12 z-10 group pointer-events-auto",
-            "flex items-center gap-3",
-            "rounded-full bg-white px-8 py-4",
-            "font-mono text-[12px] font-medium uppercase tracking-[1px] text-[#0e1418]",
+            "cta-button mt-8 sm:mt-12 z-10 group pointer-events-auto",
+            "flex items-center gap-2 sm:gap-3",
+            "rounded-full bg-white px-6 py-3 sm:px-8 sm:py-4",
+            "font-mono text-[11px] sm:text-[12px] font-medium uppercase tracking-[1px] text-[#0e1418]",
             "cursor-pointer transition-all duration-300",
             "hover:bg-white/95 hover:shadow-[0_4px_24px_rgba(255,255,255,0.2)] hover:scale-[1.03]",
             "active:scale-[0.97]",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
           )}
           style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
         >

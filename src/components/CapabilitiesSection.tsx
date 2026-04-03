@@ -75,42 +75,32 @@ function CapabilityCard({
   return (
     <div
       className={cn(
-        "capability-card bg-white text-[#0e1418] rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col justify-between min-h-0 md:min-h-[380px]",
-        "transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)] hover:-translate-y-1",
-        className
+        "capability-card bg-white text-[#0e1418] rounded-xl p-3 sm:p-4 lg:p-5 flex flex-col",
+        "transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)] hover:-translate-y-1 cursor-pointer",
+        className,
       )}
       style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
     >
       {/* Card header */}
-      <div>
-        <div className="flex justify-between items-center mb-3 md:mb-5">
-          <h3 className="text-[14px] md:text-[18px] font-bold uppercase">
-            {capability.title}
-          </h3>
-          <span className="text-[16px] md:text-[22px] font-bold font-mono">
-            {capability.icon}
-          </span>
-        </div>
-        {/* Skills list */}
-        <div>
-          {capability.skills.map((skill) => (
-            <div
-              key={skill}
-              className="skill-item py-2 md:py-2.5 border-b border-dotted border-black/20 text-[11px] md:text-[13px]"
-            >
-              {skill}
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* Card footer (upside down, playing card style) */}
-      <div className="hidden md:flex justify-between items-center rotate-180 mt-4">
-        <span className="text-[20px] font-bold font-mono">
+      <div className="flex justify-between items-center mb-2 sm:mb-3 lg:mb-4">
+        <h3 className="text-[12px] sm:text-[14px] lg:text-[16px] font-bold uppercase tracking-wide">
+          {capability.title}
+        </h3>
+        <span className="text-[14px] sm:text-[18px] lg:text-[20px] font-bold font-mono text-[#0e1418]/40">
           {capability.icon}
         </span>
-        <span className="text-[12px] font-bold uppercase">
-          {capability.title}
-        </span>
+      </div>
+
+      {/* Skills list */}
+      <div className="flex-1">
+        {capability.skills.map((skill) => (
+          <div
+            key={skill}
+            className="skill-item py-1.5 sm:py-2 lg:py-2.5 border-b border-dotted border-black/15 text-[10px] sm:text-[11px] lg:text-[13px] leading-tight"
+          >
+            {skill}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -125,12 +115,11 @@ export function CapabilitiesSection() {
 
     const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     if (reduceMotion) return;
 
-    // Heading animation
     const heading = section.querySelector(".capabilities-heading");
     const desc = section.querySelector(".capabilities-desc");
     const cards = section.querySelectorAll<HTMLElement>(".capability-card");
@@ -143,7 +132,6 @@ export function CapabilitiesSection() {
       ease: "power3.out",
       scrollTrigger: {
         trigger: heading,
-
         start: "top 85%",
         toggleActions: "play none none reverse",
       },
@@ -157,7 +145,6 @@ export function CapabilitiesSection() {
       ease: "power2.out",
       scrollTrigger: {
         trigger: heading,
-
         start: "top 85%",
         toggleActions: "play none none reverse",
       },
@@ -165,15 +152,14 @@ export function CapabilitiesSection() {
 
     cards.forEach((card, i) => {
       gsap.from(card, {
-        y: isDesktop ? 100 : 60,
+        y: isDesktop ? 80 : 50,
         autoAlpha: 0,
-        scale: isDesktop ? 0.95 : 1,
+        scale: isDesktop ? 0.96 : 1,
         duration: 0.9,
-        delay: isDesktop ? i * 0.15 : 0,
+        delay: isDesktop ? i * 0.12 : 0,
         ease: "power4.out",
         scrollTrigger: {
           trigger: card,
-
           start: isDesktop ? "top 85%" : "top 90%",
           toggleActions: "play none none reverse",
         },
@@ -181,14 +167,13 @@ export function CapabilitiesSection() {
 
       const skillItems = card.querySelectorAll(".skill-item");
       gsap.from(skillItems, {
-        x: -20,
+        x: -15,
         autoAlpha: 0,
-        duration: 0.5,
-        stagger: 0.07,
+        duration: 0.4,
+        stagger: 0.06,
         ease: "power3.out",
         scrollTrigger: {
           trigger: card,
-
           start: isDesktop ? "top 75%" : "top 85%",
           toggleActions: "play none none reverse",
         },
@@ -203,28 +188,24 @@ export function CapabilitiesSection() {
       ease: "back.out(1.7)",
       scrollTrigger: {
         trigger: heading,
-
         start: "top 80%",
         toggleActions: "play none none reverse",
       },
     });
-
   }, { scope: sectionRef });
 
   return (
     <section
       ref={sectionRef}
-      className={cn(
-        "relative bg-[#0e1418] text-white px-5 min-h-[100dvh] flex flex-col justify-center py-8",
-        "md:px-[60px] md:py-10"
-      )}
+      className="relative bg-[#0e1418] text-white min-h-[100dvh] flex flex-col justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-10 lg:px-[60px]"
     >
       {/* Top area: heading left, description+buttons right */}
-      <div className="flex flex-col gap-3 mb-6 md:flex-row md:justify-between md:items-start md:mb-8">
+      <div className="flex flex-col gap-2 mb-4 sm:mb-5 md:flex-row md:justify-between md:items-end md:mb-8">
         <h2
-          className="capabilities-heading text-[clamp(2rem,8vw,100px)] font-normal uppercase leading-[0.9] font-[family-name:var(--font-display)]"
+          className="capabilities-heading text-[clamp(1.8rem,7vw,90px)] font-normal uppercase leading-[0.9] font-[family-name:var(--font-display)]"
           style={{
-            background: "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+            background:
+              "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -234,16 +215,16 @@ export function CapabilitiesSection() {
           <br />
           <span className="ml-[0.3em] md:ml-[0.5em]">DO</span>
         </h2>
-        <div className="capabilities-desc max-w-[300px] md:max-w-[250px]">
-          <p className="text-[11px] font-medium uppercase tracking-[1px]">
+        <div className="capabilities-desc max-w-[280px]">
+          <p className="text-[10px] sm:text-[11px] font-medium uppercase tracking-[1px] text-white/70 leading-relaxed">
             AI SOLUTIONS THAT SHIP &mdash; FROM PROTOTYPE TO PRODUCTION,
             BUILT FOR REAL BUSINESSES.
           </p>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-1.5 sm:gap-2 mt-3">
             {categoryButtons.map((label) => (
               <span
                 key={label}
-                className="cat-btn w-8 h-8 border border-white/30 rounded text-[12px] font-mono flex items-center justify-center"
+                className="cat-btn w-7 h-7 sm:w-8 sm:h-8 border border-white/20 rounded text-[11px] sm:text-[12px] font-mono flex items-center justify-center text-white/50"
               >
                 {label}
               </span>
@@ -252,8 +233,8 @@ export function CapabilitiesSection() {
         </div>
       </div>
 
-      {/* Cards Grid — responsive: 1 col mobile, 2 col tablet, 4 col desktop */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+      {/* Cards Grid — 2 col mobile, 2 col tablet, 4 col desktop */}
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-4">
         {capabilities.map((capability) => (
           <CapabilityCard key={capability.title} capability={capability} />
         ))}
