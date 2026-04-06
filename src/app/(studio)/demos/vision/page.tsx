@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Eye } from "lucide-react";
+import { VisionInspectorLoader } from "@/components/demos/VisionInspectorLoader";
 
 export default function VisionPage() {
   return (
@@ -19,12 +20,24 @@ export default function VisionPage() {
         </span>
       </div>
 
-      {/* Workspace */}
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <Eye size={32} className="mx-auto mb-4 text-[#94fcff]/20" />
-          <p className="text-sm text-nex-dim">Coming soon</p>
+      {/* Hero section */}
+      <div className="px-4 pt-8 pb-6 md:px-[60px]">
+        <div className="mb-2 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#94fcff]/10">
+            <Eye size={20} className="text-[#94fcff]" />
+          </div>
+          <h1 className="text-2xl font-[family-name:var(--font-display)] uppercase tracking-wider text-white">
+            Vision Inspector
+          </h1>
         </div>
+        <p className="max-w-xl text-sm text-nex-dim">
+          Upload an image or try a sample to see real-time AI object detection. Our model identifies objects, counts them, and shows how custom AI could work for your business.
+        </p>
+      </div>
+
+      {/* Workspace */}
+      <div className="flex-1 px-4 pb-12 md:px-[60px]">
+        <VisionInspectorLoader />
       </div>
     </div>
   );
