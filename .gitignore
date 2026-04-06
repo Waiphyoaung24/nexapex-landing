@@ -49,6 +49,9 @@ dist/
 __pycache__/
 *.pyc
 
+# ML model weights (download at runtime)
+backend/models/*.pt
+
 # claude
 .claude/
 
