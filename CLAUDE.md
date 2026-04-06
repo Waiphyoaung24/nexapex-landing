@@ -201,3 +201,100 @@ All 8 GSAP skills are preloaded from `.claude/skills/gsap-skills/skills/`:
 - Keep existing content/copy — only change visuals, 3D, and styling
 - All colors must pass WCAG AA contrast
 - Animations must respect `prefers-reduced-motion`
+
+---
+
+## AI Studio v3 — Feature-by-Feature Execution
+
+### Plan & Design Docs
+
+| Doc | Path |
+|-----|------|
+| Implementation Plan | `docs/plans/2026-04-06-ai-studio-v3-plan.md` |
+| Architecture Design | `docs/plans/2026-04-06-ai-studio-v3-design.md` |
+| PRD | `docs/nexapex_ai_studio_PRD.md` |
+
+### Branch: `nexapex-v3-demo`
+
+### Custom Skills (KWG-Skills)
+
+These skills are stored in the shared skills directory and should be invoked when working on AI Studio v3 tasks:
+
+| Skill | Path | When to Use |
+|-------|------|-------------|
+| `ai-studio-v3-executor` | `KWG-Skills/skills/skills/ai-studio-v3-executor/SKILL.md` | Master orchestrator — maps every task to skills, enforces test-per-feature |
+| `nextjs-route-groups` | `KWG-Skills/skills/skills/nextjs-route-groups/SKILL.md` | Tasks 1, 2, 6, 18 — route group restructuring, layout isolation, bundle verification |
+| `fastapi-fullstack` | `KWG-Skills/skills/skills/fastapi-fullstack/SKILL.md` | Tasks 3-5, 7, 9, 11, 15 — backend scaffold, DB, auth, inference endpoints |
+| `auth-jwt-flow` | `KWG-Skills/skills/skills/auth-jwt-flow/SKILL.md` | Tasks 5, 6, 13, 14 — JWT, email gate, middleware, demo limits |
+| `feature-test-loop` | `KWG-Skills/skills/skills/feature-test-loop/SKILL.md` | ALL tasks — build → smoke → verify → commit → report cycle |
+
+### Existing Local Skills (used for AI Studio v3)
+
+| Skill | Location | Tasks |
+|-------|----------|-------|
+| `nextjs-developer` | `.claude/skills/nextjs-developer/SKILL.md` | 1, 2, 6, 17, 18, 20 |
+| `fastapi-expert` | `.claude/skills/fastapi-expert/SKILL.md` | 3-5, 7, 9, 11, 15, 20 |
+| `react-expert` | `.claude/skills/react-expert/SKILL.md` | 2, 6, 8, 10, 12, 14, 16 |
+| `frontend-design` | `.claude/skills/frontend-design/SKILL.md` | 2, 8, 10, 12, 16 |
+| `api-design` | `.claude/skills/api-design/SKILL.md` | 3, 13 |
+| `database-optimizer` | `.claude/skills/database-optimizer/SKILL.md` | 4 |
+| `coding-standards` | `.claude/skills/coding-standards/SKILL.md` | All tasks |
+| `playwright-expert` | `.claude/skills/playwright-expert/SKILL.md` | 19 |
+| `e2e-testing` | `.claude/skills/e2e-testing/SKILL.md` | 19 |
+
+### Plugin Skills (invoke via `Skill` tool)
+
+| Skill | Tasks |
+|-------|-------|
+| `ui-ux-pro-max:ui-ux-pro-max` | 2, 8, 16 |
+| `frontend-design:frontend-design` | 6, 8, 12 |
+| `superpowers:verification-before-completion` | After each phase |
+| `superpowers:test-driven-development` | Backend endpoints |
+
+### Task Execution Order (20 Tasks, 5 Phases)
+
+**Phase 1 — Foundation (Tasks 1-6):**
+1. Restructure to Route Groups
+2. Create Demo Hub Page (Static UI)
+3. Scaffold FastAPI Backend
+4. Database Schema + Migrations
+5. Auth Endpoints (Signup + JWT)
+6. Email Gate Frontend
+
+**Phase 2 — Core Demos (Tasks 7-12):**
+7. Vision Inspector — Backend (YOLO)
+8. Vision Inspector — Frontend
+9. Smart Assistant — Backend (LLM SSE)
+10. Smart Assistant — Frontend
+11. Document Intelligence — Backend
+12. Document Intelligence — Frontend
+
+**Phase 3 — Conversion (Tasks 13-15):**
+13. Booking Integration (Cal.com)
+14. Demo Limits + CTAs
+15. Transactional Emails (Resend)
+
+**Phase 4 — Admin (Tasks 16-17):**
+16. Admin Dashboard
+17. PostHog Analytics
+
+**Phase 5 — Polish (Tasks 18-20):**
+18. Bundle Optimization
+19. E2E Tests (Playwright)
+20. Error Handling + Graceful Degradation
+
+### MCP Tools for AI Studio v3
+
+- `context7` — Latest docs for Next.js 16, FastAPI, SQLAlchemy, Tailwind 4
+- `shadcn` — UI component patterns for studio pages
+
+### Performance Targets
+
+| Metric | Target |
+|--------|--------|
+| 3D libs on demo pages | 0 bytes |
+| Demo page LCP | < 2s on 4G |
+| Vision inference | < 3s |
+| Chat first token | < 1s |
+| Marketing Lighthouse | > 90 |
+| Demo Lighthouse | > 95 |

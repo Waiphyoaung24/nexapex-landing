@@ -44,6 +44,11 @@ next-env.d.ts
 .astro/
 dist/
 
+# python
+*.egg-info/
+__pycache__/
+*.pyc
+
 # claude
 .claude/
 
