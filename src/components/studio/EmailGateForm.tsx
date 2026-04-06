@@ -40,7 +40,7 @@ export function EmailGateForm() {
   }
 
   const inputClass =
-    "rounded-lg bg-[#162029] border border-white/[0.06] px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#94fcff]/30 focus:outline-none transition-colors";
+    "rounded-lg bg-nex-surface border border-white/[0.06] px-4 py-3 text-sm text-white placeholder:text-nex-dim/50 focus:border-[#94fcff]/30 focus:outline-none transition-colors";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md">
@@ -86,7 +86,7 @@ export function EmailGateForm() {
       <button
         type="submit"
         disabled={loading}
-        className="rounded-full bg-[#94fcff] px-6 py-3 text-sm font-mono font-medium uppercase tracking-wider text-[#0e1418] hover:bg-[#b0fdff] disabled:opacity-50 transition-colors"
+        className="rounded-full bg-[#94fcff] px-6 py-3 text-sm font-mono font-medium uppercase tracking-wider text-[#0e1418] hover:bg-[#b0fdff] disabled:opacity-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
       >
         {loading ? "Signing up..." : "Try Our AI"}
       </button>

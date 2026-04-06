@@ -29,7 +29,7 @@ export default function StudioLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${nevera.variable} ${nexa.variable} dark h-full antialiased`}>
-      <body className="min-h-full bg-[#0e1418] text-[#f0f1ef]">
+      <body className="grain-overlay min-h-full bg-[#0e1418] text-[#f0f1ef]">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
