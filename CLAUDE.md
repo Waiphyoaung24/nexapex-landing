@@ -253,35 +253,53 @@ These skills are stored in the shared skills directory and should be invoked whe
 
 ### Task Execution Order (20 Tasks, 5 Phases)
 
-**Phase 1 — Foundation (Tasks 1-6):**
-1. Restructure to Route Groups
-2. Create Demo Hub Page (Static UI)
-3. Scaffold FastAPI Backend
-4. Database Schema + Migrations
-5. Auth Endpoints (Signup + JWT)
-6. Email Gate Frontend
+**Phase 1 — Foundation (Tasks 1-6): COMPLETE**
+- [x] 1. Restructure to Route Groups
+- [x] 2. Create Demo Hub Page (Static UI)
+- [x] 3. Scaffold FastAPI Backend
+- [x] 4. Database Schema + Migrations
+- [x] 5. Auth Endpoints (Signup + JWT)
+- [x] 6. Email Gate Frontend
 
-**Phase 2 — Core Demos (Tasks 7-12):**
-7. Vision Inspector — Backend (YOLO)
-8. Vision Inspector — Frontend
-9. Smart Assistant — Backend (LLM SSE)
-10. Smart Assistant — Frontend
-11. Document Intelligence — Backend
-12. Document Intelligence — Frontend
+**Phase 1.5 — Studio Redesign: COMPLETE**
+- [x] Studio pages restyled with brand tokens, GSAP animations, immersive layouts
+- Plan: `docs/plans/2026-04-07-studio-redesign-plan.md`
+- Design: `docs/plans/2026-04-07-studio-redesign-design.md`
+
+**Phase 2 — Core Demos (Tasks 7-12): IN PROGRESS**
+- [x] 7. Vision Inspector — Backend (YOLO26n)
+- [x] 8. Vision Inspector — Frontend
+- [ ] **NEXT: Integration smoke test** — start both servers, test upload/sample/bounding-box/suggestion flow
+- [ ] 9. Smart Assistant — Backend (LLM SSE)
+- [ ] 10. Smart Assistant — Frontend
+- [ ] 11. Document Intelligence — Backend
+- [ ] 12. Document Intelligence — Frontend
 
 **Phase 3 — Conversion (Tasks 13-15):**
-13. Booking Integration (Cal.com)
-14. Demo Limits + CTAs
-15. Transactional Emails (Resend)
+- [ ] 13. Booking Integration (Cal.com)
+- [ ] 14. Demo Limits + CTAs
+- [ ] 15. Transactional Emails (Resend)
 
 **Phase 4 — Admin (Tasks 16-17):**
-16. Admin Dashboard
-17. PostHog Analytics
+- [ ] 16. Admin Dashboard
+- [ ] 17. PostHog Analytics
 
 **Phase 5 — Polish (Tasks 18-20):**
-18. Bundle Optimization
-19. E2E Tests (Playwright)
-20. Error Handling + Graceful Degradation
+- [ ] 18. Bundle Optimization
+- [ ] 19. E2E Tests (Playwright)
+- [ ] 20. Error Handling + Graceful Degradation
+
+### Vision Inspector Implementation Details
+
+- Plan: `docs/plans/2026-04-07-vision-inspector-plan.md` (11 sub-tasks, all code done)
+- Design: `docs/plans/2026-04-07-vision-inspector-design.md`
+- YOLO reference: `docs/yolo-reference-tutorial/tutorial.ipynb`
+- Backend: `backend/app/vision/` (schemas, service, router)
+- Frontend: `src/components/demos/` (VisionInspector, BoundingBoxCanvas, BusinessSuggestionCard, VisionSkeleton)
+- API Proxy: `src/app/api/v1/proxy/[...path]/route.ts`
+- Sample images: `public/images/samples/` (retail-shelf, restaurant-kitchen, warehouse)
+- Model weights: `backend/models/yolo26n.pt` (gitignored, download at runtime via ultralytics)
+- **Remaining**: Task 11 — manual integration smoke test (start backend + frontend, verify full flow)
 
 ### MCP Tools for AI Studio v3
 

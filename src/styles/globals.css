@@ -271,3 +271,75 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Vision Inspector animations ── */
+
+@keyframes vision-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(calc(100% + 100vh)); }
+}
+
+@keyframes vision-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes vision-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes vision-glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(148, 252, 255, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(148, 252, 255, 0.25), 0 0 40px rgba(148, 252, 255, 0.08); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes vision-border-dash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 24; }
+}
+
+@keyframes vision-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+.vision-scan-line {
+  animation: vision-scan 2s linear infinite;
+}
+
+.vision-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(148,252,255,0.04) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: vision-shimmer 1.5s ease-in-out infinite;
+}
+
+.vision-float {
+  animation: vision-float 3s ease-in-out infinite;
+}
+
+.vision-glow-pulse {
+  animation: vision-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Glass panel utilities */
+.glass-panel {
+  background: rgba(22, 32, 41, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-panel-accent {
+  background: rgba(148, 252, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 252, 255, 0.12);
+}

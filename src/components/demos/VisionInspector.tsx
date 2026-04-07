@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+// GSAP animations removed — CSS animations used instead for reliability with React 18 Strict Mode
 import { Upload, AlertCircle, RefreshCw } from "lucide-react";
 import { BoundingBoxCanvas } from "./BoundingBoxCanvas";
 import { BusinessSuggestionCard } from "./BusinessSuggestionCard";
@@ -144,17 +145,17 @@ export function VisionInspector() {
         {/* Dropzone */}
         <button
           type="button"
-          onClick={() => fileInputRef.current?.click()}
+onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
           className={`flex w-full cursor-pointer flex-col items-center gap-4 rounded-2xl border-2 border-dashed p-12 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-2xl ${
             isDragOver
-              ? "border-[#94fcff]/60 bg-[#94fcff]/5"
-              : "border-white/10 bg-nex-surface hover:border-[#94fcff]/30 hover:bg-nex-surface2"
+              ? "border-[#94fcff]/60 bg-[#94fcff]/5 shadow-[0_0_30px_rgba(148,252,255,0.12)]"
+              : "border-white/10 glass-panel hover:border-[#94fcff]/30 hover:shadow-[0_0_20px_rgba(148,252,255,0.08)]"
           }`}
         >
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#94fcff]/10">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#94fcff]/10 vision-float">
             <Upload size={24} className="text-[#94fcff]" />
           </div>
           <div className="text-center">
@@ -177,14 +178,14 @@ export function VisionInspector() {
 
         {/* Error */}
         {error && (
-          <div className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
+          <div data-animate className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
             <AlertCircle size={16} className="shrink-0 text-red-400" />
             <p className="text-sm text-red-300">{error}</p>
           </div>
         )}
 
         {/* Sample images */}
-        <div>
+        <div data-animate>
           <p className="mb-3 text-[11px] font-mono uppercase tracking-[2px] text-nex-dim">
             Or try a sample
           </p>
@@ -193,8 +194,8 @@ export function VisionInspector() {
               <button
                 key={sample.id}
                 type="button"
-                onClick={() => handleSampleClick(sample.src)}
-                className="group cursor-pointer overflow-hidden rounded-xl border border-white/[0.06] bg-nex-surface transition-all duration-200 hover:border-[#94fcff]/20 hover:shadow-[0_0_12px_rgba(148,252,255,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-xl"
+            onClick={() => handleSampleClick(sample.src)}
+                className="group cursor-pointer overflow-hidden rounded-xl glass-panel transition-all duration-200 hover:border-[#94fcff]/20 hover:shadow-[0_0_16px_rgba(148,252,255,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-xl"
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
@@ -262,7 +263,7 @@ export function VisionInspector() {
       )}
 
       {result && imageSrc && (
-        <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1fr_360px]">
           {/* Left: Image + bounding boxes */}
           <BoundingBoxCanvas
             imageSrc={imageSrc}
@@ -271,48 +272,48 @@ export function VisionInspector() {
           />
 
           {/* Right: Stats + Suggestion */}
-          <div className="flex flex-col gap-4">
-            {/* Summary stats */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-xl bg-nex-surface border border-white/[0.06] p-4 text-center">
-                <p className="text-2xl font-bold text-white font-[family-name:var(--font-display)]">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {/* Summary stats — horizontal scroll on mobile */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+                <p className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-display)]">
                   {result.total_objects}
                 </p>
-                <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
+                <p className="mt-0.5 sm:mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
                   Objects
                 </p>
               </div>
-              <div className="rounded-xl bg-nex-surface border border-white/[0.06] p-4 text-center">
-                <p className="text-2xl font-bold text-white font-[family-name:var(--font-display)]">
+              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+                <p className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-display)]">
                   {result.unique_classes}
                 </p>
-                <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
+                <p className="mt-0.5 sm:mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
                   Categories
                 </p>
               </div>
-              <div className="rounded-xl bg-nex-surface border border-white/[0.06] p-4 text-center">
-                <p className="text-2xl font-bold text-[#94fcff] font-[family-name:var(--font-display)]">
+              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+                <p className="text-xl sm:text-2xl font-bold text-[#94fcff] font-[family-name:var(--font-display)]">
                   {result.processing_time_ms < 1000
                     ? `${result.processing_time_ms}ms`
                     : `${(result.processing_time_ms / 1000).toFixed(1)}s`}
                 </p>
-                <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
+                <p className="mt-0.5 sm:mt-1 text-[10px] font-mono uppercase tracking-wider text-nex-dim">
                   Speed
                 </p>
               </div>
             </div>
 
             {/* Detection list */}
-            <div className="flex-1 space-y-1.5 overflow-y-auto max-h-[400px] rounded-xl bg-nex-surface border border-white/[0.06] p-4">
+            <div className="flex-1 space-y-1.5 overflow-y-auto max-h-[260px] sm:max-h-[400px] rounded-xl glass-panel p-3 sm:p-4">
               <p className="mb-2 text-[10px] font-mono uppercase tracking-[2px] text-nex-dim">
                 Detections
               </p>
               {result.detections.map((det, i) => (
                 <div
                   key={`${det.class_name}-${i}`}
-                  className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-white/[0.03] transition-colors"
+                  className="flex items-center gap-2 sm:gap-3 rounded-lg px-2 py-1.5 hover:bg-white/[0.03] transition-colors"
                 >
-                  <span className="min-w-[90px] text-xs text-white/80 truncate">
+                  <span className="min-w-[80px] sm:min-w-[90px] text-xs text-white/80 truncate">
                     {det.class_name}
                   </span>
                   <div className="flex-1 h-1.5 rounded-full bg-white/5 overflow-hidden">
