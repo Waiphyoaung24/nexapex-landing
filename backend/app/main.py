@@ -4,6 +4,7 @@ import psutil
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.admin.router import router as admin_router
 from app.auth.router import router as auth_router
 from app.vision.router import router as vision_router
 from app.config import settings
@@ -44,6 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(admin_router, prefix=settings.api_prefix)
 app.include_router(auth_router, prefix=settings.api_prefix)
 app.include_router(vision_router, prefix=settings.api_prefix)
 

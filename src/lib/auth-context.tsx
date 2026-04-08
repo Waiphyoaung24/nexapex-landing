@@ -18,6 +18,7 @@ interface AuthContextValue extends AuthState {
   login: (token: string, email: string, name: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  hydrated: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: null,
     name: null,
   });
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("nexapex_auth");
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         /* ignore malformed data */
       }
     }
+    setHydrated(true);
   }, []);
 
   const login = useCallback((token: string, email: string, name: string) => {
@@ -53,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ ...auth, login, logout, isAuthenticated: !!auth.token }}
+      value={{ ...auth, login, logout, isAuthenticated: !!auth.token, hydrated }}
     >
       {children}
     </AuthContext.Provider>

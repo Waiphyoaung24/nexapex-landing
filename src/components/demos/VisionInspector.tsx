@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 // GSAP animations removed — CSS animations used instead for reliability with React 18 Strict Mode
-import { Upload, AlertCircle, RefreshCw } from "lucide-react";
+import { Upload, AlertCircle, RefreshCw, Info, ShoppingCart, HardHat, UtensilsCrossed, Sprout } from "lucide-react";
 import { BoundingBoxCanvas } from "./BoundingBoxCanvas";
 import { BusinessSuggestionCard } from "./BusinessSuggestionCard";
 import { VisionSkeleton } from "./VisionSkeleton";
@@ -184,6 +184,53 @@ onClick={() => fileInputRef.current?.click()}
           </div>
         )}
 
+        {/* Model capabilities */}
+        <div className="rounded-xl border border-white/[0.06] bg-nex-surface/50 p-4 sm:p-5">
+          <div className="mb-3 flex items-center gap-2">
+            <Info size={14} className="text-nex-dim" />
+            <p className="text-[10px] font-mono uppercase tracking-[2px] text-nex-dim">
+              Pre-trained model — what it can detect
+            </p>
+          </div>
+          <p className="mb-4 text-xs sm:text-sm leading-relaxed text-nex-text/60">
+            This demo uses a <span className="text-white/80">YOLO26n</span> model pre-trained on the COCO dataset.
+            It recognizes <span className="text-white/80">80 everyday object classes</span> grouped into these categories:
+          </p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+            <div className="rounded-lg bg-white/[0.03] px-3 py-2.5">
+              <ShoppingCart size={14} className="mb-1.5 text-[#94fcff]/70" />
+              <p className="text-xs font-medium text-white/80">Retail</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-nex-dim">
+                Bottles, cups, laptops, bags, phones
+              </p>
+            </div>
+            <div className="rounded-lg bg-white/[0.03] px-3 py-2.5">
+              <HardHat size={14} className="mb-1.5 text-[#94fcff]/70" />
+              <p className="text-xs font-medium text-white/80">Safety</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-nex-dim">
+                People, trucks, cars, buses, bikes
+              </p>
+            </div>
+            <div className="rounded-lg bg-white/[0.03] px-3 py-2.5">
+              <UtensilsCrossed size={14} className="mb-1.5 text-[#94fcff]/70" />
+              <p className="text-xs font-medium text-white/80">Food & Bev</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-nex-dim">
+                Pizza, fruit, utensils, bowls, cups
+              </p>
+            </div>
+            <div className="rounded-lg bg-white/[0.03] px-3 py-2.5">
+              <Sprout size={14} className="mb-1.5 text-[#94fcff]/70" />
+              <p className="text-xs font-medium text-white/80">Agriculture</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-nex-dim">
+                Animals, birds, plants, livestock
+              </p>
+            </div>
+          </div>
+          <p className="mt-3 text-[11px] leading-relaxed text-nex-dim">
+            Objects outside these categories will still be detected if they&apos;re in the COCO class list. A custom-trained model can recognize anything specific to your business.
+          </p>
+        </div>
+
         {/* Sample images */}
         <div data-animate>
           <p className="mb-3 text-[11px] font-mono uppercase tracking-[2px] text-nex-dim">
@@ -194,7 +241,7 @@ onClick={() => fileInputRef.current?.click()}
               <button
                 key={sample.id}
                 type="button"
-            onClick={() => handleSampleClick(sample.src)}
+                onClick={() => handleSampleClick(sample.src)}
                 className="group cursor-pointer overflow-hidden rounded-xl glass-panel transition-all duration-200 hover:border-[#94fcff]/20 hover:shadow-[0_0_16px_rgba(148,252,255,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-xl"
               >
                 <div className="aspect-[4/3] overflow-hidden">

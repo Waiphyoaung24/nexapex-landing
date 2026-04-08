@@ -12,6 +12,18 @@ def create_access_token(lead_id: str, email: str) -> str:
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
+def create_admin_token(admin_id: str, email: str, role: str) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(hours=settings.jwt_expire_hours)
+    payload = {
+        "sub": admin_id,
+        "email": email,
+        "role": role,
+        "type": "admin",
+        "exp": expire,
+    }
+    return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+
+
 def verify_access_token(token: str) -> dict | None:
     try:
         return jwt.decode(

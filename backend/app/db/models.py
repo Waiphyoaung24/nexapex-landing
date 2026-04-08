@@ -57,6 +57,7 @@ class Lead(Base):
     company: Mapped[str | None] = mapped_column(String(200))
     industry: Mapped[Industry | None] = mapped_column(SAEnum(Industry))
     token_hash: Mapped[str] = mapped_column(String(64))
+    is_approved: Mapped[bool] = mapped_column(Boolean, default=False)
     vision_demos_used: Mapped[int] = mapped_column(Integer, default=0)
     chat_demos_used: Mapped[int] = mapped_column(Integer, default=0)
     doc_demos_used: Mapped[int] = mapped_column(Integer, default=0)
