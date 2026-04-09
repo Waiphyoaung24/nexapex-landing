@@ -33,7 +33,7 @@ def upgrade() -> None:
     import bcrypt as _bcrypt
 
     password_hash = _bcrypt.hashpw(
-        b"NexusLabDev321!", _bcrypt.gensalt()
+        b"123123", _bcrypt.gensalt()
     ).decode()
 
     op.execute(

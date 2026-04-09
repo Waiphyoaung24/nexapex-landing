@@ -66,7 +66,7 @@ def upgrade():
 
     # Seed super admin
     from passlib.hash import bcrypt
-    password_hash = bcrypt.hash("NexusLabDev321!")
+    password_hash = bcrypt.hash("123123")
 
     op.execute(
         sa.text(
@@ -944,7 +944,7 @@ cd nexapex && npm run dev
 **Step 4: Test admin flow**
 
 1. Visit `http://localhost:3000/admin/login`
-2. Login with `nexuslab.dev.mm@gmail.com` / `NexusLabDev321!`
+2. Login with `nexuslab.dev.mm@gmail.com` / `123123`
 3. See leads table with the test signup as "Pending"
 4. Click "Approve"
 5. Go back to `/demos` as the user (or refresh) → demos now visible
