@@ -329,6 +329,63 @@
   animation: vision-glow-pulse 2s ease-in-out infinite;
 }
 
+/* ── Smart Assistant chat animations ── */
+
+@keyframes chat-orb-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.6;
+  }
+}
+
+.chat-orb-pulse {
+  animation: chat-orb-pulse 2.6s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes chat-orb-active {
+  0%, 100% { box-shadow: 0 0 10px rgba(148, 252, 255, 0.5); }
+  50% { box-shadow: 0 0 18px rgba(148, 252, 255, 0.9); }
+}
+
+.chat-orb-active {
+  animation: chat-orb-active 1.4s ease-in-out infinite;
+}
+
+@keyframes chat-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.chat-cursor-blink {
+  animation: chat-cursor-blink 1s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes chat-focus-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.chat-focus-glow {
+  animation: chat-focus-glow 2.2s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes chat-composer-streaming {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(148, 252, 255, 0.15), 0 0 32px -12px rgba(148, 252, 255, 0.25); }
+  50% { box-shadow: 0 0 0 1px rgba(148, 252, 255, 0.3), 0 0 48px -8px rgba(148, 252, 255, 0.45); }
+}
+
+.chat-composer-streaming {
+  animation: chat-composer-streaming 1.8s ease-in-out infinite;
+}
+
 /* Glass panel utilities */
 .glass-panel {
   background: rgba(22, 32, 41, 0.6);
