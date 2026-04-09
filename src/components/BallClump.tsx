@@ -123,16 +123,15 @@ export function BallClumpSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-[60vh] md:h-[70vh] bg-[#c63518] overflow-hidden"
+      className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden"
     >
       <Canvas
         shadows
-        gl={{ antialias: false }}
+        gl={{ antialias: false, alpha: true }}
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }}
-        style={{ position: "absolute", inset: 0 }}
+        style={{ position: "absolute", inset: 0, background: "transparent" }}
       >
-        <color attach="background" args={["#c63518"]} />
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
