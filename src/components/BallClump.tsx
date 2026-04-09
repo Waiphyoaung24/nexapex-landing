@@ -11,6 +11,11 @@ import {
   SMAA,
   Bloom,
 } from "@react-three/postprocessing";
+import { patchThreeWarnings } from "@/lib/patch-three-clock";
+
+// Suppress R3F-internal deprecation warnings (THREE.Clock, etc.) on pages
+// that render BallClump without ThreeShowcase.
+patchThreeWarnings();
 
 const rfs = THREE.MathUtils.randFloatSpread;
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
@@ -126,7 +131,7 @@ export function BallClumpSection() {
       className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden"
     >
       <Canvas
-        shadows
+        shadows="variance"
         gl={{ antialias: false, alpha: true }}
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 20], fov: 35, near: 1, far: 40 }}
