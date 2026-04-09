@@ -51,6 +51,7 @@ __pycache__/
 
 # ML model weights (download at runtime)
 backend/models/*.pt
+backend/models/*.gguf
 
 # claude
 .claude/

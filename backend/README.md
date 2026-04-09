@@ -5,7 +5,7 @@ FastAPI backend serving auth, AI inference (YOLO, LLM, OCR), and admin endpoints
 ## Prerequisites
 
 - Python 3.11+
-- Docker (for PostgreSQL)
+- Docker (for PostgreSQL) — or a remote Postgres instance
 
 ## Quick Start
 
@@ -21,20 +21,45 @@ This starts PostgreSQL 16 on `localhost:5432` with:
 - User: `postgres`
 - Password: `postgres`
 
-### 2. Install Python dependencies
+### 2. Create a virtual environment
 
 ```bash
 cd backend
-pip install -e .
+
+# Create venv
+python -m venv venv
+
+# Activate — pick your shell:
+# Windows (PowerShell)
+.\venv\Scripts\Activate.ps1
+
+# Windows (CMD)
+.\venv\Scripts\activate.bat
+
+# Windows (Git Bash / MSYS2)
+source venv/Scripts/activate
+
+# macOS / Linux
+source venv/bin/activate
 ```
 
-For AI model inference (optional, needed for Phase 2 demos):
+### 3. Install Python dependencies
 
 ```bash
+# Core (auth, admin, health check)
+pip install -e .
+
+# AI model inference (Vision Inspector — YOLO, OCR, etc.)
 pip install -e ".[ai]"
+
+# Dev tools (pytest, httpx)
+pip install -e ".[dev]"
+
+# Everything
+pip install -e ".[ai,email,dev]"
 ```
 
-### 3. Set up environment
+### 4. Set up environment
 
 ```bash
 cp .env.example .env
@@ -42,7 +67,15 @@ cp .env.example .env
 
 Edit `.env` as needed. Default values work for local development.
 
-### 4. Run database migrations
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `DATABASE_URL` | `postgresql+asyncpg://postgres:postgres@localhost:5432/nexapex_studio` | Postgres connection |
+| `JWT_SECRET` | `change-me-in-production` | JWT signing key |
+| `ALLOWED_ORIGINS` | `["http://localhost:3000"]` | CORS origins (Next.js frontend) |
+| `GEMINI_API_KEY` | _(empty)_ | Google Gemini for Smart Assistant |
+| `RESEND_API_KEY` | _(empty)_ | Transactional emails |
+
+### 5. Run database migrations
 
 ```bash
 cd backend
@@ -51,25 +84,53 @@ alembic upgrade head
 
 This creates the tables: `leads`, `demo_sessions`, `bookings`, `admin_users`.
 
-### 5. Start the API server
+### 6. Start the API server
 
 ```bash
 cd backend
 uvicorn app.main:app --reload --port 8000
 ```
 
-API is now available at `http://localhost:8000`.
+API is now available at:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **Health check**: http://localhost:8000/health
 
 ## Endpoints
 
+### Health
+
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/health` | Health check + memory stats |
-| POST | `/api/v1/auth/signup` | Create lead + return JWT |
-| GET | `/docs` | Swagger UI (auto-generated) |
-| GET | `/redoc` | ReDoc API docs |
+| GET | `/health` | Health check + YOLO model status + memory stats |
 
-## Testing the Auth Flow
+### Auth (`/api/v1/auth`)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/auth/signup` | Create lead + return JWT |
+
+### Vision Inspector (`/api/v1/vision`)
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/vision/detect` | Optional Bearer | Upload image for YOLO object detection |
+
+Query params: `confidence_threshold` (0.1–1.0, default 0.25)
+
+Accepts: `multipart/form-data` with `image` field (JPEG, PNG, WebP, max 10 MB)
+
+### Admin (`/api/v1/admin`)
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/admin/login` | None | Admin login, returns JWT |
+| GET | `/admin/leads` | Admin JWT | List leads (filter: `?status=all|pending|approved`) |
+| PATCH | `/admin/leads/{id}/approve` | Admin JWT | Approve a lead |
+
+## Testing the API
+
+### Auth flow
 
 ```bash
 # Signup
@@ -78,13 +139,30 @@ curl -X POST http://localhost:8000/api/v1/auth/signup \
   -d '{"email":"test@example.com","name":"Test User"}'
 
 # Response: { id, email, name, token, demos_remaining }
+```
 
-# Duplicate email returns 409
-curl -X POST http://localhost:8000/api/v1/auth/signup \
+### Vision Inspector
+
+```bash
+# Detect objects in an image (no auth required for dev)
+curl -X POST http://localhost:8000/api/v1/vision/detect \
+  -F "image=@path/to/photo.jpg" \
+  -F "confidence_threshold=0.3"
+
+# Response: { detections: [...], summary, business_suggestions, processing_time_ms, demos_remaining }
+```
+
+### Admin
+
+```bash
+# Login (default seed admin: admin@nexapex.dev / admin123)
+curl -X POST http://localhost:8000/api/v1/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","name":"Test User"}'
+  -d '{"email":"admin@nexapex.dev","password":"admin123"}'
 
-# Response: { "detail": "Email already registered" }
+# List pending leads
+curl http://localhost:8000/api/v1/admin/leads?status=pending \
+  -H "Authorization: Bearer <admin_token>"
 ```
 
 ## Database Schema
@@ -94,7 +172,7 @@ curl -X POST http://localhost:8000/api/v1/auth/signup \
 | `leads` | Email-gated users (email, name, company, industry, demo usage counters) |
 | `demo_sessions` | Log of each demo run (type, input metadata, result, processing time) |
 | `bookings` | Cal.com consultation bookings |
-| `admin_users` | Admin dashboard access (email + password + TOTP) |
+| `admin_users` | Admin dashboard access (email + password + role) |
 
 ## Docker Commands
 
@@ -120,17 +198,26 @@ docker compose down -v
 ```
 backend/
 ├── app/
-│   ├── main.py              # FastAPI app + lifespan
+│   ├── main.py              # FastAPI app + lifespan (loads YOLO on startup)
 │   ├── config.py             # Pydantic Settings (env vars)
-│   ├── dependencies.py       # get_current_lead (JWT auth)
+│   ├── dependencies.py       # get_current_lead / get_current_admin (JWT)
 │   ├── auth/
 │   │   ├── router.py         # POST /auth/signup
-│   │   ├── jwt.py            # JWT create/verify/hash
+│   │   ├── jwt.py            # JWT create/verify
 │   │   ├── schemas.py        # SignupRequest, SignupResponse
-│   │   └── service.py        # Magic link emails (Phase 3)
+│   │   └── service.py        # Email service (Phase 3)
+│   ├── vision/
+│   │   ├── router.py         # POST /vision/detect
+│   │   ├── schemas.py        # VisionResponse, Detection
+│   │   └── service.py        # YOLO inference + business suggestions
+│   ├── admin/
+│   │   ├── router.py         # Admin login, lead management
+│   │   └── schemas.py        # AdminLoginRequest, LeadsListResponse
 │   └── db/
 │       ├── database.py       # Async engine + session
 │       └── models.py         # SQLAlchemy ORM models
+├── models/                   # AI model weights (gitignored)
+│   └── yolo26n.pt            # Downloaded at first run by ultralytics
 ├── alembic/
 │   ├── env.py                # Async migration runner
 │   └── versions/             # Migration scripts
