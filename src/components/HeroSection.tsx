@@ -123,12 +123,12 @@ export function HeroSection({ className }: { className?: string }) {
       )}
       style={{ contain: "layout style paint", isolation: "isolate" }}
     >
-      {/* Atmospheric background gradient */}
+      {/* Atmospheric background gradient — tinted hero center, particles show through */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 35%, rgba(148,252,255,0.04) 0%, rgba(26,38,48,0.15) 40%, #0e1418 70%)",
+            "radial-gradient(ellipse at 50% 35%, rgba(148,252,255,0.06) 0%, rgba(148,252,255,0.02) 35%, rgba(14,20,24,0) 70%)",
         }}
       />
 
