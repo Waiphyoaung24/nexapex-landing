@@ -37,44 +37,53 @@ export function BrandSection() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) return;
 
-    // Section headline -- SplitText char reveal, tuned for scroll-pause impact
-    const headlineTitle = section.querySelector(".section-headline-title");
-    const headlineWrap = section.querySelector(".section-headline");
+    // ─── Section headline — SplitText char reveal (one ScrollTrigger) ───
+    // Gradient is applied via CSS class (.section-headline-title) so we
+    // skip the JS style writes that previously thrashed layout per-char.
+    const headlineTitle = section.querySelector<HTMLElement>(".section-headline-title");
+    const headlineWrap = section.querySelector<HTMLElement>(".section-headline");
+    let headlineSplit: SplitText | null = null;
     if (headlineTitle) {
-      const split = SplitText.create(headlineTitle, { type: "chars" });
-      split.chars.forEach((char) => {
-        const el = char as HTMLElement;
-        el.style.background = "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)";
-        (el.style as unknown as Record<string, string>).webkitBackgroundClip = "text";
-        (el.style as unknown as Record<string, string>).webkitTextFillColor = "transparent";
-        el.style.backgroundClip = "text";
-      });
-      gsap.from(split.chars, {
-        y: 60,
+      headlineSplit = SplitText.create(headlineTitle, { type: "chars" });
+      gsap.from(headlineSplit.chars, {
+        yPercent: 100,
         autoAlpha: 0,
         rotateX: -90,
         stagger: 0.04,
         duration: 1.0,
         ease: "power4.out",
-        scrollTrigger: { trigger: headlineWrap, start: "top 80%", toggleActions: "play none none reverse" },
+        force3D: true,
+        scrollTrigger: {
+          trigger: headlineWrap,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
       });
     }
 
-    // Statement reveal — scroll-scrubbed word highlight
-    const statementTitle = section.querySelector(".brand-statement");
+    // ─── Statement reveal — scroll-scrubbed word highlight ───
+    // OLD: animated `color` + `textShadow` per word → both are PAINT
+    //      properties, repainted every scroll tick. Massive jank.
+    // NEW: one CSS variable `--lit` is animated 0 → 1, words use opacity
+    //      (composited) + a fixed final color. Single property, GPU only.
+    const statementTitle = section.querySelector<HTMLElement>(".brand-statement");
+    let statementSplit: SplitText | null = null;
     if (statementTitle) {
-      const split = SplitText.create(statementTitle, { type: "lines, words" });
+      statementSplit = SplitText.create(statementTitle, { type: "lines, words" });
+      const words = statementSplit.words as HTMLElement[];
 
-      // Start all words dim, highlight progressively on scroll
-      split.words.forEach((word) => {
-        const el = word as HTMLElement;
-        el.style.display = "inline-block";
-        el.style.color = "rgba(255, 255, 255, 0.15)";
-        el.style.transition = "none";
+      // Pre-style words ONCE (no per-frame style writes)
+      words.forEach((word) => {
+        word.style.display = "inline-block";
+        word.style.color = "#d4eef0";
+        word.style.opacity = "0.15";
+        word.style.willChange = "opacity";
       });
 
-      // Scrub-linked timeline — each word lights up as user scrolls
-      const highlightTl = gsap.timeline({
+      gsap.to(words, {
+        opacity: 1,
+        ease: "none",
+        stagger: { each: 0.08, from: "start" },
         scrollTrigger: {
           trigger: statementTitle,
           start: "top 75%",
@@ -82,68 +91,67 @@ export function BrandSection() {
           scrub: 1,
         },
       });
-
-      split.words.forEach((word, i) => {
-        highlightTl.to(word, {
-          color: "#d4eef0",
-          textShadow: "0 0 30px rgba(148, 252, 255, 0.15)",
-          duration: 0.3,
-          ease: "none",
-        }, i * 0.08);
-      });
     }
 
-    // Statement body
-    const statementBody = section.querySelector(".brand-statement-body");
-    if (statementBody) {
+    // ─── Statement body (right column) — single ScrollTrigger ───
+    const statementBody = section.querySelectorAll<HTMLElement>(".brand-statement-body");
+    if (statementBody.length) {
       gsap.from(statementBody, {
-        y: 30,
+        yPercent: 30,
         autoAlpha: 0,
         duration: 0.8,
+        stagger: 0.08,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
-          trigger: statementBody,
-
+          trigger: statementBody[0],
           start: "top 85%",
           toggleActions: "play none none reverse",
         },
       });
     }
 
-    // Pillar cards stagger
-    const pillars = section.querySelectorAll(".pillar-card");
-    pillars.forEach((card, i) => {
-      gsap.from(card, {
-        y: 60,
+    // ─── Pillar cards — ONE ScrollTrigger with stagger (was 3) ───
+    const pillars = section.querySelectorAll<HTMLElement>(".pillar-card");
+    if (pillars.length) {
+      gsap.from(pillars, {
+        yPercent: 40,
         autoAlpha: 0,
         duration: 0.8,
-        delay: i * 0.15,
+        stagger: 0.15,
         ease: "power3.out",
+        force3D: true,
         scrollTrigger: {
-          trigger: card,
-
+          trigger: pillars[0],
           start: "top 85%",
           toggleActions: "play none none reverse",
         },
       });
-    });
+    }
 
-    // Divider line draw
-    const dividers = section.querySelectorAll(".brand-divider");
-    dividers.forEach((line) => {
-      gsap.from(line, {
+    // ─── Divider draw — ONE ScrollTrigger with stagger (was 2) ───
+    const dividers = section.querySelectorAll<HTMLElement>(".brand-divider");
+    if (dividers.length) {
+      gsap.from(dividers, {
         scaleX: 0,
         transformOrigin: "left center",
         duration: 1,
+        stagger: 0.1,
         ease: "power2.inOut",
+        force3D: true,
         scrollTrigger: {
-          trigger: line,
-
+          trigger: dividers[0],
           start: "top 90%",
           toggleActions: "play none none reverse",
         },
       });
-    });
+    }
+
+    // Cleanup splits on re-run / unmount to avoid leaking DOM nodes
+    return () => {
+      headlineSplit?.revert();
+      statementSplit?.revert();
+    };
   }, { scope: sectionRef });
 
   return (
@@ -155,8 +163,18 @@ export function BrandSection() {
           Discover
         </p>
         <h2
-          className="section-headline-title font-normal uppercase tracking-[3px] text-white text-center leading-[1.1] font-[family-name:var(--font-display)]"
-          style={{ fontSize: "clamp(1.5rem, 5vw, 4rem)" }}
+          className="section-headline-title font-normal uppercase tracking-[3px] text-center leading-[1.1] font-[family-name:var(--font-display)]"
+          style={{
+            fontSize: "clamp(1.5rem, 5vw, 4rem)",
+            // Gradient applied via background-clip — handled in CSS so we
+            // skip per-char JS style writes from SplitText.
+            background:
+              "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            color: "transparent",
+          }}
         >
           Who We Are
         </h2>
@@ -210,8 +228,7 @@ export function BrandSection() {
           {PILLARS.map((pillar) => (
             <div
               key={pillar.num}
-              className="pillar-card group relative p-4 md:p-10 border-l-0 md:border-l border-[#94fcff]/10 md:first:border-l-0 border-b border-[#94fcff]/10 md:border-b-0 last:border-b-0 cursor-pointer transition-colors duration-500"
-              style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+              className="pillar-card group relative p-4 md:p-10 border-l-0 md:border-l border-[#94fcff]/10 md:first:border-l-0 border-b border-[#94fcff]/10 md:border-b-0 last:border-b-0"
             >
               {/* Number */}
               <span className="block text-[11px] font-mono text-[#94fcff]/30 tracking-wider mb-2 md:mb-6">
