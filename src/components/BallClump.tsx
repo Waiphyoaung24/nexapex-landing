@@ -136,14 +136,6 @@ export function BallClumpSection() {
           <Scene />
         </Suspense>
       </Canvas>
-
-      {/* Gradient fade into capabilities section below */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{
-          background: "linear-gradient(to bottom, transparent, #c63518)",
-        }}
-      />
     </div>
   );
 }
