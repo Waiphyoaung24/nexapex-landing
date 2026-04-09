@@ -225,17 +225,23 @@ export function ParticleNetworkBackground() {
   const countRef = useRef(getParticleCount());
 
   useGSAP(() => {
-    const st = ScrollTrigger.create({
-      trigger: document.body,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1.5,
-      onUpdate: (self) => {
-        particleScrollState.progress = self.progress;
-      },
+    // Defer to next frame so SmoothScrollProvider (sibling in layout) has mounted
+    // and #smooth-content exists in the DOM.
+    let st: ScrollTrigger | null = null;
+    const frameId = requestAnimationFrame(() => {
+      st = ScrollTrigger.create({
+        trigger: "#smooth-content",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.5,
+        onUpdate: (self) => {
+          particleScrollState.progress = self.progress;
+        },
+      });
     });
     return () => {
-      st.kill();
+      cancelAnimationFrame(frameId);
+      st?.kill();
       particleScrollState.progress = 0;
       particleScrollState.smoothedProgress = 0;
     };
