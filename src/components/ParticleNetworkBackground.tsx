@@ -1,5 +1,16 @@
 "use client";
 
+/*
+ * R3F inner-loop component — mutating ref/uniform/camera state every frame is
+ * how this library works. The React 19 react-hooks/purity, immutability, and
+ * refs rules fire on these idiomatic patterns. Disabling them for this file
+ * is the pragmatic call; wrapping each useFrame mutation in abstractions
+ * would obscure the code without changing behavior.
+ */
+/* eslint-disable react-hooks/purity */
+/* eslint-disable react-hooks/immutability */
+/* eslint-disable react-hooks/refs */
+
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
