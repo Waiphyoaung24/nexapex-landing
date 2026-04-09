@@ -118,7 +118,7 @@ export function HeroSection({ className }: { className?: string }) {
     <section
       ref={sectionRef}
       className={cn(
-        "sticky top-0 min-h-[100dvh] h-screen w-full overflow-hidden -z-10",
+        "sticky top-0 min-h-[100dvh] h-screen w-full overflow-hidden",
         className,
       )}
       style={{ contain: "layout style paint", isolation: "isolate" }}
