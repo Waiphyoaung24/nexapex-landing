@@ -1,14 +1,21 @@
 import Link from "next/link";
-import { ArrowLeft, MessageCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { ChatInterfaceLoader } from "@/components/demos/ChatInterfaceLoader";
 
 export default function ChatPage() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] w-full flex-col">
+    <div className="relative flex h-[calc(100vh-4rem)] w-full flex-col">
+      {/* Ambient gradient mesh background */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+        <div className="absolute -top-1/4 -left-1/4 h-[600px] w-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-[#94fcff]/[0.015] blur-[100px]" />
+      </div>
+
       {/* Breadcrumb toolbar */}
-      <div className="flex items-center gap-3 border-b border-white/[0.06] px-4 py-3 md:px-[60px]">
+      <div className="glass-panel flex items-center gap-3 border-b border-white/[0.06] px-4 py-3 md:px-[60px]">
         <Link
           href="/demos"
-          className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-[2px] text-nex-dim hover:text-white transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-sm"
+          className="flex cursor-pointer items-center gap-1.5 text-[11px] font-mono uppercase tracking-[2px] text-nex-dim transition-colors duration-200 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-sm"
         >
           <ArrowLeft size={14} />
           Demos
@@ -19,12 +26,9 @@ export default function ChatPage() {
         </span>
       </div>
 
-      {/* Workspace */}
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <MessageCircle size={32} className="mx-auto mb-4 text-[#94fcff]/20" />
-          <p className="text-sm text-nex-dim">Coming soon</p>
-        </div>
+      {/* Chat workspace — takes full remaining height */}
+      <div className="flex-1 overflow-hidden">
+        <ChatInterfaceLoader />
       </div>
     </div>
   );
