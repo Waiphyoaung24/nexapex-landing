@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/globals.css";
+import { ParticleNetworkBackground } from "@/components/ParticleNetworkBackground";
 import { SmoothScrollProvider } from "@/components/SmoothScroll";
 
 const nevera = localFont({
@@ -30,6 +31,7 @@ export default function MarketingLayout({
   return (
     <html lang="en" className={`${nevera.variable} ${nexa.variable} dark h-full antialiased`}>
       <body suppressHydrationWarning className="grain-overlay min-h-full bg-[#0e1418] text-[#f0f1ef]">
+        <ParticleNetworkBackground />
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>
