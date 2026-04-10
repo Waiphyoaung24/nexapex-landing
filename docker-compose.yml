@@ -18,8 +18,8 @@ services:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nexapex-frontend.rule=Host(`${FRONTEND_DOMAIN}`)"
-      - "traefik.http.routers.nexapex-frontend.entrypoints=websecure"
+      - "traefik.http.routers.nexapex-frontend.rule=Host(`${FRONTEND_DOMAIN}`) || Host(`www.${FRONTEND_DOMAIN}`)"
+      - "traefik.http.routers.nexapex-frontend.entrypoints=web,websecure"
       - "traefik.http.routers.nexapex-frontend.tls.certResolver=letsencrypt"
       - "traefik.http.services.nexapex-frontend.loadbalancer.server.port=3011"
 
@@ -48,7 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nexapex-backend.rule=Host(`${BACKEND_DOMAIN}`)"
-      - "traefik.http.routers.nexapex-backend.entrypoints=websecure"
+      - "traefik.http.routers.nexapex-backend.entrypoints=web,websecure"
       - "traefik.http.routers.nexapex-backend.tls.certResolver=letsencrypt"
       - "traefik.http.services.nexapex-backend.loadbalancer.server.port=8054"
 
