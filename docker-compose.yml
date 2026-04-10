@@ -45,12 +45,6 @@ services:
       start_period: 60s
     networks:
       - dokploy-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nexapex-backend.rule=Host(`${BACKEND_DOMAIN}`)"
-      - "traefik.http.routers.nexapex-backend.entrypoints=web,websecure"
-      - "traefik.http.routers.nexapex-backend.tls.certResolver=letsencrypt"
-      - "traefik.http.services.nexapex-backend.loadbalancer.server.port=8054"
 
 networks:
   dokploy-network:
