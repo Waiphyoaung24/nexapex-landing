@@ -60,9 +60,9 @@ const GREETING_LINE_1 = "Hi! I'm NexApex AI.";
 const GREETING_LINE_2 = "Tell me your problem — I'll show you exactly what we'd build.";
 
 const LANGUAGES = [
-  { code: "en", label: "EN" },
-  { code: "my", label: "MY" },
-  { code: "th", label: "TH" },
+  { code: "en", label: "EN", name: "English" },
+  { code: "my", label: "MY", name: "မြန်မာ" },
+  { code: "th", label: "TH", name: "ไทย" },
 ] as const;
 
 export function ChatInterface() {
@@ -75,6 +75,7 @@ export function ChatInterface() {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [autoScroll, setAutoScroll] = useState(true);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [langToast, setLangToast] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -247,6 +248,16 @@ export function ChatInterface() {
     }
   };
 
+  const switchLanguage = useCallback((code: string) => {
+    if (code === language) return;
+    setLanguage(code);
+    const lang = LANGUAGES.find((l) => l.code === code);
+    if (lang) {
+      setLangToast(lang.name);
+      setTimeout(() => setLangToast(null), 1500);
+    }
+  }, [language]);
+
   const copyMessage = useCallback((index: number, content: string) => {
     navigator.clipboard?.writeText(content).then(() => {
       setCopiedIndex(index);
@@ -336,7 +347,7 @@ export function ChatInterface() {
           {LANGUAGES.map(({ code, label }) => (
             <button
               key={code}
-              onClick={() => setLanguage(code)}
+              onClick={() => switchLanguage(code)}
               className={cn(
                 "relative z-10 flex h-8 w-10 cursor-pointer items-center justify-center rounded-md text-[11px] font-mono font-medium uppercase tracking-[1.5px] transition-colors duration-200",
                 language === code
@@ -454,6 +465,15 @@ export function ChatInterface() {
         >
           ↓ Jump to latest
         </button>
+      )}
+
+      {/* ─── Language toast ─── */}
+      {langToast && (
+        <div className="pointer-events-none absolute left-1/2 top-16 z-20 -translate-x-1/2">
+          <div className="rounded-lg border border-[#94fcff]/20 bg-[#0e1418]/90 px-3 py-1.5 text-[11px] font-mono uppercase tracking-[1.5px] text-[#94fcff] shadow-lg backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200">
+            {langToast}
+          </div>
+        </div>
       )}
 
       {/* ─── Error toast ─── */}

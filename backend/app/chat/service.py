@@ -50,16 +50,31 @@ SYSTEM_PROMPT = (
     "biggest headache in your business right now?'"
 )
 
-_LANG_NAMES = {"en": "English", "my": "Burmese", "th": "Thai"}
+_LANG_NAMES = {"en": "English", "my": "Burmese (Myanmar)", "th": "Thai"}
 
 
 def build_messages(messages: list[dict], language: str) -> list[dict]:
-    """Prepend system prompt to conversation history."""
+    """Prepend system prompt and inject language directive."""
     system = SYSTEM_PROMPT
+    result = [{"role": "system", "content": system}] + messages
+
+    # For non-English, inject a strong language directive as the final
+    # system message so the model sees it right before generating.
+    # Small LLMs need recency bias — a weak hint in the system prompt
+    # gets buried. This ensures the instruction is the last thing seen.
     if language != "en":
         lang_name = _LANG_NAMES.get(language, "English")
-        system += f"\n- The user prefers {lang_name}. Respond in that language."
-    return [{"role": "system", "content": system}] + messages
+        result.append({
+            "role": "system",
+            "content": (
+                f"IMPORTANT: Respond ENTIRELY in {lang_name}. "
+                f"Every sentence must be in {lang_name}. "
+                "Do not mix in English words unless they are proper nouns "
+                "or widely-used brand names."
+            ),
+        })
+
+    return result
 
 
 _SENTINEL = object()
