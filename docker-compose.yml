@@ -16,12 +16,6 @@ services:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     networks:
       - dokploy-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nexapex-frontend.rule=Host(`${FRONTEND_DOMAIN}`) || Host(`www.${FRONTEND_DOMAIN}`)"
-      - "traefik.http.routers.nexapex-frontend.entrypoints=web,websecure"
-      - "traefik.http.routers.nexapex-frontend.tls.certResolver=letsencrypt"
-      - "traefik.http.services.nexapex-frontend.loadbalancer.server.port=3011"
 
   nexapex-backend:
     build:
