@@ -14,6 +14,7 @@ COPY pyproject.toml .
 RUN pip install --no-cache-dir ".[ai,email]" && pip cache purge 2>/dev/null; true
 
 COPY . .
+RUN chmod +x entrypoint.sh
 
 EXPOSE 8054
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8054"]
+CMD ["./entrypoint.sh"]
