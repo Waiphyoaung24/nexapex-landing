@@ -33,31 +33,31 @@ const SUGGESTED_PROMPTS = [
     code: "01",
     icon: Utensils,
     label: "F&B",
-    prompt: "I run a restaurant in Yangon",
+    prompt: "I run a restaurant and waste too much food every week",
   },
   {
     code: "02",
     icon: Factory,
     label: "Manufacturing",
-    prompt: "I manage a garment factory",
+    prompt: "My factory needs to catch product defects faster",
   },
   {
     code: "03",
     icon: ShoppingBag,
     label: "Retail",
-    prompt: "I own a retail chain in Bangkok",
+    prompt: "I want a chatbot that knows my products and helps customers",
   },
   {
     code: "04",
     icon: Code2,
     label: "Tech",
-    prompt: "I'm building an app and need AI",
+    prompt: "I'm building an app and need to add AI features",
   },
 ] as const;
 
 // Greeting shown in landing state, auto-typed character-by-character.
 const GREETING_LINE_1 = "Hi! I'm NexApex AI.";
-const GREETING_LINE_2 = "Tell me about your business and I'll show you how AI can help.";
+const GREETING_LINE_2 = "Tell me your problem — I'll show you exactly what we'd build.";
 
 const LANGUAGES = [
   { code: "en", label: "EN" },
