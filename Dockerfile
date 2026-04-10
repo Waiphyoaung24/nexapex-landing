@@ -1,24 +1,43 @@
-FROM node:22-alpine
+FROM node:22-alpine AS base
 
-# Set working directory
+# ── Install dependencies only when needed ──
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Copy package.json and package-lock.json first
-COPY package.json package-lock.json ./
-
-# Install dependencies
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy the rest of the application files
-COPY . .
+# ── Build the application ──
+FROM base AS builder
+WORKDIR /app
 
-# Build the Next.js application
+# Accept build arguments for Next.js public environment variables
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG NEXT_PUBLIC_API_URL
+
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 RUN npm run build
 
-# Dokploy deployment — frontend on port 3011
-EXPOSE 3011
+# ── Production image — lightweight standalone ──
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
 
+RUN apk add --no-cache libc6-compat
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+EXPOSE 3011
 ENV PORT=3011
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

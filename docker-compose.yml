@@ -1,53 +1,54 @@
 services:
-  app:
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nexapex-web:latest
-    container_name: nexapex-web
+      args:
+        - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+    image: nexapex-frontend:latest
+    container_name: nexapex-frontend
     restart: unless-stopped
     ports:
-      - "3011:3001"
+      - "3011:3011"
     environment:
-      - PORT=3001
-      - HOSTNAME=0.0.0.0
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     env_file:
       - path: .env.local
         required: false
       - path: .env
         required: false
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3001/ || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3011/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+    depends_on:
+      backend:
+        condition: service_healthy
 
-  dev:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
-    image: nexapex-web:dev
-    container_name: nexapex-web-dev
+      context: ./backend
+      dockerfile: Dockerfile
+    image: nexapex-backend:latest
+    container_name: nexapex-backend
     restart: unless-stopped
     ports:
-      - "${DEV_PORT:-3002}:3000"
-    environment:
-      - NODE_ENV=development
-      - NEXT_TELEMETRY_DISABLED=1
+      - "8054:8054"
     env_file:
+      - path: ./backend/.env
+        required: false
       - path: .env.local
         required: false
       - path: .env
         required: false
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3001/ || exit 1"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8054/health')\" || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

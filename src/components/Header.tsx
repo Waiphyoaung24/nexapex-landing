@@ -245,29 +245,29 @@ export function Header() {
                           </div>
                         </SheetClose>
                       ) : (
-                        <SheetClose asChild>
-                          <Link
-                            href={`/#${link.target}`}
-                            className="w-full text-left cursor-pointer group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff] rounded"
-                          >
-                            <div className="flex items-center justify-between py-5 border-b border-white/[0.06] group-hover:border-[#94fcff]/20 transition-colors duration-300">
-                              <div className="flex items-center gap-4">
-                                <span className="text-[11px] font-mono text-[#94fcff]/30 tracking-wider">
-                                  {String(i + 1).padStart(2, "0")}
-                                </span>
-                                <span
-                                  className="font-[family-name:var(--font-display)] uppercase tracking-[1px] text-white/70 group-hover:text-white transition-colors duration-200"
-                                  style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)" }}
-                                >
-                                  {link.label}
-                                </span>
-                              </div>
-                              <ArrowUpRight
-                                size={16}
-                                className="text-[#94fcff]/0 group-hover:text-[#94fcff]/60 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                              />
+                        <SheetClose
+                          className="w-full text-left cursor-pointer group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff] rounded"
+                          onClick={() => {
+                            window.location.href = `/#${link.target}`;
+                          }}
+                        >
+                          <div className="flex items-center justify-between py-5 border-b border-white/[0.06] group-hover:border-[#94fcff]/20 transition-colors duration-300">
+                            <div className="flex items-center gap-4">
+                              <span className="text-[11px] font-mono text-[#94fcff]/30 tracking-wider">
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
+                              <span
+                                className="font-[family-name:var(--font-display)] uppercase tracking-[1px] text-white/70 group-hover:text-white transition-colors duration-200"
+                                style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)" }}
+                              >
+                                {link.label}
+                              </span>
                             </div>
-                          </Link>
+                            <ArrowUpRight
+                              size={16}
+                              className="text-[#94fcff]/0 group-hover:text-[#94fcff]/60 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            />
+                          </div>
                         </SheetClose>
                       )}
                     </li>
