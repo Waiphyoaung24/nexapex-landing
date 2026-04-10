@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml .
-RUN pip install --no-cache-dir ".[ai,email]" && pip cache purge 2>/dev/null; true
+RUN pip install --no-cache-dir ".[ai,email,local-llm]" \
+    --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu \
+    && pip cache purge 2>/dev/null; true
 
 COPY . .
 RUN chmod +x entrypoint.sh
