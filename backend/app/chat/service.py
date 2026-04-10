@@ -98,16 +98,28 @@ def build_messages(messages: list[dict], language: str) -> list[dict]:
     return [{"role": "system", "content": system}] + messages
 
 
-def _sync_stream(llm: Llama, messages: list[dict]):
-    """Blocking call — must run in executor thread."""
-    return llm.create_chat_completion(
-        messages=messages,
-        stream=True,
-        max_tokens=512,
-        temperature=1.0,
-        top_p=0.95,
-        top_k=64,
-    )
+_SENTINEL = object()
+
+
+def _run_inference(llm: Llama, messages: list[dict], q: asyncio.Queue, loop: asyncio.AbstractEventLoop):
+    """Blocking LLM iteration — runs in a thread, pushes tokens to async queue."""
+    try:
+        stream = llm.create_chat_completion(
+            messages=messages,
+            stream=True,
+            max_tokens=512,
+            temperature=1.0,
+            top_p=0.95,
+            top_k=64,
+        )
+        for chunk in stream:
+            delta = chunk["choices"][0].get("delta", {})
+            token = delta.get("content", "")
+            if token:
+                loop.call_soon_threadsafe(q.put_nowait, token)
+        loop.call_soon_threadsafe(q.put_nowait, _SENTINEL)
+    except Exception as exc:
+        loop.call_soon_threadsafe(q.put_nowait, exc)
 
 
 async def stream_chat(
@@ -116,7 +128,7 @@ async def stream_chat(
     language: str,
     conversation_id: str,
 ) -> AsyncIterator[bytes]:
-    """Acquire semaphore, run LLM in executor, yield SSE events."""
+    """Acquire semaphore, run LLM in a thread, yield SSE events without blocking the event loop."""
     full_messages = build_messages(messages, language)
 
     try:
@@ -131,22 +143,26 @@ async def stream_chat(
 
     try:
         loop = asyncio.get_event_loop()
-        stream = await loop.run_in_executor(
-            None, partial(_sync_stream, llm, full_messages)
+        q: asyncio.Queue = asyncio.Queue()
+
+        loop.run_in_executor(
+            None, partial(_run_inference, llm, full_messages, q, loop)
         )
-        for chunk in stream:
-            delta = chunk["choices"][0].get("delta", {})
-            token = delta.get("content", "")
-            if token:
+
+        while True:
+            item = await q.get()
+            if item is _SENTINEL:
+                break
+            if isinstance(item, Exception):
+                logger.error("LLM stream error: %s", item)
                 yield format_sse_event(
-                    data_str=json.dumps({"token": token, "conversation_id": conversation_id}),
-                    event="token",
+                    data_str=json.dumps({"error": "Generation failed"}),
+                    event="error",
                 )
-    except Exception as exc:
-        logger.error("LLM stream error: %s", exc)
-        yield format_sse_event(
-            data_str=json.dumps({"error": "Generation failed"}),
-            event="error",
-        )
+                break
+            yield format_sse_event(
+                data_str=json.dumps({"token": item, "conversation_id": conversation_id}),
+                event="token",
+            )
     finally:
         _llm_semaphore.release()

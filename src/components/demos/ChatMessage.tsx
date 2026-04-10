@@ -19,6 +19,8 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
     );
   }
 
+  const isThinking = isStreaming && content.length === 0;
+
   // Assistant — flush-left, no bubble, with orb mark in gutter
   return (
     <div className="flex gap-3">
@@ -40,15 +42,30 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
           NexApex AI
         </span>
 
-        <div className="text-[14px] leading-[1.7] text-white/90">
-          <span className="whitespace-pre-wrap break-words">{content}</span>
-          {isStreaming && (
-            <span
-              aria-label="Generating"
-              className="ml-1 inline-block h-[14px] w-[8px] translate-y-[2px] rounded-[1px] bg-[#94fcff] chat-cursor-blink"
-            />
-          )}
-        </div>
+        {isThinking ? (
+          <div className="flex items-center gap-1.5 py-1" aria-label="Thinking">
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="h-1.5 w-1.5 rounded-full bg-[#94fcff]/60"
+                style={{
+                  animation: "chat-thinking 1.4s ease-in-out infinite",
+                  animationDelay: `${i * 0.16}s`,
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-[14px] leading-[1.7] text-white/90">
+            <span className="whitespace-pre-wrap break-words">{content}</span>
+            {isStreaming && (
+              <span
+                aria-label="Generating"
+                className="ml-1 inline-block h-[14px] w-[8px] translate-y-[2px] rounded-[1px] bg-[#94fcff] chat-cursor-blink"
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

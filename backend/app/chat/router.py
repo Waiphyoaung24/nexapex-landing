@@ -77,4 +77,7 @@ async def chat_stream(
             event="done",
         )
 
-    return EventSourceResponse(generate())
+    return EventSourceResponse(
+        generate(),
+        headers={"X-Accel-Buffering": "no"},
+    )
