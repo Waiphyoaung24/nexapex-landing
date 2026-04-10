@@ -1,7 +1,8 @@
 from pathlib import Path
+from typing import Annotated
 
 from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, NoDecode
 
 # Resolve paths relative to the backend directory (parent of app/)
 _BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +12,7 @@ class Settings(BaseSettings):
     # API
     api_prefix: str = "/api/v1"
     debug: bool = False
-    allowed_origins: list[str] = ["http://localhost:3000"]
+    allowed_origins: Annotated[list[str], NoDecode] = ["http://localhost:3000"]
 
     @field_validator("allowed_origins", mode="before")
     @classmethod
