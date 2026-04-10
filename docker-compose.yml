@@ -14,9 +14,6 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
       - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-    depends_on:
-      nexapex-backend:
-        condition: service_healthy
     networks:
       - dokploy-network
     labels:
@@ -41,11 +38,11 @@ services:
       - RESEND_API_KEY=${RESEND_API_KEY}
       - DEBUG=${DEBUG:-false}
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8054/health')\""]
+      test: ["CMD", "curl", "-f", "http://localhost:8054/health"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 15s
+      retries: 5
+      start_period: 60s
     networks:
       - dokploy-network
     labels:
