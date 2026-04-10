@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 # Resolve paths relative to the backend directory (parent of app/)
@@ -11,6 +12,13 @@ class Settings(BaseSettings):
     api_prefix: str = "/api/v1"
     debug: bool = False
     allowed_origins: list[str] = ["http://localhost:3000"]
+
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
+    def parse_origins(cls, v: object) -> object:
+        if isinstance(v, str):
+            return [o.strip() for o in v.split(",") if o.strip()]
+        return v
 
     # Database
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/nexapex_studio"
