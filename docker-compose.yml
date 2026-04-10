@@ -1,3 +1,9 @@
+# ============================================================
+# NexApex - Docker Compose
+# Two-container setup: Next.js frontend + FastAPI backend
+# Dokploy manages domains/SSL via UI — no Traefik labels needed
+# ============================================================
+
 services:
   nexapex-frontend:
     build:
@@ -6,24 +12,30 @@ services:
       args:
         NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-    restart: unless-stopped
-    expose:
-      - 3011
+    ports:
+      - "3011:3011"
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    depends_on:
+      nexapex-backend:
+        condition: service_started
+    restart: unless-stopped
     networks:
       - dokploy-network
+      - internal
 
   nexapex-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    restart: unless-stopped
     expose:
-      - 8054
+      - "8054"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
@@ -31,15 +43,22 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - DEBUG=${DEBUG:-false}
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8054/health"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
+    restart: unless-stopped
     networks:
       - dokploy-network
+      - internal
 
 networks:
   dokploy-network:
     external: true
+  internal:
+    driver: bridge
