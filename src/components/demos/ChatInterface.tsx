@@ -24,7 +24,7 @@ interface Message {
 }
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
-const MAX_MESSAGES = 20;
+const MAX_MESSAGES = 10;
 // Booking destination — swap to Cal.com URL once Task 13 lands.
 const BOOKING_HREF = "mailto:nexuslab.dev.mm@gmail.com?subject=NexApex%20AI%20Demo%20—%20Free%20Consultation";
 
@@ -80,6 +80,15 @@ export function ChatInterface() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // ─── Lock body scroll — chat is a full-viewport app, page must not scroll ───
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
   // Scroll ONLY the chat container — never call scrollIntoView, which would
   // walk up the DOM and scroll the page itself (revealing the footer below).
   const scrollChatToBottom = useCallback(
@@ -102,6 +111,25 @@ export function ChatInterface() {
     };
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // ─── Trap wheel events at scroll boundaries — prevent scroll chain leak ───
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const maxScroll = scrollHeight - clientHeight;
+      // Content doesn't overflow — swallow wheel so nothing else scrolls
+      if (maxScroll <= 0) { e.preventDefault(); return; }
+      // At top boundary scrolling up, or bottom boundary scrolling down
+      if ((scrollTop <= 0 && e.deltaY < 0) ||
+          (scrollTop >= maxScroll - 1 && e.deltaY > 0)) {
+        e.preventDefault();
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
   useEffect(() => {
@@ -273,15 +301,35 @@ export function ChatInterface() {
         />
       </div>
 
-      {/* ─── Top toolbar — language segmented control + progress ring ─── */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 md:px-6">
-        <div className="relative flex items-center rounded-full border border-white/[0.06] bg-white/[0.02] p-0.5">
+      {/* ─── Top toolbar — progress + language side by side on the right ─── */}
+      <div className="flex items-center justify-end gap-3 border-b border-white/[0.06] px-4 py-3 md:px-6">
+        {/* Progress counter */}
+        {messageCount > 0 && (
+          <div className="flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 20 20" className="-rotate-90">
+              <circle cx="10" cy="10" r="8" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
+              <circle
+                cx="10" cy="10" r="8" fill="none" stroke="#94fcff" strokeWidth="1.5"
+                strokeLinecap="round" strokeDasharray={50.27}
+                strokeDashoffset={50.27 - (50.27 * progressPercent) / 100}
+                style={{ transition: "stroke-dashoffset 400ms var(--ease-out-expo)" }}
+              />
+            </svg>
+            <span className="text-[10px] font-mono uppercase tracking-[1.5px] text-nex-dim">
+              {MAX_MESSAGES - messageCount} chat remaining
+            </span>
+          </div>
+        )}
+
+        {/* Language segmented control */}
+        <div className="relative flex items-center rounded-lg border border-white/[0.08] bg-white/[0.03] p-0.5">
           {/* Sliding indicator */}
           <span
             aria-hidden
-            className="absolute top-0.5 bottom-0.5 left-0.5 w-[34px] rounded-full bg-[#94fcff]/10 ring-1 ring-inset ring-[#94fcff]/25"
+            className="absolute top-0.5 bottom-0.5 left-0.5 rounded-md bg-[#94fcff]/12 ring-1 ring-inset ring-[#94fcff]/30"
             style={{
-              transform: `translateX(${langIndex * 34}px)`,
+              width: "40px",
+              transform: `translateX(${langIndex * 40}px)`,
               transition: "transform 320ms var(--ease-out-expo)",
             }}
           />
@@ -290,8 +338,10 @@ export function ChatInterface() {
               key={code}
               onClick={() => setLanguage(code)}
               className={cn(
-                "relative z-10 h-7 w-[34px] cursor-pointer rounded-full text-[10px] font-mono uppercase tracking-[1.5px] transition-colors duration-200",
-                language === code ? "text-[#94fcff]" : "text-nex-dim hover:text-white"
+                "relative z-10 flex h-8 w-10 cursor-pointer items-center justify-center rounded-md text-[11px] font-mono font-medium uppercase tracking-[1.5px] transition-colors duration-200",
+                language === code
+                  ? "text-[#94fcff]"
+                  : "text-white/40 hover:text-white/70"
               )}
               aria-pressed={language === code}
             >
@@ -299,43 +349,12 @@ export function ChatInterface() {
             </button>
           ))}
         </div>
-
-        {messageCount > 0 && (
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-[1.5px] text-nex-dim">
-              {messageCount}/{MAX_MESSAGES}
-            </span>
-            {/* Progress ring */}
-            <svg width="20" height="20" viewBox="0 0 20 20" className="-rotate-90">
-              <circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="none"
-                stroke="rgba(255,255,255,0.08)"
-                strokeWidth="1.5"
-              />
-              <circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="none"
-                stroke="#94fcff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeDasharray={50.27}
-                strokeDashoffset={50.27 - (50.27 * progressPercent) / 100}
-                style={{ transition: "stroke-dashoffset 400ms var(--ease-out-expo)" }}
-              />
-            </svg>
-          </div>
-        )}
       </div>
 
       {/* ─── Messages area / empty state ─── */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain scroll-smooth"
+        className="chat-scrollbar flex-1 overflow-y-auto overflow-x-hidden overscroll-contain scroll-smooth"
       >
         {isEmpty ? (
           <EmptyState onPick={(p) => sendMessage(p)} />

@@ -4,7 +4,7 @@ import { ChatInterfaceLoader } from "@/components/demos/ChatInterfaceLoader";
 
 export default function ChatPage() {
   return (
-    <div className="relative flex h-[calc(100vh-4rem)] w-full flex-col">
+    <div className="relative flex h-[calc(100dvh-72px)] w-full flex-col md:h-[calc(100dvh-88px)]">
       {/* Ambient gradient mesh background */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div className="absolute -top-1/4 -left-1/4 h-[600px] w-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />

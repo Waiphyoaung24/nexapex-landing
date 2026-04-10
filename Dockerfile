@@ -15,10 +15,10 @@ COPY . .
 # Build the Next.js application
 RUN npm run build
 
-# App listens on 3000 internally, mapped to 3001 externally
-EXPOSE 3001
+# Dokploy deployment — frontend on port 3011
+EXPOSE 3011
 
-ENV PORT=3001
+ENV PORT=3011
 ENV HOSTNAME="0.0.0.0"
 
 CMD ["npm", "start"]

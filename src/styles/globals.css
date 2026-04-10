@@ -329,6 +329,36 @@
   animation: vision-glow-pulse 2s ease-in-out infinite;
 }
 
+/* ── Custom scrollbar — thin, dark, interactive ── */
+
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 252, 255, 0.18) transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 252, 255, 0.15);
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 252, 255, 0.35);
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(148, 252, 255, 0.5);
+}
+
 /* ── Smart Assistant chat animations ── */
 
 @keyframes chat-orb-pulse {
