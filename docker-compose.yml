@@ -1,55 +1,60 @@
 services:
-  frontend:
+  nexapex-frontend:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
-        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-    image: nexapex-frontend:latest
-    container_name: nexapex-frontend
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     restart: unless-stopped
-    ports:
-      - "3011:3011"
+    expose:
+      - 3011
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-    env_file:
-      - path: .env.local
-        required: false
-      - path: .env
-        required: false
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3011/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
     depends_on:
-      backend:
+      nexapex-backend:
         condition: service_healthy
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexapex-frontend.rule=Host(`${FRONTEND_DOMAIN}`)"
+      - "traefik.http.routers.nexapex-frontend.entrypoints=websecure"
+      - "traefik.http.routers.nexapex-frontend.tls.certResolver=letsencrypt"
+      - "traefik.http.services.nexapex-frontend.loadbalancer.server.port=3011"
 
-  backend:
+  nexapex-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: nexapex-backend:latest
-    container_name: nexapex-backend
     restart: unless-stopped
-    ports:
-      - "8054:8054"
-    env_file:
-      - path: ./backend/.env
-        required: false
-      - path: .env.local
-        required: false
-      - path: .env
-        required: false
+    expose:
+      - 8054
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - DEBUG=${DEBUG:-false}
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8054/health')\" || exit 1"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8054/health')\""]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 15s
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexapex-backend.rule=Host(`${BACKEND_DOMAIN}`)"
+      - "traefik.http.routers.nexapex-backend.entrypoints=websecure"
+      - "traefik.http.routers.nexapex-backend.tls.certResolver=letsencrypt"
+      - "traefik.http.services.nexapex-backend.loadbalancer.server.port=8054"
+
+networks:
+  dokploy-network:
+    external: true
