@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml .
-RUN pip install --no-cache-dir ".[ai,email]"
+RUN pip install --no-cache-dir ".[ai,email]" && pip cache purge 2>/dev/null; true
 
 COPY . .
 
