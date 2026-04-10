@@ -55,31 +55,29 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
             ))}
           </div>
         ) : (
-          <div className="text-[14px] leading-[1.8] text-white/90">
+          <div className="text-[14px] leading-[1.75] text-white/85">
             <Markdown
               components={{
                 p: ({ children }) => (
-                  <p className="mb-3 last:mb-0">{children}</p>
+                  <p className="mb-4 last:mb-0">{children}</p>
                 ),
                 strong: ({ children }) => (
                   <strong className="font-semibold text-white">{children}</strong>
                 ),
                 ul: ({ children }) => (
-                  <ul className="mb-4 flex flex-col gap-2.5 last:mb-0">{children}</ul>
+                  <ul className="mb-4 flex flex-col gap-3 last:mb-0">{children}</ul>
                 ),
                 ol: ({ children }) => (
-                  <ol className="mb-4 flex flex-col gap-2.5 last:mb-0">{children}</ol>
+                  <ol className="mb-4 flex flex-col gap-3 last:mb-0">{children}</ol>
                 ),
-                li: ({ children, index }) => (
-                  <li className="flex gap-2.5 leading-[1.7]">
-                    <span className="mt-[6px] flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-[#94fcff]/15 bg-[#94fcff]/[0.04] text-[10px] font-mono font-medium text-[#94fcff]/60">
-                      {(index ?? 0) + 1}
-                    </span>
+                li: ({ children }) => (
+                  <li className="flex items-start gap-2.5 leading-[1.75]">
+                    <span className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#94fcff]/30" />
                     <span className="flex-1">{children}</span>
                   </li>
                 ),
                 code: ({ children }) => (
-                  <code className="rounded border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 text-[13px] text-[#94fcff]/80">
+                  <code className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[13px] text-[#94fcff]/80">
                     {children}
                   </code>
                 ),
