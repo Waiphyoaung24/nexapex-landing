@@ -450,3 +450,80 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(148, 252, 255, 0.12);
 }
+
+/* ── Cursor-tracked cyan edge-glow ──
+ * Cyan-only adaptation of the BorderGlow primitive. Single light source,
+ * no rainbow mesh. Used by `BorderGlow.tsx` on the demo hub cards.
+ * Variables --edge-proximity (0–100) and --cursor-angle are written from JS.
+ */
+.nex-glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sensitivity: 35;
+  --glow-intensity: 1;
+  --glow-radius: 36px;
+  --cone-spread: 30;
+  --border-radius: 16px;
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  border-radius: var(--border-radius);
+  transform: translate3d(0, 0, 0.01px);
+}
+
+.nex-glow-card > .nex-edge-light {
+  content: "";
+  position: absolute;
+  inset: calc(var(--glow-radius) * -1);
+  border-radius: calc(var(--border-radius) + var(--glow-radius));
+  pointer-events: none;
+  z-index: -1;
+  opacity: calc(
+    (var(--edge-proximity) - var(--edge-sensitivity)) /
+    (100 - var(--edge-sensitivity)) * var(--glow-intensity)
+  );
+  mix-blend-mode: plus-lighter;
+  -webkit-mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black 2.5%, transparent 12%, transparent 88%, black 97.5%
+    );
+  mask-image:
+    conic-gradient(
+      from var(--cursor-angle) at center,
+      black 2.5%, transparent 12%, transparent 88%, black 97.5%
+    );
+  transition: opacity 0.4s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.nex-glow-card > .nex-edge-light::before {
+  content: "";
+  position: absolute;
+  inset: var(--glow-radius);
+  border-radius: var(--border-radius);
+  box-shadow:
+    inset 0 0 0 1px rgba(148, 252, 255, 1),
+    inset 0 0 2px 0 rgba(148, 252, 255, 0.6),
+    inset 0 0 6px 0 rgba(148, 252, 255, 0.45),
+    inset 0 0 14px 0 rgba(148, 252, 255, 0.28),
+    inset 0 0 28px 2px rgba(148, 252, 255, 0.16),
+    0 0 2px 0 rgba(148, 252, 255, 0.6),
+    0 0 6px 0 rgba(148, 252, 255, 0.45),
+    0 0 14px 0 rgba(148, 252, 255, 0.28),
+    0 0 28px 2px rgba(148, 252, 255, 0.16),
+    0 0 56px 4px rgba(148, 252, 255, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nex-glow-card > .nex-edge-light {
+    opacity: 0;
+    transition: none;
+  }
+  .nex-glow-card:hover > .nex-edge-light,
+  .nex-glow-card:focus-within > .nex-edge-light {
+    opacity: calc(0.6 * var(--glow-intensity));
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
