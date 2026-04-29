@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { apiGet } from "@/lib/api";
+import { getAdminToken, clearAdminToken } from "@/lib/admin-auth";
 import { PendingScreen } from "./PendingScreen";
 
 interface MeResponse {
@@ -14,7 +15,7 @@ interface MeResponse {
 }
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { token, isAuthenticated, hydrated } = useAuth();
+  const { token: leadToken, hydrated, logout } = useAuth();
   const router = useRouter();
   const [status, setStatus] = useState<"loading" | "approved" | "pending">(
     "loading",
@@ -23,19 +24,24 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
 
-    if (!isAuthenticated) {
+    const adminToken = getAdminToken();
+    const activeToken = adminToken ?? leadToken;
+
+    if (!activeToken) {
       router.replace("/auth");
       return;
     }
 
-    apiGet<MeResponse>("/auth/me", token!)
+    apiGet<MeResponse>("/auth/me", activeToken)
       .then((me) => {
         setStatus(me.is_approved ? "approved" : "pending");
       })
       .catch(() => {
+        if (adminToken) clearAdminToken();
+        if (leadToken) logout();
         router.replace("/auth");
       });
-  }, [hydrated, isAuthenticated, token, router]);
+  }, [hydrated, leadToken, router, logout]);
 
   if (status === "loading") {
     return (
