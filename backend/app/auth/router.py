@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth.jwt import create_access_token, hash_token
 from app.auth.schemas import MeResponse, SignupRequest, SignupResponse
 from app.db.database import get_db
-from app.db.models import Lead
+from app.db.models import AdminUser, Lead
 from app.dependencies import get_current_lead
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -49,12 +49,21 @@ async def signup(req: SignupRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/me", response_model=MeResponse)
-async def get_me(lead: Lead = Depends(get_current_lead)):
+async def get_me(user: Lead | AdminUser = Depends(get_current_lead)):
+    if isinstance(user, AdminUser):
+        return MeResponse(
+            id=str(user.id),
+            email=user.email,
+            name="Admin",
+            company=None,
+            industry=None,
+            is_approved=True,
+        )
     return MeResponse(
-        id=str(lead.id),
-        email=lead.email,
-        name=lead.name,
-        company=lead.company,
-        industry=lead.industry.value if lead.industry else None,
-        is_approved=lead.is_approved,
+        id=str(user.id),
+        email=user.email,
+        name=user.name,
+        company=user.company,
+        industry=user.industry.value if user.industry else None,
+        is_approved=user.is_approved,
     )
