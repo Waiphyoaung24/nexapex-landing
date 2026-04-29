@@ -24,6 +24,7 @@ async def get_optional_lead(
     credentials: HTTPAuthorizationCredentials | None = Depends(optional_bearer),
     db: AsyncSession = Depends(get_db),
 ) -> Lead | None:
+    """Resolve token to a Lead. Admin tokens skip the lead lookup."""
     if credentials is None:
         return None
     from app.auth.jwt import verify_access_token
@@ -31,6 +32,10 @@ async def get_optional_lead(
     payload = verify_access_token(credentials.credentials)
     if not payload:
         return None
+
+    if payload.get("type") == "admin":
+        return None
+
     result = await db.execute(select(Lead).where(Lead.id == payload["sub"]))
     return result.scalar_one_or_none()
 

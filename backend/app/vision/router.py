@@ -24,6 +24,12 @@ async def get_optional_lead(
     credentials: HTTPAuthorizationCredentials | None = Depends(optional_bearer),
     db: AsyncSession = Depends(get_db),
 ) -> Lead | None:
+    """Resolve token to a Lead. Returns None for missing/invalid tokens.
+
+    Admin tokens are accepted: we return None so the endpoint skips
+    lead-only checks (limits, counters), which is the correct behavior
+    for admins.
+    """
     if credentials is None:
         return None
     from app.auth.jwt import verify_access_token
@@ -31,6 +37,10 @@ async def get_optional_lead(
     payload = verify_access_token(credentials.credentials)
     if not payload:
         return None
+
+    if payload.get("type") == "admin":
+        return None
+
     from sqlalchemy import select
 
     result = await db.execute(select(Lead).where(Lead.id == payload["sub"]))
