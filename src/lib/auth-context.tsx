@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { clearAdminToken } from "@/lib/admin-auth";
 
 interface AuthState {
   token: string | null;
@@ -52,6 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     setAuth({ token: null, email: null, name: null });
     localStorage.removeItem("nexapex_auth");
+    clearAdminToken();
   }, []);
 
   return (
