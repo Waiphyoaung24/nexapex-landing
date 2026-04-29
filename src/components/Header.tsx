@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -16,6 +16,8 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import { getAdminToken, clearAdminToken } from "@/lib/admin-auth";
+import { useAuth } from "@/lib/auth-context";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -39,8 +41,28 @@ const SOCIALS = [
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout, hydrated } = useAuth();
   const isLanding = pathname === "/";
+
+  useEffect(() => {
+    if (!hydrated) return;
+    setIsAdmin(getAdminToken() !== null);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "nexapex_admin") setIsAdmin(getAdminToken() !== null);
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [hydrated]);
+
+  const handleSignOut = useCallback(() => {
+    clearAdminToken();
+    logout();
+    setIsAdmin(false);
+    router.replace("/auth");
+  }, [logout, router]);
 
   const scrollTo = useCallback((targetId: string) => {
     const target = document.getElementById(targetId);
@@ -168,6 +190,27 @@ export function Header() {
           <span>TRY OUR DEMOS</span>
           <span className="block h-1 w-1 rounded-full bg-[#94fcff]" />
         </Link>
+
+        {/* -- Admin Sign Out (visible only when admin token present) -- */}
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={handleSignOut}
+            aria-label="Sign out of admin session"
+            className={cn(
+              "flex items-center gap-2",
+              "rounded-full bg-[#1a2630]/80 px-4 py-3 md:px-6 cursor-pointer",
+              "border border-[#94fcff]/20",
+              "font-mono text-[12px] font-medium uppercase tracking-[1px] text-[#94fcff]",
+              "transition-all duration-300 hover:bg-[#253a49] hover:border-[#94fcff]/40 active:scale-[0.97]",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
+            )}
+            style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+          >
+            <LogOut size={12} />
+            <span className="hidden md:inline">Sign Out</span>
+          </button>
+        )}
 
         {/* -- MENU Sheet -- */}
         <Sheet>
