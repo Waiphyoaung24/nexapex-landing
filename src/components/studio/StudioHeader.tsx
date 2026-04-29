@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowUpRight, Shield, LogOut } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
+import { getAdminToken, clearAdminToken } from "@/lib/admin-auth";
+import { useAuth } from "@/lib/auth-context";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -13,20 +16,38 @@ if (typeof window !== "undefined") {
 
 export function StudioHeader() {
   const headerRef = useRef<HTMLElement>(null);
+  const router = useRouter();
+  const { logout, hydrated } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  useGSAP(() => {
-    const header = headerRef.current;
-    if (!header) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  useEffect(() => {
+    if (!hydrated) return;
+    setIsAdmin(getAdminToken() !== null);
+  }, [hydrated]);
 
-    gsap.set(header, { y: -20, autoAlpha: 0 });
-    gsap.to(header, {
-      y: 0,
-      autoAlpha: 1,
-      duration: 0.6,
-      ease: "power3.out",
-    });
-  }, { scope: headerRef });
+  useGSAP(
+    () => {
+      const header = headerRef.current;
+      if (!header) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      gsap.set(header, { y: -20, autoAlpha: 0 });
+      gsap.to(header, {
+        y: 0,
+        autoAlpha: 1,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+    },
+    { scope: headerRef },
+  );
+
+  function handleSignOut() {
+    clearAdminToken();
+    logout();
+    setIsAdmin(false);
+    router.push("/auth");
+  }
 
   return (
     <header
@@ -34,7 +55,7 @@ export function StudioHeader() {
       className={cn(
         "sticky top-0 z-50 glass-header",
         "px-4 py-4 md:px-[60px]",
-        "flex items-center justify-between"
+        "flex items-center justify-between",
       )}
     >
       <Link href="/" className="flex items-center gap-2 group">
@@ -59,21 +80,44 @@ export function StudioHeader() {
         >
           Demos
         </Link>
-        <a
-          href="mailto:support@nexapex.ai"
-          className={cn(
-            "flex items-center gap-2",
-            "rounded-full bg-[#94fcff] px-5 py-2.5",
-            "text-[11px] font-mono font-medium uppercase tracking-[1px] text-[#0e1418]",
-            "transition-all duration-300 hover:bg-[#b0fdff] hover:shadow-[0_0_20px_rgba(148,252,255,0.2)]",
-            "active:scale-[0.97]",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
-          )}
-          style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
-        >
-          Book a Call
-          <ArrowUpRight size={12} />
-        </a>
+
+        {isAdmin && (
+          <>
+            <Link
+              href="/admin/leads"
+              className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-[2px] text-[#94fcff] hover:text-[#b0fdff] transition-colors"
+            >
+              <Shield size={12} />
+              Admin
+            </Link>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-[2px] text-white/60 hover:text-white transition-colors"
+            >
+              <LogOut size={12} />
+              Sign out
+            </button>
+          </>
+        )}
+
+        {!isAdmin && (
+          <a
+            href="mailto:support@nexapex.ai"
+            className={cn(
+              "flex items-center gap-2",
+              "rounded-full bg-[#94fcff] px-5 py-2.5",
+              "text-[11px] font-mono font-medium uppercase tracking-[1px] text-[#0e1418]",
+              "transition-all duration-300 hover:bg-[#b0fdff] hover:shadow-[0_0_20px_rgba(148,252,255,0.2)]",
+              "active:scale-[0.97]",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]",
+            )}
+            style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+          >
+            Book a Call
+            <ArrowUpRight size={12} />
+          </a>
+        )}
       </div>
     </header>
   );
