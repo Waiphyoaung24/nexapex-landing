@@ -73,9 +73,9 @@ export function Header() {
       return;
     }
 
-    // PageSlideSection uses ScrollTrigger pin + clip-path reveal.
-    // Jump native scroll to pin END (clip fully open), then
-    // refresh all triggers so text animations also fire.
+    // Defensive: if any pinned ScrollTrigger still targets this element
+    // (e.g. from another scene), jump to its END so we land past the pin.
+    // Otherwise just smooth-scroll to the section.
     const pinTrigger = ScrollTrigger.getAll().find(
       (st) => st.trigger === target && st.pin
     );
