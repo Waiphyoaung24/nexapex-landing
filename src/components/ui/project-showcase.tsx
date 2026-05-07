@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
 import { ArrowUpRight } from "lucide-react"
+import { useEditorialReveal } from "@/lib/editorial-reveal"
 
 interface Project {
   title: string
@@ -67,6 +68,10 @@ export function ProjectShowcase() {
     }
   }, [mousePosition])
 
+  useEditorialReveal(containerRef as React.RefObject<HTMLElement | null>, {
+    hasIndex: true,
+  })
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
@@ -91,14 +96,14 @@ export function ProjectShowcase() {
     <section ref={containerRef} onMouseMove={handleMouseMove} className="relative w-full max-w-4xl mx-auto px-5 py-16 md:px-[60px] md:py-24">
       <div className="mb-10 md:mb-14 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-[3px] text-[#94fcff]/60 mb-2">
-            Portfolio
+          <p className="editorial-index text-[11px] font-medium uppercase tracking-[3px] text-[#94fcff]/60 mb-2" aria-hidden="true">
+            03 / SELECTED WORK
           </p>
-          <h2 className="text-2xl md:text-[40px] font-normal uppercase tracking-[2px] text-[#f0f1ef] font-[family-name:var(--font-display)] leading-tight">
+          <h2 className="editorial-heading text-2xl md:text-[40px] font-normal uppercase tracking-[2px] text-[#f0f1ef] font-[family-name:var(--font-display)] leading-tight">
             Selected Work
           </h2>
         </div>
-        <p className="max-w-[280px] text-[11px] font-medium uppercase tracking-[1px] text-[#f0f1ef]/55 md:text-right">
+        <p className="editorial-body max-w-[280px] text-[11px] font-medium uppercase tracking-[1px] text-[#f0f1ef]/55 md:text-right">
           AI products built in-house, deployed for businesses across Southeast Asia.
         </p>
       </div>
@@ -143,7 +148,7 @@ export function ProjectShowcase() {
           <a
             key={project.title}
             href={project.link}
-            className="group block cursor-pointer"
+            className="editorial-item group block cursor-pointer"
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
