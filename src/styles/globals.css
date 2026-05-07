@@ -139,6 +139,19 @@
   }
 }
 
+/* Brand cursor — hide native pointer when custom cursor is active.
+ * Re-enables native cursor for text inputs (caret needs visibility) and
+ * when prefers-reduced-motion / pointer:coarse force the follower off. */
+body.brand-cursor-active,
+body.brand-cursor-active * {
+  cursor: none !important;
+}
+body.brand-cursor-active input,
+body.brand-cursor-active textarea,
+body.brand-cursor-active [contenteditable="true"] {
+  cursor: text !important;
+}
+
 /* ScrollSmoother wrapper */
 #smooth-wrapper {
   overflow: hidden;
