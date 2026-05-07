@@ -8,7 +8,6 @@ import { HeroSection } from "@/components/HeroSection";
 import { PageSlideSection } from "@/components/PageSlideSection";
 import { Preloader } from "@/components/Preloader";
 import { ScrollPauseIndicator } from "@/components/ScrollPauseIndicator";
-import { BallClumpSection } from "@/components/BallClump";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
 
 export default function Home() {
@@ -20,7 +19,6 @@ export default function Home() {
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <HeroSection />
-          <BallClumpSection />
 
           {/* Clip 1: Who We Are */}
           <PageSlideSection id="brand-section" zIndex={10} scrollLength="+=30%">
