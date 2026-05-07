@@ -4,6 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEditorialReveal } from "@/lib/editorial-reveal";
 import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
@@ -52,7 +53,7 @@ const capabilities: Capability[] = [
   },
   {
     title: "Delivery",
-    icon: "\u2192",
+    icon: "→",
     skills: [
       "End-to-End Development",
       "Mobile & Web Deployment",
@@ -63,7 +64,7 @@ const capabilities: Capability[] = [
   },
 ];
 
-const categoryButtons = ["v", "l", "d", "\u2192"];
+const categoryButtons = ["v", "l", "d", "→"];
 
 function CapabilityCard({
   capability,
@@ -75,7 +76,7 @@ function CapabilityCard({
   return (
     <div
       className={cn(
-        "capability-card bg-white text-[#0e1418] rounded-xl p-3 sm:p-4 lg:p-5 flex flex-col",
+        "editorial-item capability-card bg-white text-[#0e1418] rounded-xl p-3 sm:p-4 lg:p-5 flex flex-col",
         "transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.15)] hover:-translate-y-1 cursor-pointer",
         className,
       )}
@@ -109,62 +110,23 @@ function CapabilityCard({
 export function CapabilitiesSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
+  useEditorialReveal(sectionRef);
+
+  // Tertiary detail animations: cat-btn scale-in + per-card skill-item slide-in.
+  // Kept inline because they're decorative chrome, not part of the editorial beat.
   useGSAP(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-
     if (reduceMotion) return;
 
-    const heading = section.querySelector(".capabilities-heading");
-    const desc = section.querySelector(".capabilities-desc");
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+
     const cards = section.querySelectorAll<HTMLElement>(".capability-card");
-    const catBtns = section.querySelectorAll(".cat-btn");
-
-    gsap.from(heading, {
-      y: 60,
-      autoAlpha: 0,
-      duration: 0.8,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: heading,
-        start: "top 85%",
-        toggleActions: "play none none reverse",
-      },
-    });
-
-    gsap.from(desc, {
-      y: 40,
-      autoAlpha: 0,
-      duration: 0.7,
-      delay: 0.2,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: heading,
-        start: "top 85%",
-        toggleActions: "play none none reverse",
-      },
-    });
-
-    cards.forEach((card, i) => {
-      gsap.from(card, {
-        y: isDesktop ? 80 : 50,
-        autoAlpha: 0,
-        scale: isDesktop ? 0.96 : 1,
-        duration: 0.9,
-        delay: isDesktop ? i * 0.12 : 0,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: card,
-          start: isDesktop ? "top 85%" : "top 90%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
+    cards.forEach((card) => {
       const skillItems = card.querySelectorAll(".skill-item");
       gsap.from(skillItems, {
         x: -15,
@@ -180,6 +142,7 @@ export function CapabilitiesSection({ id }: { id?: string } = {}) {
       });
     });
 
+    const catBtns = section.querySelectorAll(".cat-btn");
     gsap.from(catBtns, {
       scale: 0,
       autoAlpha: 0,
@@ -187,7 +150,7 @@ export function CapabilitiesSection({ id }: { id?: string } = {}) {
       stagger: 0.08,
       ease: "back.out(1.7)",
       scrollTrigger: {
-        trigger: heading,
+        trigger: section.querySelector(".capabilities-heading"),
         start: "top 80%",
         toggleActions: "play none none reverse",
       },
@@ -202,22 +165,30 @@ export function CapabilitiesSection({ id }: { id?: string } = {}) {
     >
       {/* Top area: heading left, description+buttons right */}
       <div className="flex flex-col gap-2 mb-4 sm:mb-5 md:flex-row md:justify-between md:items-end md:mb-8">
-        <h2
-          className="capabilities-heading text-[clamp(1.8rem,7vw,90px)] font-normal uppercase leading-[0.9] font-[family-name:var(--font-display)]"
-          style={{
-            background:
-              "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          WHAT WE
-          <br />
-          <span className="ml-[0.3em] md:ml-[0.5em]">DO</span>
-        </h2>
+        <div>
+          <p
+            className="editorial-index text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50 mb-3"
+            aria-hidden="true"
+          >
+            04 / WHAT WE DO
+          </p>
+          <h2
+            className="editorial-heading capabilities-heading text-[clamp(1.8rem,7vw,90px)] font-normal uppercase leading-[0.9] font-[family-name:var(--font-display)]"
+            style={{
+              background:
+                "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            WHAT WE
+            <br />
+            <span className="ml-[0.3em] md:ml-[0.5em]">DO</span>
+          </h2>
+        </div>
         <div className="capabilities-desc max-w-[280px]">
-          <p className="text-[10px] sm:text-[11px] font-medium uppercase tracking-[1px] text-white/70 leading-relaxed">
+          <p className="editorial-body text-[10px] sm:text-[11px] font-medium uppercase tracking-[1px] text-white/70 leading-relaxed">
             AI SOLUTIONS THAT SHIP &mdash; FROM PROTOTYPE TO PRODUCTION,
             BUILT FOR REAL BUSINESSES.
           </p>
