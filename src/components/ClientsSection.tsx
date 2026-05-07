@@ -1,13 +1,7 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useEditorialReveal } from "@/lib/editorial-reveal";
 
 const row1 = [
   { src: "/images/logos/logo--python.svg", alt: "Python" },
@@ -63,51 +57,44 @@ function MarqueeRow({ logos, direction, duration }: {
 export function ClientsSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
-  useGSAP(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const heading = section.querySelector(".clients-heading");
-    if (heading) {
-      gsap.from(heading, {
-        y: 40, autoAlpha: 0, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: heading, start: "top 85%", toggleActions: "play none none reverse" },
-      });
-    }
-
-    const desc = section.querySelector(".clients-desc");
-    if (desc) {
-      gsap.from(desc, {
-        y: 30, autoAlpha: 0, duration: 0.6, delay: 0.15, ease: "power2.out",
-        scrollTrigger: { trigger: heading, start: "top 85%", toggleActions: "play none none reverse" },
-      });
-    }
-  }, { scope: sectionRef });
+  useEditorialReveal(sectionRef);
 
   return (
-    <section id={id} ref={sectionRef} className="bg-[#0e1418] min-h-screen flex flex-col justify-center overflow-hidden py-10 md:py-0">
+    <section
+      id={id}
+      ref={sectionRef}
+      className="bg-[#0e1418] min-h-screen flex flex-col justify-center overflow-hidden py-10 md:py-0"
+    >
       {/* Header row */}
       <div className="mb-8 md:mb-12 flex flex-col gap-3 px-5 md:flex-row md:items-start md:justify-between md:px-[60px]">
-        <h2
-          className="clients-heading font-normal uppercase tracking-[2px] font-[family-name:var(--font-display)]"
-          style={{
-            fontSize: "clamp(1.25rem, 3vw, 2.5rem)",
-            background: "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}
-        >
-          Technologies We Work With
-        </h2>
-        <p className="clients-desc max-w-[280px] text-[10px] font-medium uppercase tracking-[1.5px] text-white/55 md:text-right leading-[1.6] md:leading-[1.8]">
+        <div>
+          <p
+            className="editorial-index text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50 mb-3"
+            aria-hidden="true"
+          >
+            02 / TECHNOLOGIES
+          </p>
+          <h2
+            className="editorial-heading clients-heading font-normal uppercase tracking-[2px] font-[family-name:var(--font-display)]"
+            style={{
+              fontSize: "clamp(1.25rem, 3vw, 2.5rem)",
+              background:
+                "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #a0dfe4 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            Technologies We Work With
+          </h2>
+        </div>
+        <p className="editorial-body clients-desc max-w-[280px] text-[10px] font-medium uppercase tracking-[1.5px] text-white/55 md:text-right leading-[1.6] md:leading-[1.8]">
           Production-grade tools powering our AI solutions across vision, language, and documents.
         </p>
       </div>
 
       {/* Scrolling logo rows — CSS infinite marquee */}
-      <div className="flex flex-col gap-3 md:gap-4">
+      <div className="editorial-item flex flex-col gap-3 md:gap-4">
         <MarqueeRow logos={row1} direction="left" duration={30} />
         <MarqueeRow logos={row2} direction="right" duration={35} />
       </div>
