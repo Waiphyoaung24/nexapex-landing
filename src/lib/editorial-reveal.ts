@@ -84,7 +84,17 @@ export function useEditorialReveal(
       const headingEl = section.querySelector<HTMLElement>(".editorial-heading");
       let split: SplitText | null = null;
       if (headingEl) {
-        if (splitHeading) {
+        // background-clip:text gradients break when SplitText wraps each char in
+        // a span — `background` doesn't inherit, so chars render with no fill.
+        // Detect gradient-text headings and animate the element as a whole.
+        const cs = window.getComputedStyle(headingEl);
+        const hasGradientText =
+          (cs.webkitBackgroundClip === "text" || cs.backgroundClip === "text") &&
+          (cs.webkitTextFillColor === "rgba(0, 0, 0, 0)" ||
+            cs.color === "rgba(0, 0, 0, 0)");
+        const useSplit = splitHeading && !hasGradientText;
+
+        if (useSplit) {
           split = SplitText.create(headingEl, { type: "chars" });
           gsap.from(split.chars, {
             y: 40,
