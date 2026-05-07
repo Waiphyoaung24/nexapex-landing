@@ -1,6 +1,5 @@
 "use client";
 
-import { initScrollPauses, resetPauseState } from "@/lib/scroll-pause";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -30,11 +29,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
 
     setSmoother(instance);
 
-    // Initialize scroll pause points (Brand, Capabilities, CTA)
-    initScrollPauses(instance);
-
     return () => {
-      resetPauseState();
       instance.kill();
     };
   }, []);

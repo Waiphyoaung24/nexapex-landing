@@ -7,7 +7,6 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PageSlideSection } from "@/components/PageSlideSection";
 import { Preloader } from "@/components/Preloader";
-import { ScrollPauseIndicator } from "@/components/ScrollPauseIndicator";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
     <>
       <Preloader />
       <Header />
-      <ScrollPauseIndicator />
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <HeroSection />

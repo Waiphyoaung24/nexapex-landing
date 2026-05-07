@@ -1,7 +1,6 @@
 "use client";
 
 import { patchThreeWarnings } from "@/lib/patch-three-clock";
-import { checkThreeShowcasePause } from "@/lib/scroll-pause";
 import { useGSAP } from "@gsap/react";
 import { Environment, Html } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
@@ -10,7 +9,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { Suspense, useCallback, useRef, useState } from "react";
 import * as THREE from "three";
-import { useSmoother } from "./SmoothScroll";
 import { SpaceStationModel } from "./SpaceStation";
 patchThreeWarnings();
 
@@ -179,18 +177,13 @@ export function ThreeShowcase() {
   const canvasWrapRef = useRef<HTMLDivElement>(null);
   const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const [activePanel, setActivePanel] = useState(0);
-  const smoother = useSmoother();
 
   const onScrollProgress = useCallback((p: number) => {
     scrollState.progress = p;
     // Panels start at 0.12, spaced by 0.22 (0.12, 0.34, 0.56, 0.78)
     const panelIndex = Math.floor(Math.max(0, p - 0.12) / 0.22);
     setActivePanel(Math.min(panelIndex, 3));
-    // Check if we should pause at panel entry points
-    if (smoother) {
-      checkThreeShowcasePause(smoother, p);
-    }
-  }, [smoother]);
+  }, []);
 
   useGSAP(() => {
     const section = sectionRef.current;
