@@ -28,7 +28,7 @@ const PILLARS = [
   },
 ];
 
-export function BrandSection() {
+export function BrandSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -155,7 +155,7 @@ export function BrandSection() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="relative bg-[#0e1418] overflow-hidden">
+    <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-hidden">
 
       {/* ── Section Headline — centered, same style as ThreeShowcase ── */}
       <div className="section-headline flex flex-col items-center justify-center py-8 md:py-20 pointer-events-none">

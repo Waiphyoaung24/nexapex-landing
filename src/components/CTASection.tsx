@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
 }
 
 /* ── CTA Section ── */
-export function CTASection() {
+export function CTASection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -62,6 +62,7 @@ export function CTASection() {
 
   return (
     <section
+      id={id}
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0e1418] text-white"
     >

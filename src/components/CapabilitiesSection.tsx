@@ -106,7 +106,7 @@ function CapabilityCard({
   );
 }
 
-export function CapabilitiesSection() {
+export function CapabilitiesSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(() => {
@@ -196,6 +196,7 @@ export function CapabilitiesSection() {
 
   return (
     <section
+      id={id}
       ref={sectionRef}
       className="relative bg-[#0e1418] text-white min-h-[100dvh] flex flex-col justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-10 lg:px-[60px]"
     >
