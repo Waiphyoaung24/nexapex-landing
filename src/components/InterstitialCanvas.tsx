@@ -10,9 +10,7 @@ if (typeof window !== "undefined") {
 }
 
 const VIDEO_SRC =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4";
-
-const FADE_DURATION = 0.5;
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260411_104032_69319010-2458-492b-b04d-b40a5dfa4482.mp4";
 
 export function InterstitialCanvas({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,41 +34,10 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         { opacity: 0, y: 40 },
       );
       gsap.set(videoWrapRef.current, { opacity: 0, scale: 1.06 });
+      video.style.opacity = "1";
       video.pause();
       video.currentTime = 0;
       video.removeAttribute("autoplay");
-
-      // rAF-driven custom fade loop (only ticks while playing)
-      let raf = 0;
-      let ticking = false;
-      const tick = () => {
-        const { currentTime, duration, paused } = video;
-        if (!paused && duration > 0 && Number.isFinite(duration)) {
-          const fadeIn = Math.min(currentTime / FADE_DURATION, 1);
-          const remaining = duration - currentTime;
-          const fadeOut = Math.min(remaining / FADE_DURATION, 1);
-          video.style.opacity = String(Math.max(0, Math.min(fadeIn, fadeOut)));
-        }
-        raf = requestAnimationFrame(tick);
-      };
-      const startTicking = () => {
-        if (ticking) return;
-        ticking = true;
-        raf = requestAnimationFrame(tick);
-      };
-      const stopTicking = () => {
-        ticking = false;
-        cancelAnimationFrame(raf);
-      };
-
-      const handleEnded = () => {
-        video.style.opacity = "0";
-        window.setTimeout(() => {
-          video.currentTime = 0;
-          void video.play().catch(() => {});
-        }, 100);
-      };
-      video.addEventListener("ended", handleEnded);
 
       // Entrance timeline — triggered when section enters viewport
       const tl = gsap.timeline({
@@ -83,10 +50,8 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
           onToggle: ({ isActive }) => {
             if (isActive && !reduced) {
               void video.play().catch(() => {});
-              startTicking();
             } else {
               video.pause();
-              stopTicking();
             }
           },
         },
@@ -97,10 +62,6 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         .to(headlineRef.current, { opacity: 1, y: 0, duration: 1.1, ease: "power4.out" }, 0.25)
         .to(descRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.55);
 
-      return () => {
-        stopTicking();
-        video.removeEventListener("ended", handleEnded);
-      };
     },
     { scope: sectionRef },
   );
@@ -110,52 +71,58 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       ref={sectionRef}
       id={id}
       className="relative w-full overflow-hidden bg-[#0e1418]"
-      style={{ minHeight: "100vh", marginBottom: "-1px" }}
+      style={{ minHeight: "115vh", marginBottom: "-1px" }}
       aria-label="Interlude"
     >
       <div
         ref={videoWrapRef}
-        className="absolute inset-x-0 bottom-0 z-0 top-[180px] md:top-[260px]"
+        className="absolute inset-x-0 z-0 top-[38%] bottom-0 md:top-[42%] md:bottom-24"
         aria-hidden
         style={{
           willChange: "transform, opacity",
           WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%)",
+            "linear-gradient(to bottom, transparent 0, #000 50px, #000 100%)",
           maskImage:
-            "linear-gradient(to bottom, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%)",
+            "linear-gradient(to bottom, transparent 0, #000 50px, #000 100%)",
         }}
       >
         <video
           ref={videoRef}
           src={VIDEO_SRC}
           muted
+          loop
           playsInline
           preload="metadata"
           className="h-full w-full object-cover"
-          style={{ opacity: 0 }}
+          style={{ objectPosition: "center 25%" }}
         />
       </div>
 
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#0e1418] via-[rgba(14,20,24,0.4)] to-[#0e1418]"
+        className="pointer-events-none absolute inset-0 z-[1]"
         aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 55% at 50% 75%, rgba(148,252,255,0.08) 0%, rgba(148,252,255,0) 70%)",
+          mixBlendMode: "screen",
+        }}
       />
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(14,20,24,0.15) 0%, rgba(14,20,24,0.6) 70%, #0e1418 100%)",
+            "linear-gradient(180deg, rgba(26,38,48,0.35) 0%, rgba(26,38,48,0) 60%, rgba(14,20,24,0.4) 100%)",
+          mixBlendMode: "multiply",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         aria-hidden
-        style={{ backgroundColor: "rgba(14,20,24,0.25)" }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-32 bg-gradient-to-b from-transparent to-[#0e1418]"
-        aria-hidden
+        style={{
+          background:
+            "linear-gradient(to bottom, #0e1418 0%, rgba(14,20,24,0.85) 30%, rgba(14,20,24,0) 45%, rgba(14,20,24,0) 100%)",
+        }}
       />
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-[#0e1418] to-transparent"
@@ -163,7 +130,8 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       />
 
       <div
-        className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 py-24 text-center md:py-32"
+        className="relative z-10 mx-auto flex max-w-5xl flex-col items-center justify-start px-6 pt-20 pb-0 text-center md:pt-32"
+        style={{ minHeight: "115vh" }}
       >
         <span
           ref={eyebrowRef}
