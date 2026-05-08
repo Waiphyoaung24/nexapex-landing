@@ -12,19 +12,21 @@ interface ParallaxTile {
   containerSpeed: number;
   col: 1 | 2 | 3;
   row: 1 | 2 | 3;
+  priority?: boolean;
 }
 
 const TILES: ParallaxTile[] = [
   {
-    src: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    src: "/images/peak/peak-1.webp",
     alt: "AI neural network representation",
     caption: "01 · Intelligence",
     containerSpeed: 1,
     col: 1,
     row: 1,
+    priority: true,
   },
   {
-    src: "https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    src: "/images/peak/peak-2.webp",
     alt: "Future robotics and engineering",
     caption: "02 · Automation",
     containerSpeed: 1.4,
@@ -32,7 +34,7 @@ const TILES: ParallaxTile[] = [
     row: 2,
   },
   {
-    src: "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    src: "/images/peak/peak-3.webp",
     alt: "Cloud infrastructure and data centers",
     caption: "03 · Infrastructure",
     containerSpeed: 1.2,
@@ -101,6 +103,8 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
                   color: "transparent",
                   letterSpacing: "0.01em",
                   WebkitTextStroke: "1px rgba(148, 252, 255, 0.35)",
+                  willChange: "transform",
+                  transform: "translateZ(0)",
                 }}
               >
                 Peak
@@ -128,13 +132,19 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
               className={`${COL_START_CLASSES[tile.col]} ${
                 ROW_START_CLASSES[tile.row]
               } relative aspect-square overflow-hidden rounded-md md:rounded-lg border border-white/[0.06]`}
+              style={{ willChange: "transform", transform: "translateZ(0)" }}
             >
               <img
                 data-speed="auto"
                 src={tile.src}
                 alt={tile.alt}
+                width={1200}
+                height={805}
+                decoding="async"
+                fetchPriority={tile.priority ? "high" : "low"}
+                loading={tile.priority ? "eager" : "lazy"}
                 className="absolute inset-0 w-full h-[140%] object-cover opacity-60 md:opacity-70"
-                loading="lazy"
+                style={{ willChange: "transform", transform: "translateZ(0)" }}
               />
               {/* dark gradient — keeps cyan type readable when it overlaps */}
               <div className="absolute inset-0 bg-gradient-to-b from-[#0e1418]/40 via-transparent to-[#0e1418]/65" />

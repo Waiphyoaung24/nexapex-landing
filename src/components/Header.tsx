@@ -40,7 +40,7 @@ const SOCIALS = [
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
-  const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -94,15 +94,25 @@ export function Header() {
     });
   }, []);
 
-  // Detect scroll position for glassmorphism activation
+  // Scroll-driven visibility: visible at top, hide on scroll-down, reveal on scroll-up.
   useEffect(() => {
     let ticking = false;
+    let lastY = window.scrollY;
+    const TOP_THRESHOLD = 80; // always visible while above this
+    const DELTA = 6;          // ignore micro-jitters
 
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 60);
+        const y = window.scrollY;
+
+        if (y < TOP_THRESHOLD) {
+          setVisible(true);
+        } else if (Math.abs(y - lastY) > DELTA) {
+          setVisible(y < lastY); // scrolling up → show; down → hide
+        }
+        lastY = y;
         ticking = false;
       });
     };
@@ -118,14 +128,15 @@ export function Header() {
         "fixed top-0 left-0 right-0 z-50",
         "px-4 py-4 md:px-[60px] md:py-6",
         "flex items-center justify-between",
-        "transition-all duration-500",
-        scrolled
-          ? "glass-header py-3 md:py-4"
-          : "bg-transparent"
+        "transition-[transform,opacity] duration-500 will-change-transform bg-transparent",
+        visible
+          ? "translate-y-0 opacity-100 pointer-events-auto"
+          : "-translate-y-full opacity-0 pointer-events-none"
       )}
       style={{
         transitionTimingFunction: "var(--ease-out-expo)",
       }}
+      aria-hidden={!visible}
     >
       {/* Logo — scroll to top on landing, navigate to / elsewhere */}
       <Link
