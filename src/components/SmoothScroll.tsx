@@ -25,7 +25,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       speed: 0.6,
       effects: true,
       normalizeScroll: true,
-      smoothTouch: 0.1,
+      smoothTouch: 0.3,
     });
 
     setSmoother(instance);
