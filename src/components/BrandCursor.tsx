@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 const RING_SIZE = 28;
@@ -10,12 +10,16 @@ const HOVER_SCALE = 1.7;
 export function BrandCursor() {
   const ringRef = useRef<HTMLDivElement | null>(null);
   const dotRef = useRef<HTMLDivElement | null>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
-    if (reduceMotion || !fine) return;
+    const hover = window.matchMedia("(hover: hover)").matches;
+    const desktopViewport = window.matchMedia("(min-width: 768px)").matches;
+    if (reduceMotion || !fine || !hover || !desktopViewport) return;
+    setEnabled(true);
 
     const ring = ringRef.current;
     const dot = dotRef.current;
@@ -97,6 +101,8 @@ export function BrandCursor() {
       document.removeEventListener("mouseenter", onEnter);
     };
   }, []);
+
+  if (!enabled) return null;
 
   return (
     <>
