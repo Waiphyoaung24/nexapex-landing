@@ -20,7 +20,6 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
   const eyebrowRef = useRef<HTMLSpanElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -33,7 +32,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
 
       // Initial state — content hidden, video paused
       gsap.set(
-        [eyebrowRef.current, headlineRef.current, descRef.current, ctaRef.current],
+        [eyebrowRef.current, headlineRef.current, descRef.current],
         { opacity: 0, y: 40 },
       );
       gsap.set(videoWrapRef.current, { opacity: 0, scale: 1.06 });
@@ -96,8 +95,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       tl.to(videoWrapRef.current, { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" }, 0)
         .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.15)
         .to(headlineRef.current, { opacity: 1, y: 0, duration: 1.1, ease: "power4.out" }, 0.25)
-        .to(descRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.55)
-        .to(ctaRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.75);
+        .to(descRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.55);
 
       return () => {
         stopTicking();
@@ -112,14 +110,20 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       ref={sectionRef}
       id={id}
       className="relative w-full overflow-hidden bg-[#0e1418]"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "100vh", marginBottom: "-1px" }}
       aria-label="Interlude"
     >
       <div
         ref={videoWrapRef}
-        className="absolute inset-x-0 bottom-0 z-0 top-[140px] md:top-[300px]"
+        className="absolute inset-x-0 bottom-0 z-0 top-[180px] md:top-[260px]"
         aria-hidden
-        style={{ willChange: "transform, opacity" }}
+        style={{
+          willChange: "transform, opacity",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%)",
+        }}
       >
         <video
           ref={videoRef}
@@ -133,7 +137,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       </div>
 
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#0e1418] via-[rgba(14,20,24,0.55)] to-[#0e1418]"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#0e1418] via-[rgba(14,20,24,0.4)] to-[#0e1418]"
         aria-hidden
       />
       <div
@@ -141,13 +145,21 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(14,20,24,0.25) 0%, rgba(14,20,24,0.7) 60%, #0e1418 100%)",
+            "radial-gradient(ellipse at center, rgba(14,20,24,0.15) 0%, rgba(14,20,24,0.6) 70%, #0e1418 100%)",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         aria-hidden
-        style={{ backgroundColor: "rgba(14,20,24,0.4)" }}
+        style={{ backgroundColor: "rgba(14,20,24,0.25)" }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-32 bg-gradient-to-b from-transparent to-[#0e1418]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-[#0e1418] to-transparent"
+        aria-hidden
       />
 
       <div
@@ -158,7 +170,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
           className="mb-5 text-[11px] uppercase tracking-[0.4em] md:mb-8"
           style={{ color: "#94fcff" }}
         >
-          Interlude
+          What&apos;s next
         </span>
 
         <h2
@@ -172,13 +184,13 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
             maxWidth: "72rem",
           }}
         >
-          Beyond{" "}
+          Build the version{" "}
           <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "#94fcff", fontWeight: 400 }}>
-            the noise,
+            they don&apos;t
           </span>{" "}
-          we engineer{" "}
+          see{" "}
           <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "#94fcff", fontWeight: 400 }}>
-            the inevitable.
+            coming.
           </span>
         </h2>
 
@@ -187,18 +199,10 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
           className="mt-6 max-w-md text-[15px] leading-relaxed md:mt-10 md:max-w-2xl md:text-lg"
           style={{ color: "#c8ccc6" }}
         >
-          NexApex partners with operators and engineers to turn ambiguous problems into
-          measurable systems — AI products built with conviction, shipped with proof.
+          Below — the proof. Operators and engineers turning ambiguous bets into shipped
+          systems, with the receipts to match. Keep going.
         </p>
 
-        <a
-          ref={ctaRef}
-          href="#contact"
-          className="mt-10 inline-flex items-center justify-center rounded-full px-9 py-4 text-sm font-medium transition-transform duration-300 hover:scale-[1.03] md:mt-12 md:px-14 md:py-5 md:text-base"
-          style={{ backgroundColor: "#94fcff", color: "#0e1418" }}
-        >
-          Start the Build
-        </a>
       </div>
     </section>
   );

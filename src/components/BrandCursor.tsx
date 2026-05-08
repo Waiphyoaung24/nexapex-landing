@@ -20,6 +20,10 @@ export function BrandCursor() {
     const desktopViewport = window.matchMedia("(min-width: 768px)").matches;
     if (reduceMotion || !fine || !hover || !desktopViewport) return;
     setEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
 
     const ring = ringRef.current;
     const dot = dotRef.current;
@@ -100,7 +104,7 @@ export function BrandCursor() {
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
     };
-  }, []);
+  }, [enabled]);
 
   if (!enabled) return null;
 
