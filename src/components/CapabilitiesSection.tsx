@@ -170,7 +170,7 @@ export function CapabilitiesSection({ id }: { id?: string } = {}) {
             className="editorial-index text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50 mb-3"
             aria-hidden="true"
           >
-            04 / WHAT WE DO
+            05 / WHAT WE DO
           </p>
           <h2
             className="editorial-heading capabilities-heading text-[clamp(1.8rem,7vw,90px)] font-normal uppercase leading-[0.9] font-[family-name:var(--font-display)]"

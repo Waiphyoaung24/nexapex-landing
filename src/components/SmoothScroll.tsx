@@ -21,11 +21,11 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     const instance = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 2,
-      speed: 0.25,
+      smooth: 1.5,
+      speed: 0.6,
       effects: true,
       normalizeScroll: true,
-      smoothTouch: 0.1,
+      smoothTouch: 0,
     });
 
     setSmoother(instance);

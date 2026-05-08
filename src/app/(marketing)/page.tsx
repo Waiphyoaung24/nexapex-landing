@@ -1,6 +1,8 @@
 import { BrandSection } from "@/components/BrandSection";
 import { CapabilitiesSection } from "@/components/CapabilitiesSection";
 import { ClientsSection } from "@/components/ClientsSection";
+import { EditorialHighlightSection } from "@/components/EditorialHighlightSection";
+import { ShipStackSection } from "@/components/ShipStackSection";
 import { CTASection } from "@/components/CTASection";
 import { FooterSection } from "@/components/FooterSection";
 import { Header } from "@/components/Header";
@@ -17,6 +19,8 @@ export default function Home() {
         <div id="smooth-content">
           <HeroSection />
           <BrandSection id="brand-section" />
+          <EditorialHighlightSection id="practice-section" />
+          <ShipStackSection id="delivery-section" />
           <ClientsSection id="clients-section" />
           <div id="project-showcase" className="bg-[#0e1418] min-h-screen flex items-center">
             <ProjectShowcase />

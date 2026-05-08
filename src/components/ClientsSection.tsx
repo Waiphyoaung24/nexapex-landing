@@ -72,7 +72,7 @@ export function ClientsSection({ id }: { id?: string } = {}) {
             className="editorial-index text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50 mb-3"
             aria-hidden="true"
           >
-            02 / TECHNOLOGIES
+            04 / TECHNOLOGIES
           </p>
           <h2
             className="editorial-heading clients-heading font-normal uppercase tracking-[2px] font-[family-name:var(--font-display)]"

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import { useEditorialReveal } from "@/lib/editorial-reveal";
 
@@ -8,16 +9,22 @@ const PILLARS = [
     num: "01",
     title: "Computer Vision",
     body: "From quality control on the factory floor to inventory tracking in retail — our vision systems see what humans miss and work around the clock.",
+    href: "/demos/vision",
+    cta: "Try the vision demo",
   },
   {
     num: "02",
     title: "AI Assistants",
     body: "Custom-trained language models that understand your business, speak your customers’ language, and handle the conversations that slow your team down.",
+    href: "/demos/chat",
+    cta: "Try the assistant demo",
   },
   {
     num: "03",
     title: "Document Intelligence",
     body: "Invoices, receipts, contracts — our extraction pipelines turn stacks of paperwork into structured, searchable data in seconds.",
+    href: "/demos/docs",
+    cta: "Try the docs demo",
   },
 ];
 
@@ -99,9 +106,11 @@ export function BrandSection({ id }: { id?: string } = {}) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px">
           {PILLARS.map((pillar) => (
-            <div
+            <Link
               key={pillar.num}
-              className="editorial-item pillar-card group relative p-4 md:p-10 border-l-0 md:border-l border-[#94fcff]/10 md:first:border-l-0 border-b border-[#94fcff]/10 md:border-b-0 last:border-b-0"
+              href={pillar.href}
+              className="editorial-item pillar-card group relative p-4 md:p-10 border-l-0 md:border-l border-[#94fcff]/10 md:first:border-l-0 border-b border-[#94fcff]/10 md:border-b-0 last:border-b-0 transition-colors duration-500 hover:bg-[#94fcff]/[0.02] focus-visible:outline-none focus-visible:bg-[#94fcff]/[0.04]"
+              aria-label={`${pillar.cta} — ${pillar.title}`}
             >
               {/* Number */}
               <span className="block text-[11px] font-mono text-[#94fcff]/30 tracking-wider mb-2 md:mb-6">
@@ -118,9 +127,29 @@ export function BrandSection({ id }: { id?: string } = {}) {
                 {pillar.body}
               </p>
 
+              {/* CTA — arrow that nudges right on hover */}
+              <span className="mt-4 md:mt-8 inline-flex items-center gap-2 text-[10px] md:text-[11px] font-mono uppercase tracking-[2px] text-[#94fcff]/70 group-hover:text-[#94fcff] transition-colors duration-300">
+                {pillar.cta}
+                <svg
+                  width="22"
+                  height="8"
+                  viewBox="0 0 22 8"
+                  fill="none"
+                  aria-hidden="true"
+                  className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5"
+                >
+                  <path
+                    d="M0 4H21M21 4L17 1M21 4L17 7"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeLinecap="square"
+                  />
+                </svg>
+              </span>
+
               {/* Hover accent line */}
-              <div className="absolute bottom-0 left-6 md:left-10 right-6 md:right-10 h-px bg-[#94fcff]/0 group-hover:bg-[#94fcff]/20 transition-colors duration-500" />
-            </div>
+              <div className="absolute bottom-0 left-6 md:left-10 right-6 md:right-10 h-px bg-[#94fcff]/0 group-hover:bg-[#94fcff]/30 transition-colors duration-500" />
+            </Link>
           ))}
         </div>
       </div>
