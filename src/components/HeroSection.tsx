@@ -133,7 +133,7 @@ export function HeroSection({ className }: { className?: string }) {
       />
 
       {/* Cross markers */}
-      <div className="hero-cross-markers pointer-events-none absolute inset-0 z-[2]">
+      <div className="hero-cross-markers pointer-events-none absolute inset-0 z-[2] hidden md:block">
         {CROSS_POSITIONS.map((x) => (
           <CrossMarker key={x} xPercent={x} />
         ))}
