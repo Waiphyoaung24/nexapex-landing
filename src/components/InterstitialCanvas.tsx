@@ -76,7 +76,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
     >
       <div
         ref={videoWrapRef}
-        className="absolute inset-x-0 z-0 top-[38%] bottom-0 md:top-[42%] md:bottom-24"
+        className="absolute inset-x-0 bottom-0 z-0 top-[45%] md:top-[50%]"
         aria-hidden
         style={{
           willChange: "transform, opacity",
@@ -112,7 +112,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         aria-hidden
         style={{
           background:
-            "linear-gradient(180deg, rgba(26,38,48,0.35) 0%, rgba(26,38,48,0) 60%, rgba(14,20,24,0.4) 100%)",
+            "linear-gradient(180deg, rgba(26,38,48,0.35) 0%, rgba(26,38,48,0) 60%, rgba(26,38,48,0) 100%)",
           mixBlendMode: "multiply",
         }}
       />
