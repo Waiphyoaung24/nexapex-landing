@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { useEditorialReveal } from "@/lib/editorial-reveal";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 const PILLARS = [
   {
@@ -28,10 +35,81 @@ const PILLARS = [
   },
 ];
 
+type Pillar = (typeof PILLARS)[number];
+
+function PillarCard({ pillar }: { pillar: Pillar }) {
+  return (
+    <Link
+      href={pillar.href}
+      className="editorial-item pillar-card group relative block h-full p-6 md:p-12 border border-[#94fcff]/10 transition-colors duration-500 hover:bg-[#94fcff]/[0.03] focus-visible:outline-none focus-visible:bg-[#94fcff]/[0.05]"
+      aria-label={`${pillar.cta} — ${pillar.title}`}
+    >
+      <span className="block text-[11px] font-mono text-[#94fcff]/30 tracking-wider mb-3 md:mb-8">
+        {pillar.num}
+      </span>
+      <h3 className="text-base md:text-2xl font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] mb-2 md:mb-5">
+        {pillar.title}
+      </h3>
+      <p className="text-[12px] md:text-[14px] leading-[1.5] md:leading-[1.75] text-white/55 max-w-[440px]">
+        {pillar.body}
+      </p>
+      <span className="mt-4 md:mt-10 inline-flex items-center gap-2 text-[10px] md:text-[11px] font-mono uppercase tracking-[2px] text-[#94fcff]/70 group-hover:text-[#94fcff] transition-colors duration-300">
+        {pillar.cta}
+        <svg
+          width="22"
+          height="8"
+          viewBox="0 0 22 8"
+          fill="none"
+          aria-hidden="true"
+          className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5"
+        >
+          <path d="M0 4H21M21 4L17 1M21 4L17 7" stroke="currentColor" strokeWidth="1" strokeLinecap="square" />
+        </svg>
+      </span>
+      <div className="absolute bottom-0 left-6 md:left-12 right-6 md:right-12 h-px bg-[#94fcff]/0 group-hover:bg-[#94fcff]/30 transition-colors duration-500" />
+    </Link>
+  );
+}
+
 export function BrandSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
+  const horizontalWrapRef = useRef<HTMLDivElement>(null);
+  const horizontalTrackRef = useRef<HTMLDivElement>(null);
 
   useEditorialReveal(sectionRef);
+
+  useGSAP(
+    () => {
+      const wrap = horizontalWrapRef.current;
+      const track = horizontalTrackRef.current;
+      if (!wrap || !track) return;
+      if (window.matchMedia("(max-width: 767px)").matches) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const getDistance = () =>
+        Math.max(0, track.scrollWidth - window.innerWidth);
+
+      const tween = gsap.to(track, {
+        x: () => -getDistance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrap,
+          start: "top top",
+          end: () => `+=${getDistance()}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    },
+    { scope: sectionRef },
+  );
 
   return (
     <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-visible">
@@ -138,56 +216,115 @@ export function BrandSection({ id }: { id?: string } = {}) {
       </div>
 
       {/* ── 2. Three Pillars ── */}
-      <div className="px-5 md:px-[60px] pb-6 md:pb-16">
-        <div className="brand-divider h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-6 md:mb-12" />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px">
+      {/* Mobile: stacked grid */}
+      <div className="md:hidden px-5 pb-6">
+        <div className="brand-divider h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-6" />
+        <div className="grid grid-cols-1 gap-px">
           {PILLARS.map((pillar) => (
-            <Link
-              key={pillar.num}
-              href={pillar.href}
-              className="editorial-item pillar-card group relative p-4 md:p-10 border-l-0 md:border-l border-[#94fcff]/10 md:first:border-l-0 border-b border-[#94fcff]/10 md:border-b-0 last:border-b-0 transition-colors duration-500 hover:bg-[#94fcff]/[0.02] focus-visible:outline-none focus-visible:bg-[#94fcff]/[0.04]"
-              aria-label={`${pillar.cta} — ${pillar.title}`}
-            >
-              {/* Number */}
-              <span className="block text-[11px] font-mono text-[#94fcff]/30 tracking-wider mb-2 md:mb-6">
-                {pillar.num}
-              </span>
-
-              {/* Title */}
-              <h3 className="text-base md:text-xl font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] mb-2 md:mb-4">
-                {pillar.title}
-              </h3>
-
-              {/* Body */}
-              <p className="text-[12px] md:text-[13px] leading-[1.5] md:leading-[1.7] text-white/55">
-                {pillar.body}
-              </p>
-
-              {/* CTA — arrow that nudges right on hover */}
-              <span className="mt-4 md:mt-8 inline-flex items-center gap-2 text-[10px] md:text-[11px] font-mono uppercase tracking-[2px] text-[#94fcff]/70 group-hover:text-[#94fcff] transition-colors duration-300">
-                {pillar.cta}
-                <svg
-                  width="22"
-                  height="8"
-                  viewBox="0 0 22 8"
-                  fill="none"
-                  aria-hidden="true"
-                  className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5"
-                >
-                  <path
-                    d="M0 4H21M21 4L17 1M21 4L17 7"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    strokeLinecap="square"
-                  />
-                </svg>
-              </span>
-
-              {/* Hover accent line */}
-              <div className="absolute bottom-0 left-6 md:left-10 right-6 md:right-10 h-px bg-[#94fcff]/0 group-hover:bg-[#94fcff]/30 transition-colors duration-500" />
-            </Link>
+            <PillarCard key={pillar.num} pillar={pillar} />
           ))}
+        </div>
+      </div>
+
+      {/* Desktop: horizontal pinned scroll */}
+      <div ref={horizontalWrapRef} className="hidden md:block relative">
+        <div className="brand-divider h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-12 mx-[60px]" />
+        <div className="h-screen overflow-hidden flex items-center">
+          <div
+            ref={horizontalTrackRef}
+            className="flex gap-px will-change-transform pl-[60px] pr-[60px]"
+          >
+            {/* Intro panel */}
+            <div className="shrink-0 w-[min(620px,85vw)] p-12 border border-[#94fcff]/10 flex flex-col justify-between">
+              <div>
+                <span className="block text-[11px] font-mono text-[#94fcff]/40 tracking-[3px] mb-8">00 / FOUNDATIONS</span>
+                <h3
+                  className="font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[1.05] mb-6"
+                  style={{ fontSize: "clamp(1.5rem, 2.4vw, 2.4rem)" }}
+                >
+                  A studio, not<br />a service desk.
+                </h3>
+                <p className="text-[14px] leading-[1.75] text-white/55 max-w-[440px]">
+                  We pair deep ML chops with operator instincts. Every system we
+                  ship is owned by your team, runs on your infrastructure, and
+                  earns its keep on day one — not after a 12-month rollout.
+                </p>
+              </div>
+              <div className="mt-8 flex items-center gap-3">
+                <span className="h-px w-10 bg-[#94fcff]/40" />
+                <span className="text-[10px] font-mono uppercase tracking-[3px] text-[#94fcff]/60">
+                  Scroll →
+                </span>
+              </div>
+            </div>
+
+            {/* Three capabilities */}
+            {PILLARS.map((pillar) => (
+              <div key={pillar.num} className="shrink-0 w-[min(540px,80vw)]">
+                <PillarCard pillar={pillar} />
+              </div>
+            ))}
+
+            {/* Stats / receipts panel */}
+            <div className="shrink-0 w-[min(620px,85vw)] p-12 border border-[#94fcff]/10 flex flex-col justify-between bg-gradient-to-br from-[#94fcff]/[0.03] to-transparent">
+              <div>
+                <span className="block text-[11px] font-mono text-[#94fcff]/40 tracking-[3px] mb-8">04 / RECEIPTS</span>
+                <h3
+                  className="font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[1.05] mb-10"
+                  style={{ fontSize: "clamp(1.5rem, 2.4vw, 2.4rem)" }}
+                >
+                  Built lean,<br />measured honestly.
+                </h3>
+                <div className="grid grid-cols-2 gap-8">
+                  {[
+                    { k: "12+", l: "Production systems shipped" },
+                    { k: "3", l: "Languages supported natively" },
+                    { k: "<3s", l: "Median inference latency" },
+                    { k: "100%", l: "Owned by your team" },
+                  ].map((s) => (
+                    <div key={s.l}>
+                      <div
+                        className="font-normal text-white font-[family-name:var(--font-display)] leading-none mb-2"
+                        style={{ fontSize: "clamp(1.75rem, 2.6vw, 2.5rem)" }}
+                      >
+                        {s.k}
+                      </div>
+                      <div className="text-[11px] uppercase tracking-[2px] text-white/45 leading-[1.5]">
+                        {s.l}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Closing CTA panel */}
+            <div className="shrink-0 w-[min(620px,85vw)] p-12 border border-[#94fcff]/15 flex flex-col justify-center text-center items-center bg-[#94fcff]/[0.02]">
+              <span className="block text-[11px] font-mono text-[#94fcff]/50 tracking-[3px] mb-6">05 / NEXT</span>
+              <h3
+                className="font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[1.05] mb-6"
+                style={{ fontSize: "clamp(1.75rem, 3vw, 3rem)" }}
+              >
+                Let&rsquo;s build the<br />unfair advantage.
+              </h3>
+              <p className="text-[14px] leading-[1.7] text-white/55 max-w-[440px] mb-10">
+                30-minute scoping call. No deck, no junior account manager —
+                you&rsquo;ll talk to the people who&rsquo;ll actually ship the system.
+              </p>
+              <Link
+                href="/#contact"
+                className="inline-flex items-center gap-3 px-6 py-3 border border-[#94fcff]/40 hover:border-[#94fcff] hover:bg-[#94fcff]/[0.06] transition-colors duration-300 text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]"
+              >
+                Start a project
+                <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
+                  <path d="M0 4H21M21 4L17 1M21 4L17 7" stroke="currentColor" strokeWidth="1" strokeLinecap="square" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Trailing spacer so the last card lands centered, not pinned to edge */}
+            <div className="shrink-0 w-[20vw]" aria-hidden />
+          </div>
         </div>
       </div>
 
