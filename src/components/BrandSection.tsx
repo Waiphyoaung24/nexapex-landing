@@ -33,6 +33,20 @@ const PILLARS = [
     href: "/demos/docs",
     cta: "Try the docs demo",
   },
+  {
+    num: "04",
+    title: "Predictive Analytics",
+    body: "Forecast demand, detect anomalies, and surface signals from your operational data — before they become problems.",
+    href: "#",
+    cta: "Talk to us",
+  },
+  {
+    num: "05",
+    title: "Workflow Automation",
+    body: "Agentic systems that handle approvals, routing, and data entry — your team stays focused on the work that actually matters.",
+    href: "#",
+    cta: "Talk to us",
+  },
 ];
 
 type Pillar = (typeof PILLARS)[number];
@@ -245,9 +259,7 @@ export function BrandSection({ id }: { id?: string } = {}) {
                   A studio, not<br />a service desk.
                 </h3>
                 <p className="text-[14px] leading-[1.75] text-white/55 max-w-[440px]">
-                  We pair deep ML chops with operator instincts. Every system we
-                  ship is owned by your team, runs on your infrastructure, and
-                  earns its keep on day one — not after a 12-month rollout.
+                  Engineers who ship. Systems you own. From day one.
                 </p>
               </div>
               <div className="mt-8 flex items-center gap-3">
@@ -265,42 +277,9 @@ export function BrandSection({ id }: { id?: string } = {}) {
               </div>
             ))}
 
-            {/* Stats / receipts panel */}
-            <div className="shrink-0 w-[min(620px,85vw)] p-12 border border-[#94fcff]/10 flex flex-col justify-between bg-gradient-to-br from-[#94fcff]/[0.03] to-transparent">
-              <div>
-                <span className="block text-[11px] font-mono text-[#94fcff]/40 tracking-[3px] mb-8">04 / RECEIPTS</span>
-                <h3
-                  className="font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[1.05] mb-10"
-                  style={{ fontSize: "clamp(1.5rem, 2.4vw, 2.4rem)" }}
-                >
-                  Built lean,<br />measured honestly.
-                </h3>
-                <div className="grid grid-cols-2 gap-8">
-                  {[
-                    { k: "12+", l: "Production systems shipped" },
-                    { k: "3", l: "Languages supported natively" },
-                    { k: "<3s", l: "Median inference latency" },
-                    { k: "100%", l: "Owned by your team" },
-                  ].map((s) => (
-                    <div key={s.l}>
-                      <div
-                        className="font-normal text-white font-[family-name:var(--font-display)] leading-none mb-2"
-                        style={{ fontSize: "clamp(1.75rem, 2.6vw, 2.5rem)" }}
-                      >
-                        {s.k}
-                      </div>
-                      <div className="text-[11px] uppercase tracking-[2px] text-white/45 leading-[1.5]">
-                        {s.l}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
             {/* Closing CTA panel */}
             <div className="shrink-0 w-[min(620px,85vw)] p-12 border border-[#94fcff]/15 flex flex-col justify-center text-center items-center bg-[#94fcff]/[0.02]">
-              <span className="block text-[11px] font-mono text-[#94fcff]/50 tracking-[3px] mb-6">05 / NEXT</span>
+              <span className="block text-[11px] font-mono text-[#94fcff]/50 tracking-[3px] mb-6">06 / NEXT</span>
               <h3
                 className="font-normal uppercase tracking-[1px] text-white font-[family-name:var(--font-display)] leading-[1.05] mb-6"
                 style={{ fontSize: "clamp(1.75rem, 3vw, 3rem)" }}

@@ -180,7 +180,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
           className="mt-6 max-w-md text-[15px] leading-relaxed md:mt-10 md:max-w-2xl md:text-lg"
           style={{ color: "#c8ccc6" }}
         >
-          Proof below. Systems shipped — not slides.
+          If your systems aren&rsquo;t already using AI, you&rsquo;re a step behind.
         </p>
 
       </div>
