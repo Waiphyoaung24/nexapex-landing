@@ -34,7 +34,44 @@ export function BrandSection({ id }: { id?: string } = {}) {
   useEditorialReveal(sectionRef);
 
   return (
-    <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-hidden">
+    <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-visible">
+
+      {/* ── Seam blend — fades the video above into this section ── */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-64 md:-top-96 h-64 md:h-96 z-10"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(14,20,24,0.15) 25%, rgba(14,20,24,0.5) 55%, rgba(14,20,24,0.85) 80%, #0e1418 100%)",
+        }}
+      />
+      {/* Brand-tinted seam haze — pulls cyan particles into the section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-40 md:-top-56 h-40 md:h-56 z-10 mix-blend-screen"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(148,252,255,0.12) 0%, rgba(99,179,237,0.06) 40%, transparent 75%)",
+        }}
+      />
+      {/* Top-edge inner glow at the seam */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 md:h-40 z-10"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(148,252,255,0.08) 0%, rgba(148,252,255,0.02) 40%, transparent 100%)",
+        }}
+      />
+      {/* Hairline accent at the seam */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px z-10"
+        style={{
+          background:
+            "linear-gradient(to right, transparent 0%, rgba(148,252,255,0.28) 50%, transparent 100%)",
+        }}
+      />
 
       {/* ── Section Headline — centered, same style as ThreeShowcase ── */}
       <div className="section-headline flex flex-col items-center justify-center py-8 md:py-20 pointer-events-none">

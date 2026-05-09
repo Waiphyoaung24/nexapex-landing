@@ -151,11 +151,13 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
       </div>
 
       {/* Paragraph stack — each highlight gets its own scroll beat */}
-      <div className="max-w-[34rem] sm:max-w-[44rem] md:max-w-[52rem] lg:max-w-[62rem]">
-        {PARAGRAPHS.map((p, i) => (
+      <div>
+        {PARAGRAPHS.map((p, i) => {
+          const isOdd = i % 2 === 1;
+          return (
           <p
             key={i}
-            className="editorial-body text-white/90 leading-[1.25] md:leading-[1.35] tracking-[-0.015em] font-[family-name:var(--font-display)] mb-[18vh] md:mb-[25vh] last:mb-0"
+            className={`editorial-body text-white/90 leading-[1.25] md:leading-[1.35] tracking-[-0.015em] font-[family-name:var(--font-display)] mb-[18vh] md:mb-[25vh] last:mb-0 max-w-[34rem] sm:max-w-[44rem] md:max-w-[52rem] lg:max-w-[62rem] ${isOdd ? "ml-auto text-right" : "mr-auto text-left"}`}
             style={{
               fontSize: "clamp(1.15rem, 3.4vw, 2.5rem)",
               textWrap: "pretty",
@@ -170,7 +172,7 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
                   "linear-gradient(rgba(148, 252, 255, 0.22), rgba(148, 252, 255, 0.22))",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "0% 100%",
-                backgroundPosition: "left center",
+                backgroundPosition: isOdd ? "right center" : "left center",
                 boxDecorationBreak: "clone",
                 WebkitBoxDecorationBreak: "clone",
                 color: "#ffffff",
@@ -183,7 +185,8 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
             </mark>
             {p.after}
           </p>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

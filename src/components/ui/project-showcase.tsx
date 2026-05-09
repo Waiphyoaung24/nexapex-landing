@@ -93,17 +93,20 @@ export function ProjectShowcase() {
   }
 
   return (
-    <section ref={containerRef} onMouseMove={handleMouseMove} className="relative w-full max-w-4xl mx-auto px-5 py-16 md:px-[60px] md:py-24">
-      <div className="mb-10 md:mb-14 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+    <section ref={containerRef} onMouseMove={handleMouseMove} className="relative w-full max-w-6xl mx-auto px-5 py-20 md:px-[60px] md:py-32">
+      <div className="mb-12 md:mb-20 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="editorial-index text-[11px] font-medium uppercase tracking-[3px] text-[#94fcff]/60 mb-2" aria-hidden="true">
+          <p className="editorial-index text-[11px] font-medium uppercase tracking-[4px] text-[#94fcff]/60 mb-3" aria-hidden="true">
             03 / SELECTED WORK
           </p>
-          <h2 className="editorial-heading text-2xl md:text-[40px] font-normal uppercase tracking-[2px] text-[#f0f1ef] font-[family-name:var(--font-display)] leading-tight">
+          <h2
+            className="editorial-heading font-normal uppercase tracking-[3px] text-[#f0f1ef] font-[family-name:var(--font-display)] leading-[1.05] whitespace-nowrap"
+            style={{ fontSize: "clamp(2rem, 6vw, 4.5rem)" }}
+          >
             Selected Work
           </h2>
         </div>
-        <p className="editorial-body max-w-[280px] text-[11px] font-medium uppercase tracking-[1px] text-[#f0f1ef]/55 md:text-right">
+        <p className="editorial-body max-w-[320px] text-[12px] font-medium uppercase tracking-[2px] text-[#f0f1ef]/55 leading-[1.7] md:text-right">
           AI products built in-house, deployed for businesses across Southeast Asia.
         </p>
       </div>
@@ -121,7 +124,7 @@ export function ProjectShowcase() {
           willChange: "transform",
         }}
       >
-        <div className="relative w-[280px] h-[180px] bg-[#1a2630] rounded-xl overflow-hidden">
+        <div className="relative w-[380px] h-[250px] bg-[#1a2630] rounded-xl overflow-hidden">
           {projects.map((project, index) => (
             <img
               key={project.title}
@@ -152,7 +155,7 @@ export function ProjectShowcase() {
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="relative py-5 border-t border-[#f0f1ef]/10 transition-all duration-300 ease-out">
+            <div className="relative py-7 md:py-10 border-t border-[#f0f1ef]/10 transition-all duration-300 ease-out">
               {/* Background highlight on hover */}
               <div
                 className={`
@@ -165,7 +168,7 @@ export function ProjectShowcase() {
               <div className="relative flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="inline-flex items-center gap-2">
-                    <h3 className="text-[#f0f1ef] font-medium text-lg tracking-tight font-[family-name:var(--font-display)]">
+                    <h3 className="text-[#f0f1ef] font-normal text-2xl md:text-[2rem] tracking-tight font-[family-name:var(--font-display)] uppercase">
                       <span className="relative">
                         {project.title}
                         <span
@@ -180,7 +183,7 @@ export function ProjectShowcase() {
 
                     <ArrowUpRight
                       className={`
-                        w-4 h-4 text-[#94fcff]
+                        w-5 h-5 md:w-6 md:h-6 text-[#94fcff]
                         transition-all duration-300 ease-out
                         ${
                           hoveredIndex === index
@@ -193,7 +196,7 @@ export function ProjectShowcase() {
 
                   <p
                     className={`
-                      text-sm mt-1 leading-relaxed
+                      text-[14px] md:text-[15px] mt-2 md:mt-3 leading-[1.6] max-w-[640px]
                       transition-all duration-300 ease-out
                       ${hoveredIndex === index ? "text-[#f0f1ef]/70" : "text-[#6e7a84]"}
                     `}
@@ -204,7 +207,7 @@ export function ProjectShowcase() {
 
                 <span
                   className={`
-                    text-xs font-mono tabular-nums
+                    text-[10px] md:text-[11px] font-mono tabular-nums uppercase tracking-[2px] whitespace-nowrap pt-2
                     transition-all duration-300 ease-out
                     ${hoveredIndex === index ? "text-[#94fcff]/60" : "text-[#6e7a84]"}
                   `}

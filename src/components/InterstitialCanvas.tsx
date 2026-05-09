@@ -70,20 +70,16 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
     <section
       ref={sectionRef}
       id={id}
-      className="relative w-full overflow-hidden bg-[#0e1418]"
-      style={{ minHeight: "115vh", marginBottom: "-1px" }}
+      className="relative w-full overflow-hidden bg-[#0e1418] min-h-[78vh] md:min-h-[115vh]"
+      style={{ marginBottom: "-1px" }}
       aria-label="Interlude"
     >
       <div
         ref={videoWrapRef}
-        className="absolute inset-x-0 bottom-0 z-0 top-[45%] md:top-[50%]"
+        className="absolute inset-x-0 bottom-0 z-0 top-[45%] md:top-[44%] [mask-image:linear-gradient(to_bottom,transparent_0,#000_50px,#000_60%,rgba(0,0,0,0.5)_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_50px,#000_60%,rgba(0,0,0,0.5)_85%,transparent_100%)] md:[mask-image:linear-gradient(to_bottom,transparent_0,#000_60px,#000_65%,rgba(0,0,0,0.75)_82%,rgba(0,0,0,0.35)_92%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_60px,#000_65%,rgba(0,0,0,0.75)_82%,rgba(0,0,0,0.35)_92%,transparent_100%)]"
         aria-hidden
         style={{
           willChange: "transform, opacity",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0, #000 50px, #000 100%)",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0, #000 50px, #000 100%)",
         }}
       >
         <video
@@ -129,9 +125,26 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         aria-hidden
       />
 
+      {/* ── Bottom backdrop overlay — brand-tinted blend into next section ── */}
       <div
-        className="relative z-10 mx-auto flex max-w-5xl flex-col items-center justify-start px-6 pt-20 pb-0 text-center md:pt-32"
-        style={{ minHeight: "115vh" }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-48 md:h-80"
+        aria-hidden
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(14,20,24,0.15) 30%, rgba(14,20,24,0.45) 60%, rgba(14,20,24,0.85) 85%, #0e1418 100%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 md:h-32 mix-blend-screen"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 100% at 50% 100%, rgba(148,252,255,0.10) 0%, rgba(99,179,237,0.04) 45%, transparent 80%)",
+        }}
+      />
+
+      <div
+        className="relative z-10 mx-auto flex max-w-5xl flex-col items-center justify-start px-6 pt-16 pb-0 text-center md:pt-32 min-h-[78vh] md:min-h-[115vh]"
       >
         <span
           ref={eyebrowRef}
