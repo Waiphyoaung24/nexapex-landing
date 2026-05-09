@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 import { ArrowUpRight, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
@@ -40,7 +41,6 @@ const SOCIALS = [
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -94,32 +94,42 @@ export function Header() {
     });
   }, []);
 
-  // Scroll-driven visibility: visible at top, hide on scroll-down, reveal on scroll-up.
-  useEffect(() => {
-    let ticking = false;
-    let lastY = window.scrollY;
-    const TOP_THRESHOLD = 80; // always visible while above this
-    const DELTA = 6;          // ignore micro-jitters
+  // Scroll-driven visibility — GSAP show/reverse pattern.
+  // At top: pinned visible. Scroll down → hide; scroll up → reveal.
+  useGSAP(
+    () => {
+      const el = headerRef.current;
+      if (!el) return;
 
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
+      const showAnim = gsap
+        .from(el, {
+          yPercent: -100,
+          autoAlpha: 0,
+          paused: true,
+          duration: 0.25,
+          ease: "power2.out",
+        })
+        .progress(1);
 
-        if (y < TOP_THRESHOLD) {
-          setVisible(true);
-        } else if (Math.abs(y - lastY) > DELTA) {
-          setVisible(y < lastY); // scrolling up → show; down → hide
-        }
-        lastY = y;
-        ticking = false;
+      const trigger = ScrollTrigger.create({
+        start: "top top",
+        end: "max",
+        onUpdate: (self) => {
+          if (self.scroll() < 80) {
+            showAnim.play();
+            return;
+          }
+          self.direction === -1 ? showAnim.play() : showAnim.reverse();
+        },
       });
-    };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+      return () => {
+        trigger.kill();
+        showAnim.kill();
+      };
+    },
+    { scope: headerRef },
+  );
 
   return (
     <header
@@ -128,15 +138,8 @@ export function Header() {
         "fixed top-0 left-0 right-0 z-50",
         "px-4 py-4 md:px-[60px] md:py-6",
         "flex items-center justify-between",
-        "transition-[transform,opacity] duration-500 will-change-transform bg-transparent",
-        visible
-          ? "translate-y-0 opacity-100 pointer-events-auto"
-          : "-translate-y-full opacity-0 pointer-events-none"
+        "will-change-transform bg-transparent",
       )}
-      style={{
-        transitionTimingFunction: "var(--ease-out-expo)",
-      }}
-      aria-hidden={!visible}
     >
       {/* Logo — scroll to top on landing, navigate to / elsewhere */}
       <Link
