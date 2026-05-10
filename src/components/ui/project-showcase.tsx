@@ -17,25 +17,32 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "VisionForge",
+    title: "NexHR",
+    description: "Hire smarter, grow faster \u2014 an AI-native HR platform for onboarding, performance, and workforce analytics.",
+    year: "hr.nexapex.ai",
+    link: "https://hr.nexapex.ai",
+    image: "/images/projects/hr.png",
+  },
+  {
+    title: "Revenue Intelligence",
+    description: "AI hotel revenue optimizer \u2014 forecasts demand, flags pricing risk, and turns booking data into a board-ready story.",
+    year: "revenue.nexapex.ai",
+    link: "https://revenue.nexapex.ai",
+    image: "/images/projects/revenue.png",
+  },
+  {
+    title: "Vision Inspector",
     description: "Custom-trained object detection for quality control, inventory tracking, and defect inspection.",
-    year: "In Development",
-    link: "#",
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2670&auto=format&fit=crop",
+    year: "vision.nexapex.ai",
+    link: "https://vision.nexapex.ai",
+    image: "/images/projects/vision.png",
   },
   {
-    title: "NexChat",
-    description: "Multilingual AI assistants fine-tuned for your industry \u2014 English, Burmese, and Thai.",
-    year: "In Development",
-    link: "#",
-    image: "https://images.unsplash.com/photo-1676299081847-824916de030a?q=80&w=2670&auto=format&fit=crop",
-  },
-  {
-    title: "DocStream",
-    description: "OCR-powered extraction pipeline that turns invoices, receipts, and contracts into structured data.",
-    year: "In Development",
-    link: "#",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
+    title: "Nexus AI Tarot",
+    description: "A playful side project \u2014 AI-generated tarot readings exploring conversational UX and personality design.",
+    year: "nat.nexapex.ai",
+    link: "https://nat.nexapex.ai",
+    image: "/images/projects/nat.png",
   },
 ]
 
@@ -155,6 +162,8 @@ export function ProjectShowcase() {
           <a
             key={project.title}
             href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
             className="editorial-item group block cursor-pointer"
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
