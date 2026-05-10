@@ -1,5 +1,11 @@
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Document Intelligence — NexApex AI Studio",
+  description: "Extract structured data from invoices, receipts, and documents automatically.",
+};
 
 export default function DocsPage() {
   return (

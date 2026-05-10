@@ -10,6 +10,12 @@ import { HeroSection } from "@/components/HeroSection";
 import { InterstitialCanvas } from "@/components/InterstitialCanvas";
 import { Preloader } from "@/components/Preloader";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "NexApex — Applied AI for Southeast Asia",
+  description: "We design, build, and ship AI-native products for ambitious teams across Southeast Asia.",
+};
 
 export default function Home() {
   return (

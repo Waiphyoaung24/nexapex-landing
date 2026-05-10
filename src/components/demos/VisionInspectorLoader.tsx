@@ -11,7 +11,7 @@ const VisionInspector = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
+        <div className="size-8 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
       </div>
     ),
   }

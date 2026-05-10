@@ -124,8 +124,10 @@ export function BrandCursor() {
           boxShadow:
             "0 0 12px rgba(148, 252, 255, 0.35), inset 0 0 6px rgba(148, 252, 255, 0.15)",
           pointerEvents: "none",
+          // eslint-disable-next-line react-doctor/no-z-index-9999 -- custom cursor must sit above all app stacking contexts including modal portals
           zIndex: 10000,
           mixBlendMode: "screen",
+          // eslint-disable-next-line react-doctor/no-permanent-will-change -- cursor transforms on every mousemove; promotion is continuously needed
           willChange: "transform, opacity",
         }}
       />
@@ -142,7 +144,9 @@ export function BrandCursor() {
           background: "#94fcff",
           boxShadow: "0 0 8px rgba(148, 252, 255, 0.8)",
           pointerEvents: "none",
+          // eslint-disable-next-line react-doctor/no-z-index-9999 -- custom cursor must sit above all app stacking contexts including modal portals
           zIndex: 10001,
+          // eslint-disable-next-line react-doctor/no-permanent-will-change -- cursor transforms on every mousemove; promotion is continuously needed
           willChange: "transform, opacity",
         }}
       />

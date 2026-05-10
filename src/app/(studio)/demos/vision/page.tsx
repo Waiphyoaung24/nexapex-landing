@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { ArrowLeft, Eye } from "lucide-react";
+import type { Metadata } from "next";
 import { VisionInspectorLoader } from "@/components/demos/VisionInspectorLoader";
+
+export const metadata: Metadata = {
+  title: "Vision Inspector — NexApex AI Studio",
+  description: "Detect objects in real time with computer vision. Upload images or use your camera.",
+};
 
 export default function VisionPage() {
   return (
     <div className="relative flex min-h-[calc(100vh-4rem)] w-full flex-col">
       {/* Ambient gradient mesh background */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-1/4 -left-1/4 h-[600px] w-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-[#94fcff]/[0.015] blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#94fcff]/[0.01] blur-[80px]" />
+        <div className="absolute -top-1/4 -left-1/4 size-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 size-[500px] rounded-full bg-[#94fcff]/[0.015] blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 size-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#94fcff]/[0.01] blur-[80px]" />
       </div>
 
       {/* Breadcrumb toolbar */}
@@ -31,7 +37,7 @@ export default function VisionPage() {
       <div className="px-4 pt-10 pb-8 sm:pt-12 sm:pb-10 md:px-[60px]">
         {/* Label */}
         <div className="mb-4 flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#94fcff]/10">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-[#94fcff]/10">
             <Eye size={16} className="text-[#94fcff]" />
           </div>
           <span className="text-[10px] font-mono uppercase tracking-[2px] text-[#94fcff]/70">

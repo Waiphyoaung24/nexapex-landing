@@ -3,6 +3,7 @@
 import {
   createContext,
   useCallback,
+  // eslint-disable-next-line react-doctor/no-react19-deprecated-apis -- intentional: use() throws inside conditional/effect codepaths that this hook participates in
   useContext,
   useEffect,
   useState,
@@ -33,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("nexapex_auth");
+    const stored = localStorage.getItem("nexapex_auth:v1");
     if (stored) {
       try {
         setAuth(JSON.parse(stored));
@@ -47,12 +48,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback((token: string, email: string, name: string) => {
     const state = { token, email, name };
     setAuth(state);
-    localStorage.setItem("nexapex_auth", JSON.stringify(state));
+    localStorage.setItem("nexapex_auth:v1", JSON.stringify(state));
   }, []);
 
   const logout = useCallback(() => {
     setAuth({ token: null, email: null, name: null });
-    localStorage.removeItem("nexapex_auth");
+    localStorage.removeItem("nexapex_auth:v1");
     clearAdminToken();
   }, []);
 

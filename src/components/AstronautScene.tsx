@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property -- react-three-fiber primitives use lowercase Three.js props */
 "use client";
 
 import { Suspense, useRef, useEffect } from "react";

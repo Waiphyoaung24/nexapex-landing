@@ -9,15 +9,15 @@ export function ChatSkeleton() {
 
       {/* Empty-state skeleton */}
       <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-12">
-        <div className="h-24 w-24 animate-pulse rounded-full bg-white/[0.03]" />
+        <div className="size-24 animate-pulse rounded-full bg-white/[0.03]" />
         <div className="h-3 w-28 animate-pulse rounded bg-white/[0.04]" />
         <div className="h-8 w-72 animate-pulse rounded bg-white/[0.04]" />
         <div className="h-8 w-56 animate-pulse rounded bg-white/[0.04]" />
 
         <div className="mt-6 grid w-full max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">
-          {[0, 1, 2, 3].map((i) => (
+          {[0, 1, 2, 3].map((slot) => (
             <div
-              key={i}
+              key={`skeleton-suggestion-${slot}`}
               className="h-[68px] animate-pulse rounded-xl border border-white/[0.04] bg-white/[0.02]"
             />
           ))}

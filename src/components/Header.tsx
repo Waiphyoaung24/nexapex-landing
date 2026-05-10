@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
@@ -43,7 +44,7 @@ export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  const { replace } = useRouter();
   const { logout, hydrated } = useAuth();
   const isLanding = pathname === "/";
 
@@ -61,8 +62,8 @@ export function Header() {
     clearAdminToken();
     logout();
     setIsAdmin(false);
-    router.replace("/auth");
-  }, [logout, router]);
+    replace("/auth");
+  }, [logout, replace]);
 
   const scrollTo = useCallback((targetId: string) => {
     const target = document.getElementById(targetId);
@@ -136,7 +137,7 @@ export function Header() {
       ref={headerRef}
       className={cn(
         "fixed top-0 left-0 right-0 z-50",
-        "px-4 py-4 md:px-[60px] md:py-6",
+        "p-4 md:px-[60px] md:py-6",
         "flex items-center justify-between",
         "will-change-transform bg-transparent",
       )}
@@ -154,13 +155,14 @@ export function Header() {
         }}
         className="flex items-center gap-2 cursor-pointer group"
       >
-        <img
+        <Image
           src="/images/Flat_white.png"
           alt="NexApex"
           width={36}
           height={36}
-          className="h-7 w-7 md:h-9 md:w-9 object-contain transition-transform duration-300 group-hover:scale-105"
+          className="size-7 md:h-9 md:w-9 object-contain transition-transform duration-300 group-hover:scale-105"
           style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+          priority
         />
         <span className="text-[14px] md:text-[20px] whitespace-nowrap font-bold uppercase font-[family-name:var(--font-display)] tracking-[3px] text-white">
           NEX APEX
@@ -202,7 +204,7 @@ export function Header() {
           style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
         >
           <span>TRY OUR DEMOS</span>
-          <span className="block h-1 w-1 rounded-full bg-[#94fcff]" />
+          <span className="block size-1 rounded-full bg-[#94fcff]" />
         </Link>
 
         {/* -- Admin Sign Out (visible only when admin token present) -- */}
@@ -240,8 +242,8 @@ export function Header() {
           >
             <span>MENU</span>
             <span className="flex items-center gap-[3px]">
-              <span className="block h-1 w-1 rounded-full bg-[#0e1418]" />
-              <span className="block h-1 w-1 rounded-full bg-[#0e1418]" />
+              <span className="block size-1 rounded-full bg-[#0e1418]" />
+              <span className="block size-1 rounded-full bg-[#0e1418]" />
             </span>
           </SheetTrigger>
 
@@ -258,7 +260,7 @@ export function Header() {
                   </SheetTitle>
                   <SheetClose
                     className={cn(
-                      "relative h-10 w-10 rounded-full bg-[#1a2630] flex items-center justify-center cursor-pointer",
+                      "relative size-10 rounded-full bg-[#1a2630] flex items-center justify-center cursor-pointer",
                       "transition-all duration-200 hover:bg-[#253a49] active:scale-[0.92]",
                       "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
                     )}
@@ -272,7 +274,7 @@ export function Header() {
                 <div className="h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mt-6" />
               </SheetHeader>
 
-              <nav className="flex-1 px-8 py-8" aria-label="Main navigation">
+              <nav className="flex-1 p-8" aria-label="Main navigation">
                 <ul className="flex flex-col gap-0">
                   {NAV_LINKS.map((link, i) => (
                     <li key={link.target}>

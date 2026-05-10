@@ -25,12 +25,12 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
   return (
     <div className="flex gap-3">
       {/* Orb mark */}
-      <div className="relative mt-1 flex h-8 w-8 shrink-0 items-center justify-center">
+      <div className="relative mt-1 flex size-8 shrink-0 items-center justify-center">
         <span className="absolute inset-0 rounded-full border border-[#94fcff]/15" />
         <span className="absolute inset-1.5 rounded-full border border-[#94fcff]/30" />
         <span
           className={cn(
-            "relative h-1.5 w-1.5 rounded-full bg-[#94fcff] shadow-[0_0_10px_rgba(148,252,255,0.5)]",
+            "relative size-1.5 rounded-full bg-[#94fcff] shadow-[0_0_10px_rgba(148,252,255,0.5)]",
             isStreaming && "chat-orb-active"
           )}
         />
@@ -43,13 +43,13 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
 
         {isThinking ? (
           <div className="flex items-center gap-1.5 py-1" aria-label="Thinking">
-            {[0, 1, 2].map((i) => (
+            {[0, 1, 2].map((dot) => (
               <span
-                key={i}
-                className="h-1.5 w-1.5 rounded-full bg-[#94fcff]/60"
+                key={`thinking-dot-${dot}`}
+                className="size-1.5 rounded-full bg-[#94fcff]/60"
                 style={{
-                  animation: "chat-thinking 1.4s ease-in-out infinite",
-                  animationDelay: `${i * 0.16}s`,
+                  animation: "chat-thinking 1s ease-in-out infinite",
+                  animationDelay: `${dot * 0.16}s`,
                 }}
               />
             ))}
@@ -72,7 +72,7 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
                 ),
                 li: ({ children }) => (
                   <li className="flex items-start gap-2.5 leading-[1.75]">
-                    <span className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[#94fcff]/30" />
+                    <span className="mt-[9px] size-[5px] shrink-0 rounded-full bg-[#94fcff]/30" />
                     <span className="flex-1">{children}</span>
                   </li>
                 ),

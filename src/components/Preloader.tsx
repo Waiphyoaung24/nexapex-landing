@@ -28,13 +28,13 @@ function DigitRoller({ value }: { value: number }) {
       style={{ width: "1ch", height: "1em", lineHeight: "1em" }}
     >
       <div ref={colRef}>
-        {Array.from({ length: 10 }, (_, i) => (
+        {Array.from({ length: 10 }, (_, digit) => (
           <div
-            key={i}
+            key={`digit-${digit}`}
             className="text-center"
             style={{ height: "1em", lineHeight: "1em" }}
           >
-            {i}
+            {digit}
           </div>
         ))}
       </div>

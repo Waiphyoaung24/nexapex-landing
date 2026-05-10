@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { ArrowRight, ArrowUp } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -87,12 +88,12 @@ export function FooterSection() {
       <div className="grid grid-cols-1 gap-10 mb-14 sm:grid-cols-2 md:grid-cols-3 md:gap-10 md:mb-20">
         {/* Column 1: Logo + Address */}
         <div className="footer-col">
-          <img
+          <Image
             src="/images/Flat_white.png"
             alt="NexApex logo"
             width={48}
             height={48}
-            className="mb-4 h-10 w-10 md:h-12 md:w-12 object-contain"
+            className="mb-4 size-10 md:h-12 md:w-12 object-contain"
           />
           <address className="not-italic text-[14px] leading-relaxed text-white/50">
             NexApex HQ
@@ -182,7 +183,7 @@ export function FooterSection() {
             ref={backToTopRef}
             type="button"
             onClick={scrollToTop}
-            className="w-12 h-12 rounded-full bg-[#1a2630] text-[#94fcff] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#253a49] hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
+            className="size-12 rounded-full bg-[#1a2630] text-[#94fcff] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#253a49] hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]"
             style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
             aria-label="Back to top"
           >

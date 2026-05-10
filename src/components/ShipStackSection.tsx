@@ -103,6 +103,7 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
                   color: "transparent",
                   letterSpacing: "0.01em",
                   WebkitTextStroke: "1px rgba(148, 252, 255, 0.35)",
+                  // eslint-disable-next-line react-doctor/no-permanent-will-change -- continuously transformed by ScrollSmoother for the entire section pin
                   willChange: "transform",
                   transform: "translateZ(0)",
                 }}
@@ -132,8 +133,10 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
               className={`${COL_START_CLASSES[tile.col]} ${
                 ROW_START_CLASSES[tile.row]
               } relative aspect-square overflow-hidden rounded-md md:rounded-lg border border-white/[0.06]`}
+              // eslint-disable-next-line react-doctor/no-permanent-will-change -- parallax target animated continuously by ScrollSmoother data-speed
               style={{ willChange: "transform", transform: "translateZ(0)" }}
             >
+              {/* eslint-disable-next-line react-doctor/nextjs-no-img-element -- needs data-speed + h-[140%] overflow for ScrollSmoother parallax; next/image's fill wrapper breaks the GSAP transform target */}
               <img
                 data-speed="auto"
                 src={tile.src}
@@ -144,6 +147,7 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
                 fetchPriority={tile.priority ? "high" : "low"}
                 loading={tile.priority ? "eager" : "lazy"}
                 className="absolute inset-0 w-full h-[140%] object-cover opacity-60 md:opacity-70"
+                // eslint-disable-next-line react-doctor/no-permanent-will-change -- parallax img animated continuously by ScrollSmoother data-speed="auto"
                 style={{ willChange: "transform", transform: "translateZ(0)" }}
               />
               {/* dark gradient — keeps cyan type readable when it overlaps */}

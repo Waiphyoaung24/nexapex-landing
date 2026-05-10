@@ -9,7 +9,7 @@ export function PendingScreen() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#94fcff]/10">
+        <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl bg-[#94fcff]/10">
           <Clock size={28} className="text-[#94fcff]" />
         </div>
 

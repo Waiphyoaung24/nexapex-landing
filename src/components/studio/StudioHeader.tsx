@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight, Shield, LogOut } from "lucide-react";
 import gsap from "gsap";
@@ -16,7 +17,7 @@ if (typeof window !== "undefined") {
 
 export function StudioHeader() {
   const headerRef = useRef<HTMLElement>(null);
-  const router = useRouter();
+  const { push } = useRouter();
   const { logout, hydrated } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -46,7 +47,7 @@ export function StudioHeader() {
     clearAdminToken();
     logout();
     setIsAdmin(false);
-    router.push("/auth");
+    push("/auth");
   }
 
   return (
@@ -59,13 +60,14 @@ export function StudioHeader() {
       )}
     >
       <Link href="/" className="flex items-center gap-2 group">
-        <img
+        <Image
           src="/images/Flat_white.png"
           alt="NexApex"
           width={36}
           height={36}
           className="h-7 w-7 md:h-9 md:w-9 object-contain transition-transform duration-300 group-hover:scale-105"
           style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
+          priority
         />
         <span className="text-[14px] md:text-[20px] font-bold uppercase font-[family-name:var(--font-display)] tracking-[3px] text-white">
           AI Studio

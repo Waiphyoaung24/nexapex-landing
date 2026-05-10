@@ -121,6 +121,7 @@ export function BoundingBoxCanvas({
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl glass-panel">
+      {/* eslint-disable-next-line react-doctor/nextjs-no-img-element -- user-uploaded blob/data URL paired with canvas overlay; next/image doesn't fit dynamic blob sources */}
       <img
         src={imageSrc}
         alt={`Uploaded image with ${detections.length} detected objects highlighted`}

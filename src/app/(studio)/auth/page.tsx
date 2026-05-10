@@ -1,6 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import { EmailGateForm } from "@/components/studio/EmailGateForm";
+
+export const metadata: Metadata = {
+  title: "Sign in — NexApex AI Studio",
+  description: "Access NexApex AI Studio demos with your work email.",
+};
 
 export default function AuthPage() {
   return (
@@ -18,16 +25,19 @@ export default function AuthPage() {
       </Link>
 
       <div className="w-full max-w-md text-center">
-        <img
+        <Image
           src="/images/Flat_white.png"
           alt="NexApex"
-          className="mx-auto mb-6 h-12 w-12"
+          width={48}
+          height={48}
+          className="mx-auto mb-6 size-12"
+          priority
         />
-        <h1 className="mb-2 text-2xl font-bold font-[family-name:var(--font-display)] uppercase tracking-wider text-white">
+        <h1 className="mb-2 text-2xl font-semibold font-[family-name:var(--font-display)] uppercase tracking-wider text-white">
           AI Solutions Studio
         </h1>
         <p className="mb-8 text-sm text-white/50">
-          Try real AI demos — computer vision, smart chat, and document
+          Try real AI demos: computer vision, smart chat, and document
           intelligence.
         </p>
         <EmailGateForm />

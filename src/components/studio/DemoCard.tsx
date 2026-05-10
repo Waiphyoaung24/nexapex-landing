@@ -27,10 +27,10 @@ export function DemoCard({ title, description, href, icon, usageLabel, tags }: D
         )}
         style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
       >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#94fcff]/10 text-[#94fcff]">
+        <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-[#94fcff]/10 text-[#94fcff]">
           {icon}
         </div>
-        <h3 className="mb-2 text-lg font-bold font-[family-name:var(--font-display)] uppercase tracking-wider text-white">
+        <h3 className="mb-2 text-lg font-semibold font-[family-name:var(--font-display)] uppercase tracking-wider text-white">
           {title}
         </h3>
         <p className="mb-4 flex-1 text-sm leading-relaxed text-nex-dim">

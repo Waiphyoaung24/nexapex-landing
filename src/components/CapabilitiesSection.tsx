@@ -84,7 +84,7 @@ function CapabilityCard({
     >
       {/* Card header */}
       <div className="flex justify-between items-center mb-2 sm:mb-3 lg:mb-4">
-        <h3 className="text-[12px] sm:text-[14px] lg:text-[16px] font-bold uppercase tracking-wide">
+        <h3 className="text-[12px] sm:text-[14px] lg:text-[16px] font-semibold uppercase tracking-wide">
           {capability.title}
         </h3>
         <span className="text-[14px] sm:text-[18px] lg:text-[20px] font-bold font-mono text-[#0e1418]/40">

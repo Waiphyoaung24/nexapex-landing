@@ -15,7 +15,7 @@ export function VisionSkeleton() {
 
         {/* Center analyzing text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-          <div className="h-10 w-10 rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff] animate-spin" />
+          <div className="size-10 rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff] animate-spin" />
           <p className="text-xs font-mono uppercase tracking-[2px] text-[#94fcff]/60">
             Analyzing<span className="inline-block w-4 text-left animate-pulse">...</span>
           </p>
@@ -26,11 +26,11 @@ export function VisionSkeleton() {
       <div className="flex flex-col gap-4">
         {/* Stat cards shimmer */}
         <div className="grid grid-cols-3 gap-3">
-          {[0, 1, 2].map((i) => (
+          {[0, 1, 2].map((slot) => (
             <div
-              key={i}
+              key={`skeleton-stat-${slot}`}
               className="rounded-xl glass-panel p-4 text-center"
-              style={{ animationDelay: `${i * 150}ms` }}
+              style={{ animationDelay: `${slot * 150}ms` }}
             >
               <div className="mx-auto h-7 w-10 rounded-md vision-shimmer" />
               <div className="mx-auto mt-2 h-3 w-14 rounded vision-shimmer" />
@@ -44,7 +44,7 @@ export function VisionSkeleton() {
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="flex items-center gap-3 rounded-lg px-2 py-2"
+              className="flex items-center gap-3 rounded-lg p-2"
               style={{ animationDelay: `${i * 100}ms` }}
             >
               <div className="h-3 w-16 rounded vision-shimmer" />
@@ -57,7 +57,7 @@ export function VisionSkeleton() {
         {/* Suggestion card placeholder */}
         <div className="rounded-2xl glass-panel-accent p-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-10 w-10 rounded-xl vision-shimmer" />
+            <div className="size-10 rounded-xl vision-shimmer" />
             <div className="space-y-2">
               <div className="h-2 w-32 rounded vision-shimmer" />
               <div className="h-3 w-44 rounded vision-shimmer" />
@@ -65,7 +65,7 @@ export function VisionSkeleton() {
           </div>
           <div className="space-y-2 mb-4">
             <div className="h-3 w-full rounded vision-shimmer" />
-            <div className="h-3 w-3/4 rounded vision-shimmer" />
+            <div className="size-3/4 rounded vision-shimmer" />
           </div>
           <div className="h-9 w-48 rounded-full vision-shimmer" />
         </div>

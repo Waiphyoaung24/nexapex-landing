@@ -18,18 +18,22 @@ interface Lead {
 
 type Filter = "all" | "pending" | "approved";
 
+function formatLeadDate(iso: string): string {
+  return new Date(iso).toLocaleDateString();
+}
+
 export default function AdminLeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState<Filter>("pending");
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const { replace } = useRouter();
 
   const token = getAdminToken();
 
   const fetchLeads = useCallback(async () => {
     if (!token) {
-      router.replace("/admin/login");
+      replace("/admin/login");
       return;
     }
     setLoading(true);
@@ -42,11 +46,11 @@ export default function AdminLeadsPage() {
       setTotal(res.total);
     } catch {
       clearAdminToken();
-      router.replace("/admin/login");
+      replace("/admin/login");
     } finally {
       setLoading(false);
     }
-  }, [token, filter, router]);
+  }, [token, filter, replace]);
 
   useEffect(() => {
     fetchLeads();
@@ -82,7 +86,7 @@ export default function AdminLeadsPage() {
             type="button"
             onClick={() => {
               clearAdminToken();
-              router.replace("/admin/login");
+              replace("/admin/login");
             }}
             className="cursor-pointer text-xs text-nex-dim hover:text-white transition-colors"
           >
@@ -112,7 +116,7 @@ export default function AdminLeadsPage() {
       {/* Table */}
       {loading ? (
         <div className="flex h-40 items-center justify-center">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
+          <div className="size-5 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
         </div>
       ) : leads.length === 0 ? (
         <p className="py-12 text-center text-sm text-nex-dim">
@@ -146,8 +150,8 @@ export default function AdminLeadsPage() {
                   <td className="px-4 py-3 text-nex-dim hidden md:table-cell capitalize">
                     {lead.industry || "\u2014"}
                   </td>
-                  <td className="px-4 py-3 text-nex-dim hidden md:table-cell">
-                    {new Date(lead.created_at).toLocaleDateString()}
+                  <td className="px-4 py-3 text-nex-dim hidden md:table-cell" suppressHydrationWarning>
+                    {formatLeadDate(lead.created_at)}
                   </td>
                   <td className="px-4 py-3">
                     {lead.is_approved ? (

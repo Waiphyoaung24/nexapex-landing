@@ -1,14 +1,20 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import { ChatInterfaceLoader } from "@/components/demos/ChatInterfaceLoader";
+
+export const metadata: Metadata = {
+  title: "Smart Assistant — NexApex AI Studio",
+  description: "Chat with an AI business consultant tuned for Southeast Asian markets.",
+};
 
 export default function ChatPage() {
   return (
     <div className="relative flex h-[calc(100dvh-72px)] w-full flex-col md:h-[calc(100dvh-88px)]">
       {/* Ambient gradient mesh background */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-1/4 -left-1/4 h-[600px] w-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-[#94fcff]/[0.015] blur-[100px]" />
+        <div className="absolute -top-1/4 -left-1/4 size-[600px] rounded-full bg-[#94fcff]/[0.02] blur-[120px]" />
+        <div className="absolute -bottom-1/4 -right-1/4 size-[500px] rounded-full bg-[#94fcff]/[0.015] blur-[100px]" />
       </div>
 
       {/* Breadcrumb toolbar */}

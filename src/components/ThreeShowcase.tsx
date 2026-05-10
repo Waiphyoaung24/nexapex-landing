@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property -- react-three-fiber primitives use lowercase Three.js props */
 "use client";
 
 import { patchThreeWarnings } from "@/lib/patch-three-clock";
@@ -31,8 +32,8 @@ function Annotation({ position, label, detail, active }: {
         <div className="relative flex items-center gap-3">
           {/* Pulse dot */}
           <div className="relative">
-            <div className="w-3 h-3 rounded-full bg-[#94fcff] shadow-[0_0_12px_rgba(148,252,255,0.6)]" />
-            <div className="absolute inset-0 w-3 h-3 rounded-full bg-[#94fcff] animate-ping opacity-40" />
+            <div className="size-3 rounded-full bg-[#94fcff] shadow-[0_0_12px_rgba(148,252,255,0.6)]" />
+            <div className="absolute inset-0 size-3 rounded-full bg-[#94fcff] animate-ping opacity-40" />
           </div>
           {/* Label card */}
           <div className="bg-[#0e1418]/90 backdrop-blur-sm border border-[#94fcff]/20 rounded-lg px-3 py-2 whitespace-nowrap">
@@ -321,7 +322,7 @@ export function ThreeShowcase() {
       <div className="absolute inset-0 z-20 pointer-events-none">
         {brandPanels.map((panel, i) => (
           <div
-            key={i}
+            key={panel.title}
             ref={(el) => { panelRefs.current[i] = el; }}
             className="absolute bottom-16 left-5 md:left-[60px] max-w-[420px]"
           >
@@ -341,9 +342,9 @@ export function ThreeShowcase() {
       {/* Active phase indicator — right side */}
       <div className="absolute right-5 md:right-[60px] top-1/2 -translate-y-1/2 z-20 pointer-events-none">
         <div className="flex flex-col gap-2">
-          {brandPanels.map((_, i) => (
+          {brandPanels.map((panel, i) => (
             <div
-              key={i}
+              key={`indicator-${panel.title}`}
               className="transition-all duration-500"
               style={{
                 width: activePanel === i ? 24 : 8,

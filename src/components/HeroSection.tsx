@@ -16,7 +16,7 @@ const CROSS_POSITIONS = [5, 25, 50, 72, 95] as const;
 function CrossMarker({ xPercent }: { xPercent: number }) {
   return (
     <div
-      className="absolute bottom-10 md:bottom-16 h-3 w-3 opacity-30"
+      className="absolute bottom-10 md:bottom-16 size-3 opacity-30"
       style={{ left: `${xPercent}%` }}
     >
       <div className="absolute left-1/2 h-full w-px -translate-x-1/2 bg-[#94fcff]" />

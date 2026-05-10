@@ -146,7 +146,7 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
           </h2>
         </div>
         <p className="editorial-body max-w-[280px] text-[10px] font-medium uppercase tracking-[1.5px] text-white/55 md:text-right leading-[1.8]">
-          A short manifesto — read it on the way down.
+          A short manifesto: read it on the way down.
         </p>
       </div>
 
@@ -156,7 +156,7 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
           const isOdd = i % 2 === 1;
           return (
           <p
-            key={i}
+            key={p.before}
             className={`editorial-body text-white/90 leading-[1.25] md:leading-[1.35] tracking-[-0.015em] font-[family-name:var(--font-display)] mb-[18vh] md:mb-[25vh] last:mb-0 max-w-[34rem] sm:max-w-[44rem] md:max-w-[52rem] lg:max-w-[62rem] ${isOdd ? "ml-auto text-right" : "mr-auto text-left"}`}
             style={{
               fontSize: "clamp(1.15rem, 3.4vw, 2.5rem)",

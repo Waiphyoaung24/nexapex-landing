@@ -129,6 +129,7 @@ export function ChatInterface() {
         e.preventDefault();
       }
     };
+    // eslint-disable-next-line react-doctor/client-passive-event-listeners -- handler calls preventDefault() at scroll boundaries to stop scroll-chain leak; passive: true would silently drop preventDefault()
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
@@ -289,14 +290,14 @@ export function ChatInterface() {
       {/* ─── Ambient mesh background — composited only ─── */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div
-          className="absolute left-1/2 top-1/3 h-[720px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60"
+          className="absolute left-1/2 top-1/3 size-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60"
           style={{
             background:
               "radial-gradient(circle at center, rgba(148,252,255,0.05) 0%, rgba(148,252,255,0.015) 35%, transparent 70%)",
           }}
         />
         <div
-          className="absolute -bottom-40 -right-40 h-[480px] w-[480px] rounded-full"
+          className="absolute -bottom-40 -right-40 size-[480px] rounded-full"
           style={{
             background:
               "radial-gradient(circle, rgba(198,53,24,0.04) 0%, transparent 65%)",
@@ -380,6 +381,7 @@ export function ChatInterface() {
               // CTA chip shown after a completed substantive assistant reply
               const showCta = showActions && msg.content.trim().length > 80;
               return (
+                // eslint-disable-next-line react-doctor/no-array-index-as-key -- messages are append-only; index is stable for the lifetime of each entry
                 <div key={i} className="group">
                   <ChatMessage role={msg.role} content={msg.content} isStreaming={streaming} />
                   {showCta && (
@@ -579,7 +581,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
   return (
     <div className="mx-auto flex h-full max-w-3xl flex-col items-center justify-center px-4 py-12 md:py-16">
       {/* Greeting orb — concentric rings, breathing pulse */}
-      <div className="relative mb-8 flex h-24 w-24 items-center justify-center">
+      <div className="relative mb-8 flex size-24 items-center justify-center">
         <span className="absolute inset-0 rounded-full border border-[#94fcff]/15 chat-orb-pulse" />
         <span
           className="absolute inset-3 rounded-full border border-[#94fcff]/25 chat-orb-pulse"
@@ -589,7 +591,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
           className="absolute inset-6 rounded-full border border-[#94fcff]/40 chat-orb-pulse"
           style={{ animationDelay: "0.6s" }}
         />
-        <span className="relative h-3 w-3 rounded-full bg-[#94fcff] shadow-[0_0_20px_rgba(148,252,255,0.6)]" />
+        <span className="relative size-3 rounded-full bg-[#94fcff] shadow-[0_0_20px_rgba(148,252,255,0.6)]" />
       </div>
 
       {/* Mono kicker */}
@@ -654,7 +656,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
               style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
             />
 
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#94fcff]/15 bg-[#94fcff]/[0.04] text-[#94fcff] transition-colors group-hover/chip:border-[#94fcff]/30 group-hover/chip:bg-[#94fcff]/10">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-[#94fcff]/15 bg-[#94fcff]/[0.04] text-[#94fcff] transition-colors group-hover/chip:border-[#94fcff]/30 group-hover/chip:bg-[#94fcff]/10">
               <Icon size={16} strokeWidth={1.5} />
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -736,14 +738,14 @@ function Composer({
           placeholder={isStreaming ? "Generating..." : "Ask about AI solutions for your business..."}
           rows={1}
           disabled={isStreaming}
-          className="flex-1 resize-none bg-transparent px-2 py-2 text-[14px] leading-relaxed text-white placeholder:text-nex-dim/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex-1 resize-none bg-transparent p-2 text-[14px] leading-relaxed text-white placeholder:text-nex-dim/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
           style={{ maxHeight: "200px" }}
         />
 
         {isStreaming ? (
           <button
             onClick={onStop}
-            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-red-400/30 bg-red-500/10 text-red-300 transition-all duration-200 hover:bg-red-500/20 hover:text-red-200"
+            className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-red-400/30 bg-red-500/10 text-red-300 transition-all duration-200 hover:bg-red-500/20 hover:text-red-200"
             aria-label="Stop generation"
           >
             <Square size={14} fill="currentColor" />
@@ -753,7 +755,7 @@ function Composer({
             onClick={onSubmit}
             disabled={!hasInput}
             className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200",
+              "flex size-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200",
               hasInput
                 ? "cursor-pointer bg-[#94fcff] text-[#0e1418] shadow-[0_0_24px_-4px_rgba(148,252,255,0.5)] hover:bg-white"
                 : "cursor-not-allowed bg-white/[0.04] text-nex-dim/40"
@@ -776,7 +778,7 @@ function LimitReachedCard() {
       {/* Soft ambient glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
+        className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full"
         style={{
           background:
             "radial-gradient(circle, rgba(148,252,255,0.12) 0%, transparent 65%)",
@@ -793,7 +795,7 @@ function LimitReachedCard() {
           You&apos;ve seen what&apos;s possible.
         </h3>
         <p className="mt-2 max-w-md text-[13px] leading-relaxed text-white/70">
-          Ready to build this for your actual business? Let&apos;s talk —
+          Ready to build this for your actual business? Let&apos;s talk:
           a free 30-minute call, no pitch deck, just your problem and how
           we&apos;d solve it.
         </p>

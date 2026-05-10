@@ -16,7 +16,7 @@ interface MeResponse {
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { token: leadToken, hydrated, logout } = useAuth();
-  const router = useRouter();
+  const { replace } = useRouter();
   const [status, setStatus] = useState<"loading" | "approved" | "pending">(
     "loading",
   );
@@ -28,7 +28,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     const activeToken = adminToken ?? leadToken;
 
     if (!activeToken) {
-      router.replace("/auth");
+      // eslint-disable-next-line react-doctor/nextjs-no-client-side-redirect -- auth state is only known after client hydration + /me probe; server redirect would require cookie-based session
+      replace("/auth");
       return;
     }
 
@@ -39,14 +40,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       .catch(() => {
         if (adminToken) clearAdminToken();
         if (leadToken) logout();
-        router.replace("/auth");
+        // eslint-disable-next-line react-doctor/nextjs-no-client-side-redirect -- auth state is only known after client hydration + /me probe; server redirect would require cookie-based session
+      replace("/auth");
       });
-  }, [hydrated, leadToken, router, logout]);
+  }, [hydrated, leadToken, replace, logout]);
 
   if (status === "loading") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
+        <div className="size-6 animate-spin rounded-full border-2 border-[#94fcff]/20 border-t-[#94fcff]" />
       </div>
     );
   }

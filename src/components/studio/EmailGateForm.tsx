@@ -23,7 +23,7 @@ export function EmailGateForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const router = useRouter();
+  const { push } = useRouter();
 
   function switchMode(next: Mode) {
     if (loading) return;
@@ -46,7 +46,7 @@ export function EmailGateForm() {
           password: adminPassword,
         });
         setAdminToken(res.token);
-        router.push("/demos");
+        push("/demos");
         return;
       }
 
@@ -61,7 +61,7 @@ export function EmailGateForm() {
         industry: industry || undefined,
       });
       login(res.token, res.email, res.name);
-      router.push("/demos");
+      push("/demos");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Request failed");
     } finally {

@@ -4,6 +4,7 @@ import "@/lib/patch-three-clock";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+// eslint-disable-next-line react-doctor/no-react19-deprecated-apis -- useContext is fine here; use() forbids reads inside non-render code paths this hook supports
 import { createContext, useContext, useEffect, useState } from "react";
 
 if (typeof window !== "undefined") {

@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { push } = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
         password,
       });
       setAdminToken(res.token);
-      router.push("/admin/leads");
+      push("/admin/leads");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

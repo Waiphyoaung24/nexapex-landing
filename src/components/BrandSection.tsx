@@ -217,9 +217,9 @@ export function BrandSection({ id }: { id?: string } = {}) {
             </p>
             {/* Location badge */}
             <div className="editorial-body brand-statement-body flex items-center gap-3">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#94fcff]/60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#94fcff]" />
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#94fcff]/60" />
+                <span className="relative inline-flex size-2 rounded-full bg-[#94fcff]" />
               </span>
               <span className="text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]/70">
                 Based in Bangkok, Thailand
@@ -287,7 +287,7 @@ export function BrandSection({ id }: { id?: string } = {}) {
                 Let&rsquo;s build the<br />unfair advantage.
               </h3>
               <p className="text-[14px] leading-[1.7] text-white/55 max-w-[440px] mb-10">
-                30-minute scoping call. No deck, no junior account manager —
+                30-minute scoping call. No deck, no junior account manager;
                 you&rsquo;ll talk to the people who&rsquo;ll actually ship the system.
               </p>
               <Link

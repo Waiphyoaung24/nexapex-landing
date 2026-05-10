@@ -79,6 +79,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         className="absolute inset-x-0 bottom-0 z-0 top-[45%] md:top-[52%] [mask-image:linear-gradient(to_bottom,transparent_0,#000_50px,#000_60%,rgba(0,0,0,0.5)_85%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_50px,#000_60%,rgba(0,0,0,0.5)_85%,transparent_100%)] md:[mask-image:linear-gradient(to_bottom,transparent_0,#000_60px,#000_65%,rgba(0,0,0,0.75)_82%,rgba(0,0,0,0.35)_92%,transparent_100%)] md:[-webkit-mask-image:linear-gradient(to_bottom,transparent_0,#000_60px,#000_65%,rgba(0,0,0,0.75)_82%,rgba(0,0,0,0.35)_92%,transparent_100%)]"
         aria-hidden
         style={{
+          // eslint-disable-next-line react-doctor/no-permanent-will-change -- pinned section animated continuously by ScrollSmoother for entire pin
           willChange: "transform, opacity",
         }}
       >

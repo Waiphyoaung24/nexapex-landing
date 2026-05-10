@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
+import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 import { useEditorialReveal } from "@/lib/editorial-reveal"
 
@@ -121,16 +122,19 @@ export function ProjectShowcase() {
           opacity: isVisible ? 1 : 0,
           scale: isVisible ? 1 : 0.8,
           transition: "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), scale 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          // eslint-disable-next-line react-doctor/no-permanent-will-change -- transform updated on every mousemove while showcase is mounted
           willChange: "transform",
         }}
       >
         <div className="relative w-[380px] h-[250px] bg-[#1a2630] rounded-xl overflow-hidden">
           {projects.map((project, index) => (
-            <img
+            <Image
               key={project.title}
               src={project.image}
               alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out"
+              fill
+              sizes="380px"
+              className="object-cover transition-all duration-500 ease-out"
               style={{
                 opacity: hoveredIndex === index ? 1 : 0,
                 scale: hoveredIndex === index ? 1 : 1.1,

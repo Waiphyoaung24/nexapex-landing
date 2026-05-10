@@ -27,7 +27,10 @@ function MarqueeRow({ logos, direction, duration }: {
   duration: number;
 }) {
   // Duplicate enough times to fill viewport + overflow
-  const allLogos = [...logos, ...logos, ...logos, ...logos];
+  const allLogos = [...logos, ...logos, ...logos, ...logos].map((logo, idx) => ({
+    ...logo,
+    rowKey: `${logo.alt}-${idx}`,
+  }));
 
   return (
     <div className="overflow-hidden">
@@ -37,14 +40,17 @@ function MarqueeRow({ logos, direction, duration }: {
           animation: `marquee-${direction} ${duration}s linear infinite`,
         }}
       >
-        {allLogos.map((logo, i) => (
+        {allLogos.map((logo) => (
           <div
-            key={`${logo.alt}-${i}`}
+            key={logo.rowKey}
             className="group flex items-center justify-center rounded-lg md:rounded-xl border border-white/[0.06] bg-white/[0.02] w-[120px] h-[75px] md:w-[180px] md:h-[100px] shrink-0 hover:border-[#94fcff]/15 hover:bg-white/[0.04] transition-all duration-300"
           >
+            {/* eslint-disable-next-line react-doctor/nextjs-no-img-element -- third-party brand SVG logos with varying intrinsic ratios; next/image's fixed width/height prop ratio fights CSS max-h sizing */}
             <img
               src={logo.src}
               alt={`${logo.alt} logo`}
+              loading="lazy"
+              decoding="async"
               className="max-h-[24px] md:max-h-[40px] w-auto opacity-60 group-hover:opacity-90 transition-opacity duration-300"
             />
           </div>

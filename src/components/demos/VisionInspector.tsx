@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import Image from "next/image";
 // GSAP animations removed — CSS animations used instead for reliability with React 18 Strict Mode
 import { Upload, AlertCircle, RefreshCw, Info, ShoppingCart, HardHat, UtensilsCrossed, Sprout } from "lucide-react";
 import { BoundingBoxCanvas } from "./BoundingBoxCanvas";
@@ -155,7 +156,7 @@ onClick={() => fileInputRef.current?.click()}
               : "border-white/10 glass-panel hover:border-[#94fcff]/30 hover:shadow-[0_0_20px_rgba(148,252,255,0.08)]"
           }`}
         >
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#94fcff]/10 vision-float">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-[#94fcff]/10 vision-float">
             <Upload size={24} className="text-[#94fcff]" />
           </div>
           <div className="text-center">
@@ -189,7 +190,7 @@ onClick={() => fileInputRef.current?.click()}
           <div className="mb-3 flex items-center gap-2">
             <Info size={14} className="text-nex-dim" />
             <p className="text-[10px] font-mono uppercase tracking-[2px] text-nex-dim">
-              Pre-trained model — what it can detect
+              Pre-trained model: what it can detect
             </p>
           </div>
           <p className="mb-4 text-xs sm:text-sm leading-relaxed text-nex-text/60">
@@ -244,12 +245,13 @@ onClick={() => fileInputRef.current?.click()}
                 onClick={() => handleSampleClick(sample.src)}
                 className="group cursor-pointer overflow-hidden rounded-xl glass-panel transition-all duration-200 hover:border-[#94fcff]/20 hover:shadow-[0_0_16px_rgba(148,252,255,0.1)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#94fcff]/60 focus-visible:rounded-xl"
               >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
                     src={sample.src}
                     alt={sample.label}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 768px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
                 <div className="px-3 py-2">
@@ -322,7 +324,7 @@ onClick={() => fileInputRef.current?.click()}
           <div className="flex flex-col gap-3 sm:gap-4">
             {/* Summary stats — horizontal scroll on mobile */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+              <div className="rounded-xl glass-panel p-3 sm:p-4 text-center">
                 <p className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-display)]">
                   {result.total_objects}
                 </p>
@@ -330,7 +332,7 @@ onClick={() => fileInputRef.current?.click()}
                   Objects
                 </p>
               </div>
-              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+              <div className="rounded-xl glass-panel p-3 sm:p-4 text-center">
                 <p className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-display)]">
                   {result.unique_classes}
                 </p>
@@ -338,7 +340,7 @@ onClick={() => fileInputRef.current?.click()}
                   Categories
                 </p>
               </div>
-              <div className="rounded-xl glass-panel px-3 py-3 sm:p-4 text-center">
+              <div className="rounded-xl glass-panel p-3 sm:p-4 text-center">
                 <p className="text-xl sm:text-2xl font-bold text-[#94fcff] font-[family-name:var(--font-display)]">
                   {result.processing_time_ms < 1000
                     ? `${result.processing_time_ms}ms`
@@ -355,9 +357,9 @@ onClick={() => fileInputRef.current?.click()}
               <p className="mb-2 text-[10px] font-mono uppercase tracking-[2px] text-nex-dim">
                 Detections
               </p>
-              {result.detections.map((det, i) => (
+              {result.detections.map((det) => (
                 <div
-                  key={`${det.class_name}-${i}`}
+                  key={`${det.class_name}-${det.bbox.join(",")}`}
                   className="flex items-center gap-2 sm:gap-3 rounded-lg px-2 py-1.5 hover:bg-white/[0.03] transition-colors"
                 >
                   <span className="min-w-[80px] sm:min-w-[90px] text-xs text-white/80 truncate">
