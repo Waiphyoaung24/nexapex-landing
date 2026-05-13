@@ -128,7 +128,15 @@ export function ParticleMorphScene() {
       ref={containerRef}
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-10"
-      style={{ contain: "strict" }}
+      style={{
+        contain: "strict",
+        // Soft top/bottom falloff so the canvas never shows a hard seam against
+        // the next section's background. Particles vignette toward the edges.
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent 0%, black 12%, black 80%, transparent 100%)",
+        maskImage:
+          "linear-gradient(to bottom, transparent 0%, black 12%, black 80%, transparent 100%)",
+      }}
     >
       <canvas ref={canvasRef} className="block h-full w-full" />
     </div>

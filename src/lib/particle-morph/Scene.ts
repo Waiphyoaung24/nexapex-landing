@@ -1,11 +1,9 @@
 import {
   Clock,
-  Color,
   PerspectiveCamera,
   Scene as ThreeScene,
   WebGLRenderer,
 } from "three";
-import { config } from "./Config";
 
 export class Scene {
   scene: ThreeScene;
@@ -21,7 +19,8 @@ export class Scene {
     this.container = container;
 
     this.scene = new ThreeScene();
-    this.scene.background = new Color(config.scene.backgroundColor);
+    // Transparent clear — body bg shows through, masking can vignette edges.
+    this.scene.background = null;
 
     this.camera = new PerspectiveCamera(50, 1, 0.1, 100);
     this.camera.position.set(0, 0, 5);
@@ -32,8 +31,10 @@ export class Scene {
       canvas,
       alpha: true,
       antialias: true,
+      premultipliedAlpha: false,
       powerPreference: "high-performance",
     });
+    this.renderer.setClearColor(0x000000, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setAnimationLoop((timeStamp) => {
       const elapsed = this.clock.getElapsedTime();
