@@ -126,21 +126,36 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
         aria-hidden
       />
 
-      {/* ── Bottom backdrop overlay — brand-tinted blend into next section ── */}
+      {/* ── Bottom seam — brand-palette atmospheric blend into BrandSection ── */}
+      {/* Layer 1: vertical falloff using brand tokens nex-teal → nex-surface → nex-background */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-48 md:h-80"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-72 md:h-[28rem]"
         aria-hidden
         style={{
           background:
-            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(14,20,24,0.15) 30%, rgba(14,20,24,0.45) 60%, rgba(14,20,24,0.85) 85%, #0e1418 100%)",
+            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(26,38,48,0.25) 28%, rgba(22,32,41,0.6) 55%, rgba(14,20,24,0.92) 82%, #0e1418 100%)",
         }}
       />
+      {/* Layer 2: horizontal brand-color sweep — nex-cyan → nex-mauve → nex-red, very dim, mix-blend-screen */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 md:h-32 mix-blend-screen"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-44 md:h-56 mix-blend-screen"
         aria-hidden
         style={{
           background:
-            "radial-gradient(ellipse 60% 100% at 50% 100%, rgba(148,252,255,0.10) 0%, rgba(99,179,237,0.04) 45%, transparent 80%)",
+            "linear-gradient(90deg, rgba(148,252,255,0.06) 0%, rgba(185,175,187,0.05) 45%, rgba(198,53,24,0.05) 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, black 35%, black 75%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, black 35%, black 75%, transparent 100%)",
+        }}
+      />
+      {/* Layer 3: cyan ground haze, centered radial — the same nex-cyan glow that lives in the hero */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40 md:h-44 mix-blend-screen"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(148,252,255,0.12) 0%, rgba(148,252,255,0.04) 50%, transparent 85%)",
         }}
       />
 
