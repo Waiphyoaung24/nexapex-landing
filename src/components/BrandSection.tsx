@@ -144,7 +144,7 @@ export function BrandSection({ id }: { id?: string } = {}) {
           where this section meets the canvas above. */}
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-10 w-full md:h-16"
+        className="pointer-events-none absolute left-1/2 top-0 z-10 h-8 w-[40%] -translate-x-1/2 md:h-12 md:w-[28%]"
         viewBox="0 0 1440 64"
         preserveAspectRatio="none"
       >
