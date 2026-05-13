@@ -69,7 +69,7 @@ export function MorphSegmentIndicator() {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="pointer-events-none fixed right-6 top-1/2 z-[5] hidden -translate-y-1/2 flex-col items-end gap-5 md:flex"
+      className="pointer-events-none fixed right-8 top-1/2 z-[5] hidden -translate-y-1/2 flex-col items-end gap-8 md:flex"
     >
       {MORPH_SEQUENCE.map((name, i) => {
         const active = i === idx;

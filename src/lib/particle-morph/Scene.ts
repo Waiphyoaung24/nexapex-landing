@@ -23,7 +23,8 @@ export class Scene {
     this.scene.background = null;
 
     this.camera = new PerspectiveCamera(50, 1, 0.1, 100);
-    this.camera.position.set(0, 0, 5);
+    // Closer camera = larger particle silhouette in viewport.
+    this.camera.position.set(0, 0, 3.4);
     this.camera.lookAt(0, 0, 0);
     this.scene.add(this.camera);
 

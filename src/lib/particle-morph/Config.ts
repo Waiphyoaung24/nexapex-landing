@@ -18,7 +18,7 @@ export const config = {
     colors: ["#94fcff", "#c63518", "#dfe4dc"] as [string, string, string],
     dotColor: "#94fcff",
     dotColorShadow: "#1a2630", // nex-teal
-    dotSize: 22,
+    dotSize: 28,
     dotMinSize: 0.1,
     dotsNum: 14000,
     useRandColor: false,

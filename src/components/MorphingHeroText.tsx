@@ -86,14 +86,14 @@ export function MorphingHeroText() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-1/2 z-[3] flex -translate-y-1/2 flex-col items-center justify-center px-6 text-center"
+      className="pointer-events-none absolute bottom-24 left-6 z-[3] flex flex-col items-start text-left md:bottom-28 md:left-[60px]"
     >
       <h2
         ref={titleRef}
-        className="morph-title select-none font-normal uppercase leading-[0.92] tracking-[-0.03em] text-white"
+        className="morph-title select-none font-normal uppercase leading-[0.85] tracking-[-0.025em] text-white"
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(2.5rem, 9vw, 7.5rem)",
+          fontSize: "clamp(2rem, 5.2vw, 4.5rem)",
           background:
             "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #94fcff 100%)",
           WebkitBackgroundClip: "text",
@@ -106,7 +106,7 @@ export function MorphingHeroText() {
       </h2>
       <p
         ref={tagRef}
-        className="morph-tagline mt-5 max-w-md text-xs font-medium uppercase tracking-[3px] text-[#94fcff]/70 md:text-sm"
+        className="morph-tagline mt-3 max-w-xs text-[10px] font-medium uppercase tracking-[3px] text-[#94fcff]/60 md:text-xs md:max-w-sm"
         style={{ willChange: "transform, opacity" }}
       >
         {initial.tagline}
