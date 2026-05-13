@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { cn } from "@/lib/utils";
 import { MorphingHeroText } from "@/components/MorphingHeroText";
+import { MorphSegmentIndicator } from "@/components/MorphSegmentIndicator";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
@@ -117,12 +118,13 @@ export function HeroSection({ className }: { className?: string }) {
 
   return (
     <section
+      id="particle-morph-pin"
       ref={sectionRef}
       className={cn(
         "relative min-h-[100dvh] h-screen w-full overflow-hidden",
         className,
       )}
-      style={{ contain: "layout style paint", isolation: "isolate" }}
+      style={{ isolation: "isolate" }}
     >
       {/* Atmospheric background gradient — tinted hero center, particles show through */}
       <div
@@ -135,6 +137,9 @@ export function HeroSection({ className }: { className?: string }) {
 
       {/* Centered morphing title, synced to ParticleMorphScene segments */}
       <MorphingHeroText />
+
+      {/* Right-rail step indicator — one pip per morph */}
+      <MorphSegmentIndicator />
 
       {/* Cross markers */}
       <div className="hero-cross-markers pointer-events-none absolute inset-0 z-[2] hidden md:block">

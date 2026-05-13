@@ -64,24 +64,50 @@ export function ParticleMorphScene() {
         }
       };
 
-      // Scroll-scrubbed morph progress + segment broadcasts.
+      // Scroll-pinned, snap-stepped morph progress + segment broadcasts.
+      const { MORPH_SEQUENCE } = await import("@/lib/particle-morph/Config");
+      const stops = MORPH_SEQUENCE.length;
+      const snapPoints = Array.from({ length: stops }, (_, i) => i / (stops - 1));
+
       let lastIdx = -1;
+      const broadcast = (progress: number) => {
+        // Snap progress to nearest stop for label switching, so the title
+        // changes exactly when a shape is fully formed.
+        const stepped =
+          snapPoints.reduce(
+            (best, p) =>
+              Math.abs(p - progress) < Math.abs(best - progress) ? p : best,
+            snapPoints[0],
+          );
+        const idx = Math.round(stepped * (stops - 1));
+        if (idx !== lastIdx) {
+          lastIdx = idx;
+          window.dispatchEvent(
+            new CustomEvent("particle-morph-segment", {
+              detail: { idx },
+            }),
+          );
+        }
+      };
+
       const st = ScrollTrigger.create({
-        trigger: "body",
+        trigger: "#particle-morph-pin",
+        pin: true,
+        pinSpacing: true,
         start: "top top",
-        end: () => `+=${window.innerHeight * 2}`, // hero range = 2× viewport scroll
+        end: () => `+=${window.innerHeight * (stops - 1) * 1.2}`,
         scrub: reduceMotion ? false : 1,
+        snap: reduceMotion
+          ? undefined
+          : {
+              snapTo: snapPoints,
+              duration: { min: 0.25, max: 0.7 },
+              delay: 0.08,
+              ease: "power2.inOut",
+            },
         onUpdate: (self) => {
           engine.setScrollProgress(self.progress);
-          const seg = engine.segmentFor(self.progress);
-          if (seg.idx !== lastIdx) {
-            lastIdx = seg.idx;
-            window.dispatchEvent(
-              new CustomEvent("particle-morph-segment", {
-                detail: { idx: seg.idx },
-              }),
-            );
-          }
+          broadcast(self.progress);
         },
       });
 
