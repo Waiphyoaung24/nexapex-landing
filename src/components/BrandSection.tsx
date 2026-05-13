@@ -155,15 +155,28 @@ export function BrandSection({ id }: { id?: string } = {}) {
             "linear-gradient(to bottom, rgba(148,252,255,0.08) 0%, rgba(148,252,255,0.02) 40%, transparent 100%)",
         }}
       />
-      {/* Hairline accent at the seam */}
-      <div
+      {/* Curved seam accent — gentle arc replaces the straight hairline so
+          the boundary reads as an organic horizon, not a panel edge. */}
+      <svg
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px z-10"
-        style={{
-          background:
-            "linear-gradient(to right, transparent 0%, rgba(148,252,255,0.28) 50%, transparent 100%)",
-        }}
-      />
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 w-full md:h-20"
+        viewBox="0 0 1440 80"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="seam-curve-grad" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="rgba(148,252,255,0)" />
+            <stop offset="50%" stopColor="rgba(148,252,255,0.32)" />
+            <stop offset="100%" stopColor="rgba(148,252,255,0)" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M 0 14 C 360 38, 1080 38, 1440 14"
+          fill="none"
+          stroke="url(#seam-curve-grad)"
+          strokeWidth="1"
+        />
+      </svg>
 
       {/* ── Section Headline — centered, same style as ThreeShowcase ── */}
       <div className="section-headline flex flex-col items-center justify-center py-8 md:py-20 pointer-events-none">
