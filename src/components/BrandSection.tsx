@@ -128,36 +128,15 @@ export function BrandSection({ id }: { id?: string } = {}) {
   return (
     <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-visible">
 
-      {/* ── Seam blend — brand-palette atmospheric merge with section above ── */}
-      {/* Vertical falloff: nex-teal/surface/background, sits OUTSIDE this section */}
+      {/* Seam blend — single dark falloff that meets the section above at #0e1418.
+          No colored sweeps: the two sections share the same background token,
+          so they should join with zero visible band. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-72 md:-top-[28rem] h-72 md:h-[28rem] z-10"
+        className="pointer-events-none absolute inset-x-0 -top-64 md:-top-96 h-64 md:h-96 z-10"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(26,38,48,0.25) 28%, rgba(22,32,41,0.55) 55%, rgba(14,20,24,0.9) 82%, #0e1418 100%)",
-        }}
-      />
-      {/* Brand sweep: nex-cyan → nex-mauve → nex-red, masked vertical band */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-44 md:-top-56 h-44 md:h-56 z-10 mix-blend-screen"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(148,252,255,0.05) 0%, rgba(185,175,187,0.04) 50%, rgba(198,53,24,0.04) 100%)",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-        }}
-      />
-      {/* Cyan ground haze — radial, sits at the bottom of the section above */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-32 md:-top-40 h-32 md:h-40 z-10 mix-blend-screen"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(148,252,255,0.10) 0%, rgba(148,252,255,0.03) 50%, transparent 85%)",
+            "linear-gradient(to bottom, rgba(14,20,24,0) 0%, rgba(14,20,24,0.55) 55%, #0e1418 100%)",
         }}
       />
       {/* Curved seam accent — a single dim arc replacing the old straight
