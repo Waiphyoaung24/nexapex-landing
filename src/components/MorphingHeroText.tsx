@@ -86,14 +86,14 @@ export function MorphingHeroText() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute bottom-24 left-6 z-[3] flex flex-col items-start text-left md:bottom-28 md:left-[60px]"
+      className="pointer-events-none absolute bottom-40 left-4 right-4 z-[3] flex flex-col items-start text-left sm:bottom-24 sm:left-6 sm:right-auto md:bottom-28 md:left-[60px]"
     >
       <h2
         ref={titleRef}
         className="morph-title select-none font-normal uppercase leading-[0.85] tracking-[-0.025em] text-white"
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "clamp(2rem, 5.2vw, 4.5rem)",
+          fontSize: "clamp(1.6rem, 8.5vw, 4.5rem)",
           background:
             "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #94fcff 100%)",
           WebkitBackgroundClip: "text",
