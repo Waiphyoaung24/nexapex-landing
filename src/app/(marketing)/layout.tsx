@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/styles/globals.css";
-import { ParticleNetworkBackground } from "@/components/ParticleNetworkBackground";
+import { ParticleMorphScene } from "@/components/ParticleMorphScene";
 import { SmoothScrollProvider } from "@/components/SmoothScroll";
 import SplashCursor from "@/components/SplashCursor";
 import { BrandCursor } from "@/components/BrandCursor";
@@ -34,7 +34,7 @@ export default function MarketingLayout({
   return (
     <html lang="en" className={`${nevera.variable} ${nexa.variable} dark h-full antialiased`}>
       <body suppressHydrationWarning className="grain-overlay min-h-full bg-[#0e1418] text-[#f0f1ef]">
-        <ParticleNetworkBackground />
+        <ParticleMorphScene />
         <SplashCursor RAINBOW_MODE={false} COLOR="#94fcff" />
         <BrandCursor />
         <AuthProvider>

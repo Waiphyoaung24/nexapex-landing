@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { cn } from "@/lib/utils";
+import { MorphingHeroText } from "@/components/MorphingHeroText";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
@@ -131,6 +132,9 @@ export function HeroSection({ className }: { className?: string }) {
             "radial-gradient(ellipse at 50% 35%, rgba(148,252,255,0.06) 0%, rgba(148,252,255,0.02) 35%, rgba(14,20,24,0) 70%)",
         }}
       />
+
+      {/* Centered morphing title, synced to ParticleMorphScene segments */}
+      <MorphingHeroText />
 
       {/* Cross markers */}
       <div className="hero-cross-markers pointer-events-none absolute inset-0 z-[2] hidden md:block">
