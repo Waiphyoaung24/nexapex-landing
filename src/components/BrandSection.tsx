@@ -146,35 +146,27 @@ export function BrandSection({ id }: { id?: string } = {}) {
             "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(148,252,255,0.12) 0%, rgba(99,179,237,0.06) 40%, transparent 75%)",
         }}
       />
-      {/* Top-edge inner glow at the seam */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 md:h-40 z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(148,252,255,0.08) 0%, rgba(148,252,255,0.02) 40%, transparent 100%)",
-        }}
-      />
-      {/* Curved seam accent — gentle arc replaces the straight hairline so
-          the boundary reads as an organic horizon, not a panel edge. */}
+      {/* Curved seam accent — a single dim arc replacing the old straight
+          hairline + duplicate inner glow that together formed a visible band
+          where this section meets the canvas above. */}
       <svg
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 w-full md:h-20"
-        viewBox="0 0 1440 80"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-10 w-full md:h-16"
+        viewBox="0 0 1440 64"
         preserveAspectRatio="none"
       >
         <defs>
           <linearGradient id="seam-curve-grad" x1="0" x2="1" y1="0" y2="0">
             <stop offset="0%" stopColor="rgba(148,252,255,0)" />
-            <stop offset="50%" stopColor="rgba(148,252,255,0.32)" />
+            <stop offset="50%" stopColor="rgba(148,252,255,0.16)" />
             <stop offset="100%" stopColor="rgba(148,252,255,0)" />
           </linearGradient>
         </defs>
         <path
-          d="M 0 14 C 360 38, 1080 38, 1440 14"
+          d="M 0 20 C 360 40, 1080 40, 1440 20"
           fill="none"
           stroke="url(#seam-curve-grad)"
-          strokeWidth="1"
+          strokeWidth="0.75"
         />
       </svg>
 
