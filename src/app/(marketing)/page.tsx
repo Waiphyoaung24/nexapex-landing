@@ -7,6 +7,7 @@ import { CTASection } from "@/components/CTASection";
 import { FooterSection } from "@/components/FooterSection";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
+import { InterstitialBreathe } from "@/components/InterstitialBreathe";
 import { InterstitialCanvas } from "@/components/InterstitialCanvas";
 import { Preloader } from "@/components/Preloader";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
@@ -27,6 +28,7 @@ export default function Home() {
           <HeroSection />
           <InterstitialCanvas id="interstitial-canvas" />
           <BrandSection id="brand-section" />
+          <InterstitialBreathe id="breathe-section" />
           <EditorialHighlightSection id="practice-section" />
           <ShipStackSection id="delivery-section" />
           <ClientsSection id="clients-section" />
