@@ -168,6 +168,27 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
             <InterludeContent profile="static" mounted={mounted} />
           </>
         )}
+
+        {profile === "lite" && (
+          <>
+            <video
+              src={VIDEO_SRC}
+              poster={POSTER_SRC}
+              autoPlay
+              muted
+              playsInline
+              loop
+              preload="metadata"
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
+            />
+            <InterludeContent profile="lite" mounted={mounted} />
+          </>
+        )}
       </div>
     </section>
   );
