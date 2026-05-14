@@ -35,6 +35,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -43,6 +44,25 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     const onChange = () => setReduceMotion(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const splash = document.getElementById("splash-cursor");
+    const wrapper = splash?.parentElement as HTMLElement | null;
+    if (!wrapper) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        wrapper.style.visibility = entry.isIntersecting ? "hidden" : "";
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(section);
+    return () => {
+      io.disconnect();
+      wrapper.style.visibility = "";
+    };
   }, []);
 
   useGSAP(
@@ -83,9 +103,25 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         },
       });
 
+      const card = cardRef.current;
+      if (card) {
+        gsap.set(card, { scale: 0.82, yPercent: 6, filter: "blur(8px)", opacity: 0.6 });
+        tl.to(
+          card,
+          { scale: 1, yPercent: 0, filter: "blur(0px)", opacity: 1, duration: 1.5, ease: "power2.out" },
+          0
+        );
+        tl.to(card, { rotate: 0.6, duration: 8, ease: "none" }, 0);
+        tl.to(
+          card,
+          { scale: 1.04, duration: 1.5, ease: "power2.in" },
+          6.5
+        );
+      }
+
       if (headline) {
         gsap.set(headline, { opacity: 0, y: 24 });
-        tl.to(headline, { opacity: 1, y: 0, duration: 1 }, 0);
+        tl.to(headline, { opacity: 1, y: 0, duration: 1 }, 0.6);
         tl.to(headline, { opacity: 0, y: -12, duration: 1 }, 7);
       }
 
@@ -158,15 +194,19 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         {/* HD media card — 16:9 on md+, 4:3 on mobile for breathing room, capped at 1280px */}
         {/* max-h via svh keeps the whole section inside short viewports (eyebrow + padding + caption ≈ 320px chrome) */}
         <div
-          className={`relative mx-auto w-full max-w-[1280px] aspect-[4/3] sm:aspect-video overflow-hidden rounded-xl sm:rounded-2xl transition-[opacity,transform] duration-1000 ease-out ${
+          ref={cardRef}
+          className={`relative mx-auto w-full max-w-[560px] sm:max-w-[720px] lg:max-w-[880px] xl:max-w-[960px] aspect-[4/5] sm:aspect-[3/2] overflow-hidden rounded-xl sm:rounded-2xl p-[1.5px] transition-[opacity,transform] duration-1000 ease-out will-change-transform ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
           style={{
+            background:
+              "conic-gradient(from 140deg at 50% 50%, rgba(148,252,255,0.55), rgba(148,252,255,0.05) 25%, rgba(120,90,255,0.35) 50%, rgba(148,252,255,0.05) 75%, rgba(148,252,255,0.55))",
             boxShadow:
-              "0 60px 140px -40px rgba(148,252,255,0.12)",
-            maxHeight: "calc(100svh - 320px)",
+              "0 60px 140px -40px rgba(148,252,255,0.18), 0 0 60px -20px rgba(148,252,255,0.25)",
+            maxHeight: "calc(100svh - 220px)",
           }}
         >
+          <div className="relative h-full w-full overflow-hidden rounded-[inherit] bg-nex-background">
           {reduceMotion ? (
             <img
               src={POSTER_SRC}
@@ -258,6 +298,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
             >
               SYSTEMS THAT BREATHE.
             </h2>
+          </div>
           </div>
         </div>
 
