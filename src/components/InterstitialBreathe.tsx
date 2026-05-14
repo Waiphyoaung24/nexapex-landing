@@ -58,9 +58,6 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         video.pause();
       });
 
-      // Only pin when the viewport is tall enough to fit the whole section.
-      const canPin = window.matchMedia("(min-height: 820px)").matches;
-
       // Proxy object so we tween a plain number (cheap) and only set
       // video.currentTime when the change exceeds ~1 frame. Avoids the
       // seek-storm that makes direct currentTime tweens feel laggy under
@@ -68,17 +65,20 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
       const proxy = { t: 0 };
       const FRAME = 1 / 24; // source is 24fps
 
+      // Always pin so the screen locks while the video scrubs end-to-end.
+      // The card's max-height (calc(100svh - 320px)) keeps the whole section
+      // inside the viewport even on short screens, so the pin never overflows.
       const tl = gsap.timeline({
         defaults: { duration: 1, ease: "none" },
         scrollTrigger: {
           trigger: section,
-          start: canPin ? "top top" : "top bottom",
-          end: canPin ? "+=150%" : "bottom top",
-          pin: canPin,
-          // Lazy scrub: 1s of smoothing gives the decoder room to catch up,
-          // matches the rhythm of ScrollSmoother (smooth: 1.5) used globally.
+          start: "top top",
+          // 200% of viewport gives the scrub enough travel to feel deliberate
+          // and guarantees the video reaches its final frame before unpin.
+          end: "+=200%",
+          pin: true,
           scrub: 1,
-          anticipatePin: canPin ? 1 : 0,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
