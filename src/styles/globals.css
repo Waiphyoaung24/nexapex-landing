@@ -16,6 +16,9 @@
      on marketing routes must use bg-nex-background (not bg-[#0e1418]) to
      stay in sync with this token. */
   --color-nex-background: #0e1418;
+  /* Space-separated RGB triple of --color-nex-background, for inline rgba()
+     uses (overlays, gradients, scrim) via rgb(var(--color-nex-background-rgb) / α). */
+  --color-nex-background-rgb: 14 20 24;
   --color-nex-teal: #1a2630;
   --color-nex-red: #c63518;
   --color-nex-slate: #45596d;
