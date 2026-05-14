@@ -1,414 +1,160 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useEffect, useState } from "react";
 
 const VIDEO_SRC =
   "https://res.cloudinary.com/dkk8ylzhy/video/upload/v1778744291/Butterflies_flapping_flowers_swa__202605141433_ndqss3.mp4";
 const POSTER_SRC =
   "https://res.cloudinary.com/dkk8ylzhy/video/upload/so_0,w_1280,q_auto/Butterflies_flapping_flowers_swa__202605141433_ndqss3.jpg";
 
-const MAX_FRAMES = 150;
-const MAX_WIDTH = 960;
-
-type Profile = "full" | "lite" | "static";
-
-function pickProfile(): Profile {
-  if (typeof window === "undefined") return "full";
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return "static";
-  if (window.innerWidth < 768) return "lite";
-  return "full";
-}
-
-function InterludeContent({
-  profile,
-  mounted,
-}: {
-  profile: Profile;
-  mounted: boolean;
-}) {
-  return (
-    <div className="absolute inset-0 z-20 flex flex-col">
-      {/* Eyebrow */}
-      <div className="flex justify-start px-5 pt-8 md:px-[60px] md:pt-12">
-        <p className="text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50">
-          02.5 / INTERLUDE
-        </p>
-      </div>
-
-      {/* Headline — vertically centered */}
-      <div
-        className={`flex-1 flex items-center justify-center px-5 transition-all duration-1000 ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
-      >
-        <h2
-          className="interlude-title"
-          style={
-            profile === "lite"
-              ? { fontSize: "clamp(48px, 14vw, 96px)" }
-              : undefined
-          }
-        >
-          SYSTEMS THAT BREATHE.
-        </h2>
-      </div>
-
-      {/* Bottom row */}
-      <div
-        className={`grid grid-cols-1 md:grid-cols-3 items-end gap-6 px-5 pb-10 md:px-[60px] md:pb-14 transition-all duration-1000 delay-300 ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-        }`}
-      >
-        <p className="text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.8] text-white/60 max-w-[280px]">
-          Built like nature: living systems, not static deliverables.
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/#contact"
-            className="inline-flex items-center gap-3 px-6 py-3 border border-[#94fcff]/40 hover:border-[#94fcff] hover:bg-[#94fcff]/[0.06] transition-colors duration-300 text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]"
-          >
-            Start a project
-            <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
-              <path
-                d="M0 4H21M21 4L17 1M21 4L17 7"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="square"
-              />
-            </svg>
-          </Link>
-          <Link
-            href="#project-showcase"
-            className="liquid-glass inline-flex items-center gap-3 rounded-full px-6 py-3 text-[11px] font-mono uppercase tracking-[3px] text-white hover:scale-[1.03] active:scale-[0.97] transition-transform duration-200"
-          >
-            See work
-            <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
-              <path
-                d="M0 4H21M21 4L17 1M21 4L17 7"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="square"
-              />
-            </svg>
-          </Link>
-        </div>
-
-        <p className="text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.8] text-white/60 max-w-[280px] md:text-right md:justify-self-end">
-          From a single prototype to a stack that runs every day.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function InterstitialBreathe({ id }: { id?: string } = {}) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const pinnedRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const framesRef = useRef<HTMLCanvasElement[]>([]);
-
+  const [reduceMotion, setReduceMotion] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [framesReady, setFramesReady] = useState(false);
-  // Start as "static" so SSR/initial render never creates a pin trigger.
-  // The mount effect upgrades to "full" or "lite" based on the actual client env.
-  const [profile, setProfile] = useState<Profile>("static");
 
   useEffect(() => {
-    setProfile(pickProfile());
-    setMounted(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setProfile(pickProfile());
+    setReduceMotion(mq.matches);
+    setMounted(true);
+    const onChange = () => setReduceMotion(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Frame capture (Full profile only)
-  useEffect(() => {
-    if (profile !== "full") return;
-    const video = videoRef.current;
-    if (!video) return;
-
-    let capturing = true;
-    let lastTime = -1;
-    let raf = 0;
-    const frames: HTMLCanvasElement[] = [];
-
-    const onCaptureDone = () => {
-      framesRef.current = frames;
-      setFramesReady(true);
-      try {
-        video.pause();
-      } catch {}
-    };
-
-    const captureFrame = () => {
-      if (!capturing) return;
-      if (video.readyState < 2) {
-        raf = requestAnimationFrame(captureFrame);
-        return;
-      }
-      if (video.currentTime === lastTime) {
-        raf = requestAnimationFrame(captureFrame);
-        return;
-      }
-      lastTime = video.currentTime;
-      const scale = Math.min(1, MAX_WIDTH / video.videoWidth);
-      const w = Math.round(video.videoWidth * scale);
-      const h = Math.round(video.videoHeight * scale);
-      const canvas = document.createElement("canvas");
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.drawImage(video, 0, 0, w, h);
-      frames.push(canvas);
-      if (frames.length >= MAX_FRAMES) {
-        capturing = false;
-        onCaptureDone();
-        return;
-      }
-      if ("requestVideoFrameCallback" in video) {
-        (
-          video as HTMLVideoElement & {
-            requestVideoFrameCallback: (cb: () => void) => number;
-          }
-        ).requestVideoFrameCallback(captureFrame);
-      } else {
-        raf = requestAnimationFrame(captureFrame);
-      }
-    };
-
-    const onLoaded = () => {
-      video.play().catch(() => {});
-      captureFrame();
-    };
-
-    const onEnded = () => {
-      capturing = false;
-      onCaptureDone();
-    };
-
-    video.addEventListener("loadedmetadata", onLoaded);
-    video.addEventListener("ended", onEnded);
-    if (video.readyState >= 1) onLoaded();
-
-    return () => {
-      capturing = false;
-      cancelAnimationFrame(raf);
-      video.removeEventListener("loadedmetadata", onLoaded);
-      video.removeEventListener("ended", onEnded);
-    };
-  }, [profile]);
-
-  // Size canvas and draw initial frame once capture completes
-  useEffect(() => {
-    if (!framesReady) return;
-    const canvas = canvasRef.current;
-    const frames = framesRef.current;
-    if (!canvas || frames.length === 0) return;
-    canvas.width = frames[0].width;
-    canvas.height = frames[0].height;
-    const ctx = canvas.getContext("2d");
-    if (ctx) ctx.drawImage(frames[0], 0, 0);
-  }, [framesReady]);
-
-  // Pin + scroll-scrub (Full profile only)
-  // Follows the same gsap.timeline + scrollTrigger pattern as BrandSection so
-  // ScrollSmoother integrates the pin spacer correctly.
-  useGSAP(
-    () => {
-      if (profile !== "full") return;
-      const section = sectionRef.current;
-      const pinned = pinnedRef.current;
-      if (!section || !pinned) return;
-
-      const state = { i: -1 };
-      const drawFrame = (idx: number) => {
-        const canvas = canvasRef.current;
-        const frames = framesRef.current;
-        if (!canvas || frames.length === 0) return;
-        if (idx === state.i) return;
-        state.i = idx;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(frames[idx], 0, 0);
-      };
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pinned,
-          start: "top top",
-          end: "+=100%",
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.5,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const frames = framesRef.current;
-            if (frames.length === 0) return;
-            const idx = Math.round(self.progress * (frames.length - 1));
-            drawFrame(idx);
-          },
-        },
-      });
-
-      return () => {
-        tl.scrollTrigger?.kill();
-        tl.kill();
-      };
-    },
-    { scope: sectionRef, dependencies: [profile] },
-  );
-
-  // Refresh ScrollTrigger once capture completes so it re-measures with the
-  // canvas now visible (display flipped from none -> block).
-  useEffect(() => {
-    if (!framesReady) return;
-    ScrollTrigger.refresh();
-  }, [framesReady]);
-
-  // Mouse parallax (Full profile, ≥1024px, no reduced-motion)
-  // Targets bgRef (not pinnedRef) so it doesn't fight ScrollTrigger's pin transforms.
-  useEffect(() => {
-    if (profile !== "full") return;
-    if (typeof window === "undefined") return;
-    if (window.innerWidth < 1024) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const bg = bgRef.current;
-    if (!bg) return;
-
-    const STRENGTH = 20;
-    const LERP = 0.06;
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let raf = 0;
-
-    const onMove = (e: MouseEvent) => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      targetX = ((e.clientX - cx) / cx) * STRENGTH;
-      targetY = ((e.clientY - cy) / cy) * STRENGTH;
-    };
-
-    const tick = () => {
-      currentX += (targetX - currentX) * LERP;
-      currentY += (targetY - currentY) * LERP;
-      gsap.set(bg, { x: currentX, y: currentY });
-      raf = requestAnimationFrame(tick);
-    };
-
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(tick);
-
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-      gsap.set(bg, { x: 0, y: 0 });
-    };
-  }, [profile]);
-
   return (
     <section
-      id={id}
-      ref={sectionRef}
+      id={id ?? "breathe-section"}
       role="region"
       aria-label="Interlude — Systems that breathe"
-      className="relative bg-nex-background overflow-hidden"
+      className="relative bg-nex-background overflow-hidden py-16 md:py-28"
     >
+      {/* Top seam fade — joins BrandSection above at the same bg token */}
       <div
-        ref={pinnedRef}
-        className="relative h-screen w-full overflow-hidden"
-      >
-        {/* Background layer — scaled for parallax bleed, separate from pinnedRef so pin transforms don't conflict */}
-        <div
-          ref={bgRef}
-          className="absolute inset-0 scale-[1.06] origin-center will-change-transform"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 md:h-32 z-[5]"
+        style={{
+          background:
+            "linear-gradient(to bottom, #0e1418 0%, rgba(14,20,24,0.6) 55%, rgba(14,20,24,0) 100%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-[1440px] px-5 md:px-[60px]">
+        {/* Eyebrow */}
+        <p
+          className={`mb-6 text-[10px] font-mono uppercase tracking-[4px] text-[#94fcff]/50 transition-all duration-700 md:mb-10 ${
+            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+          }`}
         >
-          {profile === "static" && (
+          02.5 / INTERLUDE
+        </p>
+
+        {/* HD media card — 16:9, capped at 1280px, brand-tinted ring + soft glow */}
+        <div
+          className={`relative mx-auto w-full max-w-[1280px] aspect-video overflow-hidden rounded-2xl ring-1 ring-[#94fcff]/15 transition-all duration-1000 ${
+            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+          style={{
+            boxShadow:
+              "0 30px 80px -20px rgba(148,252,255,0.18), 0 0 0 1px rgba(148,252,255,0.05)",
+          }}
+        >
+          {reduceMotion ? (
             <img
               src={POSTER_SRC}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
             />
-          )}
-
-          {profile === "lite" && (
+          ) : (
             <video
               src={VIDEO_SRC}
               poster={POSTER_SRC}
               autoPlay
               muted
-              playsInline
               loop
+              playsInline
               preload="metadata"
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
             />
           )}
 
-          {profile === "full" && (
-            <>
-              {!framesReady && (
-                <img
-                  src={POSTER_SRC}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              )}
-              <video
-                ref={videoRef}
-                src={VIDEO_SRC}
-                muted
-                playsInline
-                preload="auto"
-                crossOrigin="anonymous"
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none"
-                style={{ display: framesReady ? "none" : "block" }}
-              />
-              <canvas
-                ref={canvasRef}
-                role="img"
-                aria-label="Animated butterflies and flowers"
-                className="absolute inset-0 h-full w-full object-cover"
-                style={{ display: framesReady ? "block" : "none" }}
-              />
-            </>
-          )}
-
+          {/* Vignette — keeps headline readable over butterflies */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(14,20,24,0) 0%, rgba(14,20,24,0.35) 70%, rgba(14,20,24,0.7) 100%)",
+            }}
           />
+
+          {/* Headline overlay */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
+            <h2
+              className="select-none text-center font-normal uppercase text-white font-[family-name:var(--font-display)]"
+              style={{
+                fontSize: "clamp(2rem, 7vw, 6.5rem)",
+                lineHeight: 0.9,
+                letterSpacing: "-0.025em",
+                background:
+                  "linear-gradient(180deg, #ffffff 0%, #e8eae7 30%, #d4eef0 65%, #94fcff 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 2px 30px rgba(0,0,0,0.4)",
+              }}
+            >
+              SYSTEMS THAT BREATHE.
+            </h2>
+          </div>
         </div>
 
+        {/* Caption row — 3-col on md+, stacked on mobile */}
         <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-32 md:h-40 z-[5]"
-          style={{
-            background:
-              "linear-gradient(to bottom, #0e1418 0%, rgba(14,20,24,0.6) 55%, rgba(14,20,24,0) 100%)",
-          }}
-        />
+          className={`mt-8 grid grid-cols-1 items-start gap-6 transition-all duration-1000 delay-200 md:mt-14 md:grid-cols-3 md:items-center ${
+            mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          <p className="text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.8] text-white/60 max-w-[280px]">
+            Built like nature: living systems, not static deliverables.
+          </p>
 
-        <InterludeContent profile={profile} mounted={mounted} />
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/#contact"
+              className="inline-flex items-center gap-3 px-6 py-3 border border-[#94fcff]/40 hover:border-[#94fcff] hover:bg-[#94fcff]/[0.06] transition-colors duration-300 text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]"
+            >
+              Start a project
+              <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
+                <path
+                  d="M0 4H21M21 4L17 1M21 4L17 7"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="square"
+                />
+              </svg>
+            </Link>
+            <Link
+              href="#project-showcase"
+              className="liquid-glass inline-flex items-center gap-3 rounded-full px-6 py-3 text-[11px] font-mono uppercase tracking-[3px] text-white hover:scale-[1.03] active:scale-[0.97] transition-transform duration-200"
+            >
+              See work
+              <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
+                <path
+                  d="M0 4H21M21 4L17 1M21 4L17 7"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="square"
+                />
+              </svg>
+            </Link>
+          </div>
+
+          <p className="text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.8] text-white/60 max-w-[280px] md:text-right md:justify-self-end">
+            From a single prototype to a stack that runs every day.
+          </p>
+        </div>
       </div>
     </section>
   );
