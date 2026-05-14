@@ -131,11 +131,95 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Silence unused-var lints until later tasks wire these up.
-  void videoRef;
-  void canvasRef;
-  void framesRef;
-  void framesReady;
+  // Frame capture (Full profile only)
+  useEffect(() => {
+    if (profile !== "full") return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    let capturing = true;
+    let lastTime = -1;
+    let raf = 0;
+    const frames: HTMLCanvasElement[] = [];
+
+    const onCaptureDone = () => {
+      framesRef.current = frames;
+      setFramesReady(true);
+      try {
+        video.pause();
+      } catch {}
+    };
+
+    const captureFrame = () => {
+      if (!capturing) return;
+      if (video.readyState < 2) {
+        raf = requestAnimationFrame(captureFrame);
+        return;
+      }
+      if (video.currentTime === lastTime) {
+        raf = requestAnimationFrame(captureFrame);
+        return;
+      }
+      lastTime = video.currentTime;
+      const scale = Math.min(1, MAX_WIDTH / video.videoWidth);
+      const w = Math.round(video.videoWidth * scale);
+      const h = Math.round(video.videoHeight * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(video, 0, 0, w, h);
+      frames.push(canvas);
+      if (frames.length >= MAX_FRAMES) {
+        capturing = false;
+        onCaptureDone();
+        return;
+      }
+      if ("requestVideoFrameCallback" in video) {
+        (
+          video as HTMLVideoElement & {
+            requestVideoFrameCallback: (cb: () => void) => number;
+          }
+        ).requestVideoFrameCallback(captureFrame);
+      } else {
+        raf = requestAnimationFrame(captureFrame);
+      }
+    };
+
+    const onLoaded = () => {
+      video.play().catch(() => {});
+      captureFrame();
+    };
+
+    const onEnded = () => {
+      capturing = false;
+      onCaptureDone();
+    };
+
+    video.addEventListener("loadedmetadata", onLoaded);
+    video.addEventListener("ended", onEnded);
+    if (video.readyState >= 1) onLoaded();
+
+    return () => {
+      capturing = false;
+      cancelAnimationFrame(raf);
+      video.removeEventListener("loadedmetadata", onLoaded);
+      video.removeEventListener("ended", onEnded);
+    };
+  }, [profile]);
+
+  // Size canvas and draw initial frame once capture completes
+  useEffect(() => {
+    if (!framesReady) return;
+    const canvas = canvasRef.current;
+    const frames = framesRef.current;
+    if (!canvas || frames.length === 0) return;
+    canvas.width = frames[0].width;
+    canvas.height = frames[0].height;
+    const ctx = canvas.getContext("2d");
+    if (ctx) ctx.drawImage(frames[0], 0, 0);
+  }, [framesReady]);
 
   return (
     <section
@@ -187,6 +271,46 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
             />
             <InterludeContent profile="lite" mounted={mounted} />
+          </>
+        )}
+
+        {profile === "full" && (
+          <>
+            {!framesReady && (
+              <img
+                src={POSTER_SRC}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            )}
+
+            <video
+              ref={videoRef}
+              src={VIDEO_SRC}
+              muted
+              playsInline
+              preload="auto"
+              crossOrigin="anonymous"
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none"
+              style={{ display: framesReady ? "none" : "block" }}
+            />
+
+            <canvas
+              ref={canvasRef}
+              role="img"
+              aria-label="Animated butterflies and flowers"
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ display: framesReady ? "block" : "none" }}
+            />
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
+            />
+
+            <InterludeContent profile="full" mounted={mounted} />
           </>
         )}
       </div>
