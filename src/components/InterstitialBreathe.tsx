@@ -182,6 +182,8 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
               muted
               playsInline
               preload="auto"
+              disablePictureInPicture
+              disableRemotePlayback
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
               style={{
