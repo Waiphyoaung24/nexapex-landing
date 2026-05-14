@@ -264,6 +264,47 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     { scope: sectionRef, dependencies: [profile, framesReady] },
   );
 
+  // Mouse parallax (Full profile, ≥1024px, no reduced-motion)
+  useEffect(() => {
+    if (profile !== "full") return;
+    if (typeof window === "undefined") return;
+    if (window.innerWidth < 1024) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const pinned = pinnedRef.current;
+    if (!pinned) return;
+
+    const STRENGTH = 20;
+    const LERP = 0.06;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let raf = 0;
+
+    const onMove = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      targetX = ((e.clientX - cx) / cx) * STRENGTH;
+      targetY = ((e.clientY - cy) / cy) * STRENGTH;
+    };
+
+    const tick = () => {
+      currentX += (targetX - currentX) * LERP;
+      currentY += (targetY - currentY) * LERP;
+      gsap.set(pinned, { x: currentX, y: currentY });
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+      gsap.set(pinned, { x: 0, y: 0 });
+    };
+  }, [profile]);
+
   return (
     <section
       id={id}
@@ -278,7 +319,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     >
       <div
         ref={pinnedRef}
-        className="relative h-screen w-full overflow-hidden"
+        className="relative h-screen w-full overflow-hidden scale-[1.06] origin-center"
       >
         {profile === "static" && (
           <>
