@@ -62,15 +62,20 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         video.pause();
       });
 
+      // Only pin when the viewport is tall enough to fit the whole section.
+      // On shorter viewports the pinned content overflows and looks chopped,
+      // so we fall back to a non-pinned scrub keyed to natural scroll.
+      const canPin = window.matchMedia("(min-height: 820px)").matches;
+
       const tl = gsap.timeline({
         defaults: { duration: 1 },
         scrollTrigger: {
           trigger: section,
-          start: "top top",
-          end: "+=150%",
-          pin: true,
+          start: canPin ? "top top" : "top bottom",
+          end: canPin ? "+=150%" : "bottom top",
+          pin: canPin,
           scrub: true,
-          anticipatePin: 1,
+          anticipatePin: canPin ? 1 : 0,
           invalidateOnRefresh: true,
         },
       });
@@ -150,6 +155,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         </p>
 
         {/* HD media card — 16:9 on md+, 4:3 on mobile for breathing room, capped at 1280px */}
+        {/* max-h via svh keeps the whole section inside short viewports (eyebrow + padding + caption ≈ 320px chrome) */}
         <div
           className={`relative mx-auto w-full max-w-[1280px] aspect-[4/3] sm:aspect-video overflow-hidden rounded-xl sm:rounded-2xl transition-[opacity,transform] duration-1000 ease-out ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
@@ -157,6 +163,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
           style={{
             boxShadow:
               "0 60px 140px -40px rgba(148,252,255,0.12)",
+            maxHeight: "calc(100svh - 320px)",
           }}
         >
           {reduceMotion ? (
