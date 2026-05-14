@@ -53,75 +53,76 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
       const headline = headlineRef.current;
       if (!video || !section) return;
 
-      if (headline) {
-        gsap.set(headline, { opacity: 0, y: 24 });
-      }
-
       once(document.documentElement, "touchstart", () => {
         video.play();
         video.pause();
       });
 
       // Only pin when the viewport is tall enough to fit the whole section.
-      // On shorter viewports the pinned content overflows and looks chopped,
-      // so we fall back to a non-pinned scrub keyed to natural scroll.
       const canPin = window.matchMedia("(min-height: 820px)").matches;
 
+      // Proxy object so we tween a plain number (cheap) and only set
+      // video.currentTime when the change exceeds ~1 frame. Avoids the
+      // seek-storm that makes direct currentTime tweens feel laggy under
+      // ScrollSmoother's high-frequency scroll updates.
+      const proxy = { t: 0 };
+      const FRAME = 1 / 24; // source is 24fps
+
       const tl = gsap.timeline({
-        defaults: { duration: 1 },
+        defaults: { duration: 1, ease: "none" },
         scrollTrigger: {
           trigger: section,
           start: canPin ? "top top" : "top bottom",
           end: canPin ? "+=150%" : "bottom top",
           pin: canPin,
-          scrub: true,
+          // Lazy scrub: 1s of smoothing gives the decoder room to catch up,
+          // matches the rhythm of ScrollSmoother (smooth: 1.5) used globally.
+          scrub: 1,
           anticipatePin: canPin ? 1 : 0,
           invalidateOnRefresh: true,
         },
       });
 
       if (headline) {
+        gsap.set(headline, { opacity: 0, y: 24 });
         tl.to(headline, { opacity: 1, y: 0, duration: 1 }, 0);
         tl.to(headline, { opacity: 0, y: -12, duration: 1 }, 7);
       }
 
+      let scrubAttached = false;
       const attachScrubTween = () => {
-        tl.fromTo(
-          video,
-          { currentTime: 0 },
-          { currentTime: video.duration || 1, duration: 8 },
+        if (scrubAttached) return;
+        scrubAttached = true;
+        const dur = video.duration || 1;
+        tl.to(
+          proxy,
+          {
+            t: dur,
+            duration: 8,
+            ease: "none",
+            onUpdate: () => {
+              // Skip redundant seeks within one frame — the decoder can't
+              // display sub-frame deltas anyway, and each seek is expensive.
+              if (Math.abs(video.currentTime - proxy.t) > FRAME) {
+                video.currentTime = proxy.t;
+              }
+            },
+          },
           0
         );
       };
 
-      if (video.readyState >= 1 /* HAVE_METADATA */) {
+      // Wait for canplaythrough — seeks before this stall the main thread
+      // because the demuxer hasn't built enough of the seek index yet.
+      if (video.readyState >= 4 /* HAVE_ENOUGH_DATA */) {
         attachScrubTween();
       } else {
-        once(video, "loadedmetadata", attachScrubTween);
+        once(video, "canplaythrough", attachScrubTween);
+        // Fallback in case canplaythrough never fires (cached video on some browsers)
+        once(video, "loadeddata", () => {
+          if (video.readyState >= 3) attachScrubTween();
+        });
       }
-
-      const blobTimer = window.setTimeout(() => {
-        if (typeof window.fetch !== "function") return;
-        fetch(VIDEO_SRC)
-          .then((res) => res.blob())
-          .then((blob) => {
-            const blobURL = URL.createObjectURL(blob);
-            const t = video.currentTime;
-            once(document.documentElement, "touchstart", () => {
-              video.play();
-              video.pause();
-            });
-            video.setAttribute("src", blobURL);
-            video.currentTime = t + 0.01;
-          })
-          .catch(() => {
-            // Network or CORS failure — silently keep streamed src.
-          });
-      }, 1000);
-
-      return () => {
-        window.clearTimeout(blobTimer);
-      };
     },
     { scope: sectionRef, dependencies: [reduceMotion] }
   );
