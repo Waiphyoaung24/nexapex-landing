@@ -184,6 +184,12 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
               preload="auto"
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
+              style={{
+                // Subject is framed right in the source; nudge zoom toward it
+                // so the tree reads as "centered with atmosphere," not "cropped."
+                transform: "scale(1.12)",
+                transformOrigin: "62% 55%",
+              }}
             />
           )}
 
@@ -199,16 +205,26 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
             }}
           />
 
-          {/* Edge blend — fades all four edges into bg-nex-background */}
+          {/* Edge blend — softer fades into bg-nex-background so the image keeps presence */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
             style={{
               background: [
-                "radial-gradient(ellipse 80% 80% at center, rgb(var(--color-nex-background-rgb) / 0) 30%, rgb(var(--color-nex-background-rgb) / 0.35) 75%, rgb(var(--color-nex-background-rgb) / 0.85) 100%)",
-                "linear-gradient(to right, rgb(var(--color-nex-background-rgb) / 0.95) 0%, rgb(var(--color-nex-background-rgb) / 0) 12%, rgb(var(--color-nex-background-rgb) / 0) 88%, rgb(var(--color-nex-background-rgb) / 0.95) 100%)",
-                "linear-gradient(to bottom, rgb(var(--color-nex-background-rgb) / 0.9) 0%, rgb(var(--color-nex-background-rgb) / 0) 14%, rgb(var(--color-nex-background-rgb) / 0) 80%, rgb(var(--color-nex-background-rgb) / 0.92) 100%)",
+                "radial-gradient(ellipse 85% 85% at center, rgb(var(--color-nex-background-rgb) / 0) 40%, rgb(var(--color-nex-background-rgb) / 0.2) 80%, rgb(var(--color-nex-background-rgb) / 0.65) 100%)",
+                "linear-gradient(to right, rgb(var(--color-nex-background-rgb) / 0.55) 0%, rgb(var(--color-nex-background-rgb) / 0) 8%, rgb(var(--color-nex-background-rgb) / 0) 92%, rgb(var(--color-nex-background-rgb) / 0.55) 100%)",
+                "linear-gradient(to bottom, rgb(var(--color-nex-background-rgb) / 0.6) 0%, rgb(var(--color-nex-background-rgb) / 0) 10%, rgb(var(--color-nex-background-rgb) / 0) 82%, rgb(var(--color-nex-background-rgb) / 0.7) 100%)",
               ].join(", "),
+            }}
+          />
+
+          {/* Atmospheric counter-glow — quiet cyan haze on the left balances the bright tree on the right */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 mix-blend-screen"
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 70% at 22% 65%, rgb(148 252 255 / 0.06) 0%, rgb(148 252 255 / 0.025) 45%, rgb(148 252 255 / 0) 75%)",
             }}
           />
 
