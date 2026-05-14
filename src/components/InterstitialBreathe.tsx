@@ -221,6 +221,49 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     if (ctx) ctx.drawImage(frames[0], 0, 0);
   }, [framesReady]);
 
+  // Pin + scroll-scrub (Full profile only)
+  useGSAP(
+    () => {
+      if (profile !== "full") return;
+      if (!framesReady) return;
+      const section = sectionRef.current;
+      const pinned = pinnedRef.current;
+      const canvas = canvasRef.current;
+      const frames = framesRef.current;
+      if (!section || !pinned || !canvas || frames.length === 0) return;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const state = { i: -1 };
+
+      const drawFrame = (idx: number) => {
+        if (idx === state.i) return;
+        state.i = idx;
+        ctx.drawImage(frames[idx], 0, 0);
+      };
+
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=100%",
+        pin: pinned,
+        pinSpacing: true,
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const idx = Math.round(self.progress * (frames.length - 1));
+          drawFrame(idx);
+        },
+      });
+
+      return () => {
+        trigger.kill();
+      };
+    },
+    { scope: sectionRef, dependencies: [profile, framesReady] },
+  );
+
   return (
     <section
       id={id}
