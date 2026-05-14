@@ -12,6 +12,9 @@
   --font-heading: var(--font-display, "Nevera", var(--font-sans));
 
   /* NexApex brand colors */
+  /* Canonical deep-surface background. All section-level <section> wrappers
+     on marketing routes must use bg-nex-background (not bg-[#0e1418]) to
+     stay in sync with this token. */
   --color-nex-background: #0e1418;
   --color-nex-teal: #1a2630;
   --color-nex-red: #c63518;
