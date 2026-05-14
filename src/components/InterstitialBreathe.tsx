@@ -399,6 +399,15 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
           />
         </div>
 
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-32 md:h-40 z-[5]"
+          style={{
+            background:
+              "linear-gradient(to bottom, #0e1418 0%, rgba(14,20,24,0.6) 55%, rgba(14,20,24,0) 100%)",
+          }}
+        />
+
         <InterludeContent profile={profile} mounted={mounted} />
       </div>
     </section>
