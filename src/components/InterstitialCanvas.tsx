@@ -70,7 +70,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
     <section
       ref={sectionRef}
       id={id}
-      className="relative w-full overflow-hidden bg-[#0e1418] min-h-[78vh] md:min-h-[115vh]"
+      className="relative w-full overflow-hidden bg-nex-background min-h-[78vh] md:min-h-[115vh]"
       style={{ marginBottom: "-1px" }}
       aria-label="Interlude"
     >

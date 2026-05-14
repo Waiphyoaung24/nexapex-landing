@@ -32,7 +32,7 @@ export default function Home() {
           <EditorialHighlightSection id="practice-section" />
           <ShipStackSection id="delivery-section" />
           <ClientsSection id="clients-section" />
-          <div id="project-showcase" className="bg-[#0e1418] min-h-screen flex items-center">
+          <div id="project-showcase" className="bg-nex-background min-h-screen flex items-center">
             <ProjectShowcase />
           </div>
           <CapabilitiesSection id="capabilities-section" />

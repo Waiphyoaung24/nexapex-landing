@@ -64,7 +64,7 @@ export function ShipStackSection({ id }: { id?: string } = {}) {
     <section
       id={id}
       ref={sectionRef}
-      className="relative bg-[#0e1418] text-white min-h-[120vh] md:min-h-[180vh] overflow-hidden px-5 md:px-[60px] py-24 md:py-32"
+      className="relative bg-nex-background text-white min-h-[120vh] md:min-h-[180vh] overflow-hidden px-5 md:px-[60px] py-24 md:py-32"
     >
       {/* Eyebrow */}
       <div className="absolute top-10 md:top-14 left-5 md:left-[60px] z-40">

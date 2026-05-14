@@ -126,7 +126,7 @@ export function BrandSection({ id }: { id?: string } = {}) {
   );
 
   return (
-    <section id={id} ref={sectionRef} className="relative bg-[#0e1418] overflow-visible">
+    <section id={id} ref={sectionRef} className="relative bg-nex-background overflow-visible">
 
       {/* Seam blend — single dark falloff that meets the section above at #0e1418.
           No colored sweeps: the two sections share the same background token,

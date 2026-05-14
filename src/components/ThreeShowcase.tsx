@@ -276,7 +276,7 @@ export function ThreeShowcase() {
   }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen h-screen w-full overflow-hidden bg-[#0e1418]">
+    <section ref={sectionRef} className="relative min-h-screen h-screen w-full overflow-hidden bg-nex-background">
       {/* Full-bleed 3D Canvas */}
       <div ref={canvasWrapRef} className="absolute inset-0">
         <Canvas

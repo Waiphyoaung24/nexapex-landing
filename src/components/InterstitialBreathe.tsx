@@ -328,7 +328,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
       ref={sectionRef}
       role="region"
       aria-label="Interlude — Systems that breathe"
-      className="relative bg-[#0e1418] overflow-hidden"
+      className="relative bg-nex-background overflow-hidden"
     >
       <div
         ref={pinnedRef}

@@ -69,7 +69,7 @@ export function ClientsSection({ id }: { id?: string } = {}) {
     <section
       id={id}
       ref={sectionRef}
-      className="bg-[#0e1418] min-h-screen flex flex-col justify-center overflow-hidden py-10 md:py-0"
+      className="bg-nex-background min-h-screen flex flex-col justify-center overflow-hidden py-10 md:py-0"
     >
       {/* Header row */}
       <div className="mb-8 md:mb-12 flex flex-col gap-3 px-5 md:flex-row md:items-start md:justify-between md:px-[60px]">

@@ -17,7 +17,7 @@ export function CTASection({ id }: { id?: string } = {}) {
     <section
       id={id}
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#0e1418] text-white"
+      className="relative overflow-hidden bg-nex-background text-white"
     >
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16 sm:px-6 sm:py-24 md:py-32 md:px-[60px] lg:py-48">
         {/* Tagline */}

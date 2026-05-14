@@ -79,7 +79,7 @@ export function FooterSection() {
   return (
     <footer
       ref={footerRef}
-      className="relative bg-[#0e1418] text-[#c8ccc6] pt-10 pb-10 px-5 md:pt-14 md:pb-14 md:px-[60px]"
+      className="relative bg-nex-background text-[#c8ccc6] pt-10 pb-10 px-5 md:pt-14 md:pb-14 md:px-[60px]"
     >
       {/* Top divider */}
       <div className="absolute top-0 left-5 right-5 md:left-[60px] md:right-[60px] h-px bg-gradient-to-r from-transparent via-[#94fcff]/15 to-transparent" />

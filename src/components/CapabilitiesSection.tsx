@@ -161,7 +161,7 @@ export function CapabilitiesSection({ id }: { id?: string } = {}) {
     <section
       id={id}
       ref={sectionRef}
-      className="relative bg-[#0e1418] text-white min-h-[100dvh] flex flex-col justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-10 lg:px-[60px]"
+      className="relative bg-nex-background text-white min-h-[100dvh] flex flex-col justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-10 lg:px-[60px]"
     >
       {/* Top area: heading left, description+buttons right */}
       <div className="flex flex-col gap-2 mb-4 sm:mb-5 md:flex-row md:justify-between md:items-end md:mb-8">

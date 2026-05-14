@@ -120,7 +120,7 @@ export function EditorialHighlightSection({ id }: { id?: string } = {}) {
     <section
       id={id}
       ref={sectionRef}
-      className="relative bg-[#0e1418] text-white px-5 md:px-[60px] py-14 md:py-28 overflow-hidden"
+      className="relative bg-nex-background text-white px-5 md:px-[60px] py-14 md:py-28 overflow-hidden"
     >
       {/* Header row */}
       <div className="mb-12 md:mb-24 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
