@@ -114,13 +114,16 @@ function InterludeContent({
 export function InterstitialBreathe({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const pinnedRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const framesRef = useRef<HTMLCanvasElement[]>([]);
 
   const [mounted, setMounted] = useState(false);
   const [framesReady, setFramesReady] = useState(false);
-  const [profile, setProfile] = useState<Profile>("full");
+  // Start as "static" so SSR/initial render never creates a pin trigger.
+  // The mount effect upgrades to "full" or "lite" based on the actual client env.
+  const [profile, setProfile] = useState<Profile>("static");
 
   useEffect(() => {
     setProfile(pickProfile());
@@ -222,56 +225,70 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
   }, [framesReady]);
 
   // Pin + scroll-scrub (Full profile only)
+  // Follows the same gsap.timeline + scrollTrigger pattern as BrandSection so
+  // ScrollSmoother integrates the pin spacer correctly.
   useGSAP(
     () => {
       if (profile !== "full") return;
-      if (!framesReady) return;
       const section = sectionRef.current;
       const pinned = pinnedRef.current;
-      const canvas = canvasRef.current;
-      const frames = framesRef.current;
-      if (!section || !pinned || !canvas || frames.length === 0) return;
-
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+      if (!section || !pinned) return;
 
       const state = { i: -1 };
-
       const drawFrame = (idx: number) => {
+        const canvas = canvasRef.current;
+        const frames = framesRef.current;
+        if (!canvas || frames.length === 0) return;
         if (idx === state.i) return;
         state.i = idx;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
         ctx.drawImage(frames[idx], 0, 0);
       };
 
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: "+=100%",
-        pin: pinned,
-        pinSpacing: true,
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const idx = Math.round(self.progress * (frames.length - 1));
-          drawFrame(idx);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pinned,
+          start: "top top",
+          end: "+=100%",
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.5,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const frames = framesRef.current;
+            if (frames.length === 0) return;
+            const idx = Math.round(self.progress * (frames.length - 1));
+            drawFrame(idx);
+          },
         },
       });
 
       return () => {
-        trigger.kill();
+        tl.scrollTrigger?.kill();
+        tl.kill();
       };
     },
-    { scope: sectionRef, dependencies: [profile, framesReady] },
+    { scope: sectionRef, dependencies: [profile] },
   );
 
+  // Refresh ScrollTrigger once capture completes so it re-measures with the
+  // canvas now visible (display flipped from none -> block).
+  useEffect(() => {
+    if (!framesReady) return;
+    ScrollTrigger.refresh();
+  }, [framesReady]);
+
   // Mouse parallax (Full profile, ≥1024px, no reduced-motion)
+  // Targets bgRef (not pinnedRef) so it doesn't fight ScrollTrigger's pin transforms.
   useEffect(() => {
     if (profile !== "full") return;
     if (typeof window === "undefined") return;
     if (window.innerWidth < 1024) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const pinned = pinnedRef.current;
-    if (!pinned) return;
+    const bg = bgRef.current;
+    if (!bg) return;
 
     const STRENGTH = 20;
     const LERP = 0.06;
@@ -291,7 +308,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     const tick = () => {
       currentX += (targetX - currentX) * LERP;
       currentY += (targetY - currentY) * LERP;
-      gsap.set(pinned, { x: currentX, y: currentY });
+      gsap.set(bg, { x: currentX, y: currentY });
       raf = requestAnimationFrame(tick);
     };
 
@@ -301,7 +318,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
     return () => {
       window.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(raf);
-      gsap.set(pinned, { x: 0, y: 0 });
+      gsap.set(bg, { x: 0, y: 0 });
     };
   }, [profile]);
 
@@ -312,33 +329,26 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
       role="region"
       aria-label="Interlude — Systems that breathe"
       className="relative bg-[#0e1418] overflow-hidden"
-      style={{
-        height: profile === "full" ? "200vh" : undefined,
-        minHeight: profile !== "full" ? "100svh" : undefined,
-      }}
     >
       <div
         ref={pinnedRef}
-        className="relative h-screen w-full overflow-hidden scale-[1.06] origin-center"
+        className="relative h-screen w-full overflow-hidden"
       >
-        {profile === "static" && (
-          <>
+        {/* Background layer — scaled for parallax bleed, separate from pinnedRef so pin transforms don't conflict */}
+        <div
+          ref={bgRef}
+          className="absolute inset-0 scale-[1.06] origin-center will-change-transform"
+        >
+          {profile === "static" && (
             <img
               src={POSTER_SRC}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
-            />
-            <InterludeContent profile="static" mounted={mounted} />
-          </>
-        )}
+          )}
 
-        {profile === "lite" && (
-          <>
+          {profile === "lite" && (
             <video
               src={VIDEO_SRC}
               poster={POSTER_SRC}
@@ -350,53 +360,46 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
               aria-hidden="true"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
-            />
-            <InterludeContent profile="lite" mounted={mounted} />
-          </>
-        )}
+          )}
 
-        {profile === "full" && (
-          <>
-            {!framesReady && (
-              <img
-                src={POSTER_SRC}
-                alt=""
+          {profile === "full" && (
+            <>
+              {!framesReady && (
+                <img
+                  src={POSTER_SRC}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              )}
+              <video
+                ref={videoRef}
+                src={VIDEO_SRC}
+                muted
+                playsInline
+                preload="auto"
+                crossOrigin="anonymous"
                 aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none"
+                style={{ display: framesReady ? "none" : "block" }}
               />
-            )}
+              <canvas
+                ref={canvasRef}
+                role="img"
+                aria-label="Animated butterflies and flowers"
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ display: framesReady ? "block" : "none" }}
+              />
+            </>
+          )}
 
-            <video
-              ref={videoRef}
-              src={VIDEO_SRC}
-              muted
-              playsInline
-              preload="auto"
-              crossOrigin="anonymous"
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none"
-              style={{ display: framesReady ? "none" : "block" }}
-            />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
+          />
+        </div>
 
-            <canvas
-              ref={canvasRef}
-              role="img"
-              aria-label="Animated butterflies and flowers"
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{ display: framesReady ? "block" : "none" }}
-            />
-
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(14,20,24,0)_0%,_rgba(14,20,24,0.35)_70%,_rgba(14,20,24,0.7)_100%)]"
-            />
-
-            <InterludeContent profile="full" mounted={mounted} />
-          </>
-        )}
+        <InterludeContent profile={profile} mounted={mounted} />
       </div>
     </section>
   );
