@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -78,26 +78,14 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         video.pause();
       });
 
-      // Proxy object so we tween a plain number (cheap) and only set
-      // video.currentTime when the change exceeds ~1 frame. Avoids the
-      // seek-storm that makes direct currentTime tweens feel laggy under
-      // ScrollSmoother's high-frequency scroll updates.
-      const proxy = { t: 0 };
-      const FRAME = 1 / 24; // source is 24fps
-
-      // Always pin so the screen locks while the video scrubs end-to-end.
-      // The card's max-height (calc(100svh - 320px)) keeps the whole section
-      // inside the viewport even on short screens, so the pin never overflows.
       const tl = gsap.timeline({
-        defaults: { duration: 1, ease: "none" },
+        defaults: { ease: "none" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          // 200% of viewport gives the scrub enough travel to feel deliberate
-          // and guarantees the video reaches its final frame before unpin.
-          end: "+=200%",
+          end: "+=150%",
           pin: true,
-          scrub: 1,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -105,59 +93,27 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
 
       const card = cardRef.current;
       if (card) {
-        gsap.set(card, { scale: 0.82, yPercent: 6, filter: "blur(8px)", opacity: 0.6 });
-        tl.to(
-          card,
-          { scale: 1, yPercent: 0, filter: "blur(0px)", opacity: 1, duration: 1.5, ease: "power2.out" },
-          0
-        );
-        tl.to(card, { rotate: 0.6, duration: 8, ease: "none" }, 0);
-        tl.to(
-          card,
-          { scale: 1.04, duration: 1.5, ease: "power2.in" },
-          6.5
-        );
+        gsap.set(card, { scale: 0.9, yPercent: 4, opacity: 0.75 });
+        tl.to(card, { scale: 1, yPercent: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0);
       }
 
       if (headline) {
-        gsap.set(headline, { opacity: 0, y: 24 });
-        tl.to(headline, { opacity: 1, y: 0, duration: 1 }, 0.6);
-        tl.to(headline, { opacity: 0, y: -12, duration: 1 }, 7);
+        gsap.set(headline, { opacity: 0, y: 16 });
+        tl.to(headline, { opacity: 1, y: 0, duration: 0.2 }, 0.15);
+        tl.to(headline, { opacity: 0, y: -8, duration: 0.15 }, 0.85);
       }
 
       let scrubAttached = false;
       const attachScrubTween = () => {
         if (scrubAttached) return;
         scrubAttached = true;
-        const dur = video.duration || 1;
-        tl.to(
-          proxy,
-          {
-            t: dur,
-            duration: 8,
-            ease: "none",
-            onUpdate: () => {
-              // Skip redundant seeks within one frame — the decoder can't
-              // display sub-frame deltas anyway, and each seek is expensive.
-              if (Math.abs(video.currentTime - proxy.t) > FRAME) {
-                video.currentTime = proxy.t;
-              }
-            },
-          },
-          0
-        );
+        tl.to(video, { currentTime: video.duration || 1, duration: 1 }, 0);
       };
 
-      // Wait for canplaythrough — seeks before this stall the main thread
-      // because the demuxer hasn't built enough of the seek index yet.
-      if (video.readyState >= 4 /* HAVE_ENOUGH_DATA */) {
+      if (video.readyState >= 1 /* HAVE_METADATA */) {
         attachScrubTween();
       } else {
-        once(video, "canplaythrough", attachScrubTween);
-        // Fallback in case canplaythrough never fires (cached video on some browsers)
-        once(video, "loadeddata", () => {
-          if (video.readyState >= 3) attachScrubTween();
-        });
+        once(video, "loadedmetadata", attachScrubTween);
       }
     },
     { scope: sectionRef, dependencies: [reduceMotion] }
@@ -195,18 +151,24 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
         {/* max-h via svh keeps the whole section inside short viewports (eyebrow + padding + caption ≈ 320px chrome) */}
         <div
           ref={cardRef}
-          className={`relative mx-auto w-full max-w-[560px] sm:max-w-[720px] lg:max-w-[880px] xl:max-w-[960px] aspect-[4/5] sm:aspect-[3/2] overflow-hidden rounded-xl sm:rounded-2xl p-[1.5px] transition-[opacity,transform] duration-1000 ease-out will-change-transform ${
+          className={`relative mx-auto w-full max-w-[560px] sm:max-w-[720px] lg:max-w-[880px] xl:max-w-[960px] aspect-[4/5] sm:aspect-[3/2] transition-[opacity,transform] duration-1000 ease-out will-change-transform ${
             mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
           style={{
-            background:
-              "conic-gradient(from 140deg at 50% 50%, rgba(148,252,255,0.55), rgba(148,252,255,0.05) 25%, rgba(120,90,255,0.35) 50%, rgba(148,252,255,0.05) 75%, rgba(148,252,255,0.55))",
-            boxShadow:
-              "0 60px 140px -40px rgba(148,252,255,0.18), 0 0 60px -20px rgba(148,252,255,0.25)",
             maxHeight: "calc(100svh - 220px)",
+            willChange: "transform",
+            transform: "translateZ(0)",
           }}
         >
-          <div className="relative h-full w-full overflow-hidden rounded-[inherit] bg-nex-background">
+          <div
+            className="relative h-full w-full"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(ellipse 78% 78% at center, #000 30%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0) 95%)",
+              maskImage:
+                "radial-gradient(ellipse 78% 78% at center, #000 30%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0) 95%)",
+            }}
+          >
           {reduceMotion ? (
             <img
               src={POSTER_SRC}
@@ -235,48 +197,13 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
             />
           )}
 
-          {/* Void gradient overlay — cinematic vignette + bottom grounding (tinted near-black, not pure #000) */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: [
-                "radial-gradient(ellipse 100% 80% at center, rgb(4 7 10 / 0) 40%, rgb(4 7 10 / 0.5) 100%)",
-                "linear-gradient(to bottom, rgb(4 7 10 / 0.25) 0%, rgb(4 7 10 / 0) 30%, rgb(4 7 10 / 0) 65%, rgb(4 7 10 / 0.55) 100%)",
-              ].join(", "),
-            }}
-          />
-
-          {/* Edge blend — softer fades into bg-nex-background so the image keeps presence */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: [
-                "radial-gradient(ellipse 85% 85% at center, rgb(var(--color-nex-background-rgb) / 0) 40%, rgb(var(--color-nex-background-rgb) / 0.2) 80%, rgb(var(--color-nex-background-rgb) / 0.65) 100%)",
-                "linear-gradient(to right, rgb(var(--color-nex-background-rgb) / 0.55) 0%, rgb(var(--color-nex-background-rgb) / 0) 8%, rgb(var(--color-nex-background-rgb) / 0) 92%, rgb(var(--color-nex-background-rgb) / 0.55) 100%)",
-                "linear-gradient(to bottom, rgb(var(--color-nex-background-rgb) / 0.6) 0%, rgb(var(--color-nex-background-rgb) / 0) 10%, rgb(var(--color-nex-background-rgb) / 0) 82%, rgb(var(--color-nex-background-rgb) / 0.7) 100%)",
-              ].join(", "),
-            }}
-          />
-
-          {/* Atmospheric counter-glow — quiet cyan haze on the left balances the bright tree on the right */}
+          {/* Subtle cyan counter-glow on the left to balance the bright tree */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 mix-blend-screen"
             style={{
               background:
                 "radial-gradient(ellipse 55% 70% at 22% 65%, rgb(148 252 255 / 0.06) 0%, rgb(148 252 255 / 0.025) 45%, rgb(148 252 255 / 0) 75%)",
-            }}
-          />
-
-          {/* Watermark mask — focused gradient over bottom-right corner to hide source-tool watermark */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute bottom-0 right-0 h-[32%] w-[28%]"
-            style={{
-              background:
-                "radial-gradient(ellipse at bottom right, rgb(var(--color-nex-background-rgb) / 1) 0%, rgb(var(--color-nex-background-rgb) / 0.95) 30%, rgb(var(--color-nex-background-rgb) / 0.6) 60%, rgb(var(--color-nex-background-rgb) / 0) 100%)",
             }}
           />
 
