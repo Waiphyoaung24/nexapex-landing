@@ -41,7 +41,7 @@ export const config = {
   },
 
   meshAnimationParams: {
-    cow: {
+    "nex-logo": {
       position: new Vector3(0, 0, 0),
       rotation: new Vector3(0, 0, 0),
     },
@@ -56,14 +56,14 @@ export const config = {
   } as Record<string, { position: Vector3; rotation: Vector3 }>,
 };
 
-export type MorphName = "cow" | "brain" | "earth";
+export type MorphName = "nex-logo" | "brain" | "earth";
 
 // Sequence the particles cycle through as the user scrolls the hero range.
-export const MORPH_SEQUENCE: MorphName[] = ["cow", "brain", "earth"];
+export const MORPH_SEQUENCE: MorphName[] = ["nex-logo", "brain", "earth"];
 
 // Labels overlaid on the canvas, one per morph segment.
 export const MORPH_TITLES: Record<MorphName, { title: string; tagline: string }> = {
-  cow: { title: "Curiosity", tagline: "Where every breakthrough begins" },
+  "nex-logo": { title: "NexApex", tagline: "Where intelligence takes shape" },
   brain: { title: "Intelligence", tagline: "Models that learn your domain" },
   earth: { title: "Scale", tagline: "Built for global production loads" },
 };

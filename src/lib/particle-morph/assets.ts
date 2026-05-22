@@ -15,7 +15,9 @@
  * in AssetsLoader.ts.
  */
 
-import type { Mesh, Object3D } from "three";
+import { Mesh } from "three";
+import type { BufferGeometry, Object3D } from "three";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export type AssetSpec =
@@ -23,7 +25,7 @@ export type AssetSpec =
   | { kind: "texture"; name: string; url: string };
 
 export const ASSETS: AssetSpec[] = [
-  { kind: "model", name: "cow", url: "/models/cow.glb" },
+  { kind: "model", name: "nex-logo", url: "/models/nex_logo_solid_web.glb" },
   { kind: "model", name: "brain", url: "/models/brain.glb" },
   { kind: "model", name: "earth", url: "/models/earth.glb" },
   { kind: "texture", name: "disk", url: "/models/particle-disk.png" },
@@ -53,14 +55,42 @@ function firstMesh(root: Object3D): Mesh | null {
   return found;
 }
 
+/**
+ * Merge every Mesh in a scene graph into one geometry. Needed for models
+ * authored as multiple parts (e.g. the NexApex logo: left wing, right wing,
+ * accent) so the surface sampler scatters particles across the whole shape
+ * instead of just the first part. Each part's world transform is baked in,
+ * and attributes are trimmed to position + normal so the merge is clean.
+ */
+function mergedMesh(root: Object3D): Mesh {
+  root.updateMatrixWorld(true);
+  const parts: BufferGeometry[] = [];
+  root.traverse((o) => {
+    const m = o as Mesh;
+    if (!m.isMesh || !m.geometry) return;
+    let g = m.geometry.clone();
+    g.applyMatrix4(m.matrixWorld);
+    if (g.index) g = g.toNonIndexed();
+    for (const attr of Object.keys(g.attributes)) {
+      if (attr !== "position" && attr !== "normal") g.deleteAttribute(attr);
+    }
+    if (!g.attributes.normal) g.computeVertexNormals();
+    parts.push(g);
+  });
+  if (parts.length === 0) {
+    throw new Error("[particle-morph] no meshes to merge");
+  }
+  const merged = mergeGeometries(parts, false);
+  if (!merged) throw new Error("[particle-morph] geometry merge failed");
+  return new Mesh(merged);
+}
+
 export function resolveObj(name: string, gltf: GLTF): Mesh {
   switch (name) {
-    case "cow": {
-      const mesh =
-        (gltf.scene.getObjectByName("PEPCow_Mesh") as Mesh | undefined) ??
-        firstMesh(gltf.scene);
-      if (!mesh) throw new Error("[particle-morph] cow mesh not found");
-      return autoNormalize(mesh, 2.2);
+    case "nex-logo": {
+      // Logo ships as three parts — merge them so particles cover the
+      // full mark, then normalize to a consistent morph size.
+      return autoNormalize(mergedMesh(gltf.scene), 2.2);
     }
     case "brain": {
       const mesh =
