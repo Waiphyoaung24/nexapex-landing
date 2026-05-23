@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -85,10 +86,26 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
   );
 }
 
+const BURST_PHOTOS = [
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=520&q=80",
+];
+
 export function BrandSection({ id }: { id?: string } = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const horizontalWrapRef = useRef<HTMLDivElement>(null);
   const horizontalTrackRef = useRef<HTMLDivElement>(null);
+  const burstContainerRef = useRef<HTMLDivElement>(null);
+  const burstKeywordRef = useRef<HTMLSpanElement>(null);
+  const burstPhotosRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEditorialReveal(sectionRef);
 
@@ -125,8 +142,148 @@ export function BrandSection({ id }: { id?: string } = {}) {
     { scope: sectionRef },
   );
 
+  useGSAP(
+    () => {
+      const container = burstContainerRef.current;
+      const keyword = burstKeywordRef.current;
+      const photoLayer = burstPhotosRef.current;
+      if (!container || !keyword || !photoLayer) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const photos = Array.from(
+        photoLayer.querySelectorAll<HTMLImageElement>(".ai-burst-photo"),
+      );
+      if (!photos.length) return;
+
+      const r = gsap.utils.random;
+      let tl: gsap.core.Timeline | null = null;
+
+      const hideOffscreen = () =>
+        gsap.set(photos, {
+          left: "50%",
+          top: "50%",
+          xPercent: -50,
+          yPercent: -50,
+          x: 0,
+          y: 0,
+          rotation: 0,
+          clipPath: "inset(100% 0 0 0)",
+        });
+
+      const stopBurst = () => {
+        tl?.kill();
+        tl = null;
+        gsap.killTweensOf(photos);
+        hideOffscreen();
+      };
+
+      const scatter = () => {
+        photos.forEach((photo, index) => {
+          gsap.set(photo, {
+            left: r(2, 98) + "%",
+            top: r(2, 98) + "%",
+            x: r(-48, 48),
+            y: r(50, 110),
+            rotation: r(-12, 12) * 0.2,
+            zIndex: index,
+          });
+        });
+      };
+
+      const playBurst = () => {
+        stopBurst();
+        scatter();
+
+        const stagger = 0.09;
+        const revealDur = 0.34;
+        const exitDur = 0.3;
+        const exitStagger = 0.07;
+        const revealEnd = (photos.length - 1) * stagger + revealDur;
+
+        tl = gsap.timeline({ onComplete: stopBurst });
+
+        photos.forEach((photo, index) => {
+          tl!.to(
+            photo,
+            {
+              x: r(-40, 40),
+              y: r(-30, 30),
+              rotation: r(-12, 12),
+              clipPath: "inset(0% 0 0 0)",
+              ease: "power3.out",
+              duration: revealDur,
+            },
+            index * stagger,
+          );
+        });
+
+        photos.forEach((photo, index) => {
+          tl!.to(
+            photo,
+            {
+              y: "+=" + r(180, 280),
+              x: "+=" + r(-55, 55),
+              rotation: "+=" + r(-10, 10),
+              clipPath: "inset(0% 0 100% 0)",
+              ease: "power2.in",
+              duration: exitDur,
+            },
+            revealEnd + index * exitStagger,
+          );
+        });
+      };
+
+      hideOffscreen();
+
+      const onPointerDown = (e: PointerEvent) => {
+        if (e.pointerType === "touch" || e.pointerType === "pen") playBurst();
+      };
+
+      keyword.addEventListener("mouseenter", playBurst);
+      keyword.addEventListener("focus", playBurst);
+      keyword.addEventListener("pointerdown", onPointerDown);
+      container.addEventListener("mouseleave", stopBurst);
+
+      return () => {
+        keyword.removeEventListener("mouseenter", playBurst);
+        keyword.removeEventListener("focus", playBurst);
+        keyword.removeEventListener("pointerdown", onPointerDown);
+        container.removeEventListener("mouseleave", stopBurst);
+        stopBurst();
+      };
+    },
+    { scope: sectionRef, dependencies: [mounted] },
+  );
+
   return (
     <section id={id} ref={sectionRef} className="relative bg-nex-background overflow-visible">
+      {/* Full-viewport burst overlay — portaled to body so no ancestor
+          transform/filter can break `position: fixed`. */}
+      {mounted &&
+        createPortal(
+          <div
+            ref={burstPhotosRef}
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 z-[60] overflow-hidden"
+          >
+            {BURST_PHOTOS.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="ai-burst-photo absolute pointer-events-none rounded-[3px] object-cover shadow-2xl will-change-transform"
+                style={{
+                  width: "clamp(140px, 22vw, 300px)",
+                  maxHeight: "min(48vh, 420px)",
+                  aspectRatio: "3 / 4",
+                }}
+              />
+            ))}
+          </div>,
+          document.body,
+        )}
+
 
       {/* Seam blend — single dark falloff that meets the section above at #0e1418.
           No colored sweeps: the two sections share the same background token,
@@ -195,14 +352,35 @@ export function BrandSection({ id }: { id?: string } = {}) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-16">
           {/* Left — large statement */}
           <div className="md:col-span-7">
-            <h2
-              className="editorial-body brand-statement font-normal uppercase leading-[0.92] tracking-[-0.01em] text-white font-[family-name:var(--font-display)]"
-              style={{ fontSize: "clamp(1.6rem, 5vw, 4.5rem)" }}
-            >
-              We build AI solutions{"\n"}
-              that transform how{"\n"}
-              businesses operate
-            </h2>
+            <div ref={burstContainerRef} className="relative">
+              <h2
+                className="editorial-body brand-statement relative z-[2] font-normal uppercase leading-[0.92] tracking-[-0.01em] text-white font-[family-name:var(--font-display)]"
+                style={{ fontSize: "clamp(1.6rem, 5vw, 4.5rem)" }}
+              >
+                We build{" "}
+                <span
+                  ref={burstKeywordRef}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Reveal AI solutions"
+                  className="ai-burst-keyword relative z-10 inline-block cursor-pointer outline-none transition-colors duration-200 hover:text-[#94fcff] focus-visible:text-[#94fcff]"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, rgba(148,252,255,0.55) 0, rgba(148,252,255,0.55) 55%, transparent 55%)",
+                    backgroundRepeat: "repeat-x",
+                    backgroundSize: "0.32em 0.08em",
+                    backgroundPosition: "0 100%",
+                    paddingBottom: "0.12em",
+                    WebkitTapHighlightColor: "transparent",
+                  }}
+                >
+                  AI solutions
+                </span>
+                {"\n"}
+                that transform how{"\n"}
+                businesses operate
+              </h2>
+            </div>
           </div>
 
           {/* Right — supporting text + location badge */}
