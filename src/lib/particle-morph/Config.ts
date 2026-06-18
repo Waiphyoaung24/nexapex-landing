@@ -63,7 +63,7 @@ export const MORPH_SEQUENCE: MorphName[] = ["nex-logo", "brain", "earth"];
 
 // Labels overlaid on the canvas, one per morph segment.
 export const MORPH_TITLES: Record<MorphName, { title: string; tagline: string }> = {
-  "nex-logo": { title: "NexApex", tagline: "Where intelligence takes shape" },
+  "nex-logo": { title: "NexApex", tagline: "Intelligence that moves business" },
   brain: { title: "Intelligence", tagline: "Models that learn your domain" },
   earth: { title: "Scale", tagline: "Built for global production loads" },
 };

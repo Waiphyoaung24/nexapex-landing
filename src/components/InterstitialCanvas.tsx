@@ -17,7 +17,8 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const eyebrowRef = useRef<HTMLSpanElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
+  const statementRef = useRef<HTMLParagraphElement>(null);
+  const proofRef = useRef<HTMLDivElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -30,7 +31,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
 
       // Initial state — content hidden, video paused
       gsap.set(
-        [eyebrowRef.current, headlineRef.current, descRef.current],
+        [eyebrowRef.current, headlineRef.current, statementRef.current, proofRef.current],
         { opacity: 0, y: 40 },
       );
       gsap.set(videoWrapRef.current, { opacity: 0, scale: 1.06 });
@@ -60,7 +61,8 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
       tl.to(videoWrapRef.current, { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" }, 0)
         .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.8 }, 0.15)
         .to(headlineRef.current, { opacity: 1, y: 0, duration: 1.1, ease: "power4.out" }, 0.25)
-        .to(descRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.55);
+        .to(statementRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.5)
+        .to(proofRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.7);
 
     },
     { scope: sectionRef },
@@ -149,7 +151,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
 
         <h2
           ref={headlineRef}
-          className="text-[2.5rem] font-normal md:text-8xl"
+          className="text-[2.25rem] font-normal sm:text-6xl md:text-8xl"
           style={{
             fontFamily: "var(--font-display, Nevera), serif",
             color: "#f0f1ef",
@@ -158,24 +160,54 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
             maxWidth: "72rem",
           }}
         >
-          Build the version{" "}
+          AI is not coming.{" "}
           <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "#94fcff", fontWeight: 400 }}>
-            they don&apos;t
-          </span>{" "}
-          see{" "}
-          <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "#94fcff", fontWeight: 400 }}>
-            coming.
+            It&apos;s already here.
           </span>
         </h2>
 
         <p
-          ref={descRef}
-          className="mt-6 max-w-md text-[15px] leading-relaxed md:mt-10 md:max-w-2xl md:text-lg"
-          style={{ color: "#c8ccc6" }}
+          ref={statementRef}
+          className="mt-6 max-w-xs text-balance text-lg font-normal leading-snug sm:max-w-xl sm:text-2xl md:mt-10 md:max-w-3xl md:text-4xl"
+          style={{
+            fontFamily: "var(--font-display, Nevera), serif",
+            color: "#f0f1ef",
+            letterSpacing: "-0.01em",
+          }}
         >
-          If your systems aren&rsquo;t already using AI, you&rsquo;re a step behind.
+          You either move with the market and the evolution of people{" "}
+          <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontStyle: "italic", color: "#94fcff", fontWeight: 400 }}>
+            &ndash; or you get left behind.
+          </span>
         </p>
 
+        {/* Market proof points — flow beneath the statement on smaller screens,
+            flank the figure only when there's room (xl+). */}
+        <div
+          ref={proofRef}
+          className="pointer-events-none mx-auto mt-9 hidden w-full max-w-md flex-col gap-6 text-left sm:max-w-3xl sm:flex-row sm:justify-center sm:gap-10 md:flex md:mt-12 xl:absolute xl:inset-x-0 xl:top-[74%] xl:mt-0 xl:max-w-5xl xl:items-center xl:justify-between xl:gap-12"
+        >
+          <p
+            className="text-[15px] leading-relaxed text-[#d6dad4] sm:flex-1 xl:max-w-[19rem] xl:flex-none"
+            style={{ textShadow: "0 1px 16px rgba(8,12,16,0.9)" }}
+          >
+            <span aria-hidden="true" className="mr-2 font-semibold text-[#94fcff]">
+              &raquo;
+            </span>
+            Companies moving now are cutting costs, making faster decisions, and
+            outpacing competitors still running outdated systems.
+          </p>
+          <p
+            className="text-[15px] leading-relaxed text-[#d6dad4] sm:flex-1 xl:max-w-[19rem] xl:flex-none"
+            style={{ textShadow: "0 1px 16px rgba(8,12,16,0.9)" }}
+          >
+            <span aria-hidden="true" className="mr-2 font-semibold text-[#94fcff]">
+              &raquo;
+            </span>
+            The question is no longer whether your business needs AI &ndash;
+            it&rsquo;s whether you&rsquo;ll move before your competitors do.
+          </p>
+        </div>
       </div>
     </section>
   );

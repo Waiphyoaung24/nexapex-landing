@@ -157,7 +157,7 @@ export function HeroSection({ className }: { className?: string }) {
             fontFamily: "var(--font-display)",
           }}
         >
-          AI Lab
+          AI Solution
         </h1>
         <span className="text-[10px] font-medium uppercase tracking-[2px] text-[#94fcff]/50">
           SCROLL TO DISCOVER
