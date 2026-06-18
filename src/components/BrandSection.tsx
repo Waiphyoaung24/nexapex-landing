@@ -87,14 +87,14 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
 }
 
 const BURST_PHOTOS = [
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=520&q=80",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=520&q=80",
+  "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=520&q=80",
 ];
 
 export function BrandSection({ id }: { id?: string } = {}) {
@@ -349,20 +349,20 @@ export function BrandSection({ id }: { id?: string } = {}) {
       <div className="px-5 md:px-[60px] pb-6 md:pb-16">
         <div className="brand-divider h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-6 md:mb-16" />
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-16">
-          {/* Left — large statement */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
+          {/* Left — identity statement + narrative */}
           <div className="md:col-span-7">
             <div ref={burstContainerRef} className="relative">
               <h2
                 className="editorial-body brand-statement relative z-[2] font-normal uppercase leading-[0.92] tracking-[-0.01em] text-white font-[family-name:var(--font-display)]"
                 style={{ fontSize: "clamp(1.6rem, 5vw, 4.5rem)" }}
               >
-                We build{" "}
+                We are{" "}
                 <span
                   ref={burstKeywordRef}
                   tabIndex={0}
                   role="button"
-                  aria-label="Reveal AI solutions"
+                  aria-label="Reveal NexApex"
                   className="ai-burst-keyword relative z-10 inline-block cursor-pointer outline-none transition-colors duration-200 hover:text-[#94fcff] focus-visible:text-[#94fcff]"
                   style={{
                     backgroundImage:
@@ -374,32 +374,64 @@ export function BrandSection({ id }: { id?: string } = {}) {
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
-                  AI solutions
+                  Nexapex
                 </span>
-                {"\n"}
-                that transform how{"\n"}
-                businesses operate
               </h2>
             </div>
+
+            <p className="editorial-body brand-statement-body mt-6 md:mt-10 text-[15px] md:text-[18px] leading-[1.5] md:leading-[1.6] text-white/85 max-w-[34rem]">
+              An AI solutions company built for businesses that are ready to move faster.
+            </p>
+            <p className="editorial-body brand-statement-body mt-4 md:mt-5 text-[13px] md:text-[14px] leading-[1.7] md:leading-[1.8] text-white/55 max-w-[34rem]">
+              We work with companies across Southeast Asia to find where AI creates the
+              most impact &mdash; then we build it, deploy it, and make sure it delivers.
+              No demos. No generic tools. Real systems that solve real problems.
+            </p>
           </div>
 
-          {/* Right — supporting text + location badge */}
-          <div className="md:col-span-5 flex flex-col justify-end gap-4 md:gap-6">
-            <p className="editorial-body brand-statement-body text-[13px] md:text-[14px] leading-[1.6] md:leading-[1.8] text-white/60 max-w-[400px]">
-              NexApex is an AI solutions studio based in Southeast Asia.
-              We design, build, and deploy production AI &mdash; from computer vision
-              to intelligent assistants &mdash; for businesses ready to move faster
-              than their competition.
-            </p>
-            {/* Location badge */}
-            <div className="editorial-body brand-statement-body flex items-center gap-3">
-              <span className="relative flex size-2">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#94fcff]/60" />
-                <span className="relative inline-flex size-2 rounded-full bg-[#94fcff]" />
-              </span>
-              <span className="text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]/70">
-                Based in Bangkok, Thailand
-              </span>
+          {/* Right — positioning + facts */}
+          <div className="md:col-span-5 flex flex-col justify-end gap-8 md:gap-10">
+            {/* Positioning: negate, then affirm */}
+            <div className="editorial-body brand-statement-body flex flex-col gap-2.5">
+              <p className="text-[15px] md:text-[17px] leading-snug text-white/50">
+                We are not a{" "}
+                <span className="line-through decoration-white/40 decoration-1">
+                  software vendor
+                </span>
+              </p>
+              <p className="text-[15px] md:text-[17px] leading-snug text-white/50">
+                We are not a{" "}
+                <span className="line-through decoration-white/40 decoration-1">
+                  typical tech agency
+                </span>
+              </p>
+              <p className="mt-1 text-[16px] md:text-[19px] font-medium leading-snug text-[#94fcff]">
+                We are your business intelligence partner.
+              </p>
+            </div>
+
+            {/* Facts */}
+            <div className="editorial-body brand-statement-body grid grid-cols-2 gap-6 border-t border-[#94fcff]/15 pt-5">
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[10px] font-mono uppercase tracking-[3px] text-[#94fcff]/50">
+                  Founded
+                </span>
+                <span className="text-[18px] md:text-[20px] text-white font-[family-name:var(--font-display)]">
+                  2026
+                </span>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[10px] font-mono uppercase tracking-[3px] text-[#94fcff]/50">
+                  Regional Vision
+                </span>
+                <span className="flex items-center gap-2 text-[18px] md:text-[20px] text-white font-[family-name:var(--font-display)]">
+                  <span className="relative flex size-2" aria-hidden="true">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#94fcff]/60" />
+                    <span className="relative inline-flex size-2 rounded-full bg-[#94fcff]" />
+                  </span>
+                  Southeast Asia
+                </span>
+              </div>
             </div>
           </div>
         </div>

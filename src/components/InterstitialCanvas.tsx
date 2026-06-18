@@ -151,7 +151,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
 
         <h2
           ref={headlineRef}
-          className="text-[2.25rem] font-normal sm:text-6xl md:text-8xl"
+          className="text-[1.75rem] font-normal sm:text-5xl md:text-7xl"
           style={{
             fontFamily: "var(--font-display, Nevera), serif",
             color: "#f0f1ef",
@@ -168,7 +168,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
 
         <p
           ref={statementRef}
-          className="mt-6 max-w-xs text-balance text-lg font-normal leading-snug sm:max-w-xl sm:text-2xl md:mt-10 md:max-w-3xl md:text-4xl"
+          className="mt-6 max-w-xs text-balance text-base font-normal leading-snug sm:max-w-xl sm:text-xl md:mt-10 md:max-w-3xl md:text-3xl"
           style={{
             fontFamily: "var(--font-display, Nevera), serif",
             color: "#f0f1ef",
@@ -185,7 +185,7 @@ export function InterstitialCanvas({ id }: { id?: string } = {}) {
             flank the figure only when there's room (xl+). */}
         <div
           ref={proofRef}
-          className="pointer-events-none mx-auto mt-9 hidden w-full max-w-md flex-col gap-6 text-left sm:max-w-3xl sm:flex-row sm:justify-center sm:gap-10 md:flex md:mt-12 xl:absolute xl:inset-x-0 xl:top-[74%] xl:mt-0 xl:max-w-5xl xl:items-center xl:justify-between xl:gap-12"
+          className="pointer-events-none mx-auto mt-9 hidden w-full max-w-md flex-col gap-6 text-left sm:max-w-3xl sm:flex-row sm:justify-center sm:gap-10 md:flex md:mt-12 xl:absolute xl:inset-x-0 xl:top-[80%] xl:mt-0 xl:max-w-5xl xl:items-center xl:justify-between xl:gap-12"
         >
           <p
             className="text-[15px] leading-relaxed text-[#d6dad4] sm:flex-1 xl:max-w-[19rem] xl:flex-none"
