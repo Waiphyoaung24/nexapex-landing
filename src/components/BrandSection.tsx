@@ -437,6 +437,123 @@ export function BrandSection({ id }: { id?: string } = {}) {
         </div>
       </div>
 
+      {/* ── 1.5 Two Models — "Two lines. One mission" ── */}
+      <div className="px-5 md:px-[60px] pb-6 md:pb-16">
+        <div className="brand-divider h-px bg-gradient-to-r from-[#94fcff]/30 via-[#94fcff]/10 to-transparent mb-6 md:mb-14" />
+
+        {/* Header */}
+        <div className="mb-8 md:mb-14">
+          <h3
+            className="editorial-body font-normal uppercase leading-[0.95] tracking-[-0.01em] text-white font-[family-name:var(--font-display)]"
+            style={{ fontSize: "clamp(1.6rem, 4vw, 3rem)" }}
+          >
+            Two lines.{" "}
+            <span className="text-[#94fcff]">One mission.</span>
+          </h3>
+          <p className="editorial-body mt-3 max-w-[42rem] text-[14px] md:text-[16px] leading-[1.6] text-white/55">
+            Turn business problems into intelligent systems that work.
+          </p>
+        </div>
+
+        {/* Two models */}
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
+          {/* Model 1 — AI Consulting */}
+          <div className="editorial-body relative pl-5">
+            <span
+              aria-hidden="true"
+              className="absolute left-0 top-1 h-[calc(100%-0.5rem)] w-px bg-gradient-to-b from-[#94fcff]/70 via-[#94fcff]/25 to-transparent"
+            />
+            <p className="text-[10px] md:text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]/70">
+              AI Consulting <span className="text-[#94fcff]/30">·</span> B2B
+            </p>
+            <h4 className="mt-3 max-w-[30rem] text-[18px] md:text-[22px] font-normal leading-[1.2] text-white font-[family-name:var(--font-display)]">
+              We find where AI creates value, then we build it.
+            </h4>
+            <p className="mt-3 max-w-[34rem] text-[13px] md:text-[14px] leading-[1.7] text-white/60">
+              Every industry, every size. We assess your operation and deploy the
+              systems that move the needle.
+            </p>
+            <p className="mt-6 text-[10px] md:text-[11px] font-mono uppercase tracking-[3px] text-white/35">
+              Five surfaces of impact
+            </p>
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {[
+                "Operations & Automation",
+                "Customer Experience",
+                "Data & Intelligence",
+                "People & Workforce",
+                "Production & Quality",
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-3 text-[14px] md:text-[15px] text-white/85"
+                >
+                  <span aria-hidden="true" className="size-1 flex-none rounded-full bg-[#94fcff]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Model 2 — Enterprise AI Products */}
+          <div className="editorial-body relative pl-5">
+            <span
+              aria-hidden="true"
+              className="absolute left-0 top-1 h-[calc(100%-0.5rem)] w-px bg-gradient-to-b from-[#94fcff]/70 via-[#94fcff]/25 to-transparent"
+            />
+            <p className="text-[10px] md:text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]/70">
+              Enterprise AI Products <span className="text-[#94fcff]/30">·</span> B2B2C
+            </p>
+            <h4 className="mt-3 max-w-[30rem] text-[18px] md:text-[22px] font-normal leading-[1.2] text-white font-[family-name:var(--font-display)]">
+              Proprietary platforms built to replace legacy software.
+            </h4>
+            <p className="mt-3 max-w-[34rem] text-[13px] md:text-[14px] leading-[1.7] text-white/60">
+              Industry-specific AI for Southeast Asia. Ready to deploy. Customizable.
+              Built for teams that have outgrown their tools.
+            </p>
+            <p className="mt-6 text-[10px] md:text-[11px] font-mono uppercase tracking-[3px] text-white/35">
+              In market &amp; on the roadmap
+            </p>
+            <ul className="mt-3 flex flex-col gap-3">
+              {[
+                { name: "NexHR", desc: "AI HR & Recruitment", locked: false },
+                { name: "NexCareer", desc: "Career Development AI", locked: true },
+                { name: "NexStay", desc: "Hotel Revenue AI", locked: true },
+              ].map((p) => (
+                <li
+                  key={p.name}
+                  className="flex items-center gap-2.5 text-[14px] md:text-[15px]"
+                >
+                  <span aria-hidden="true" className="size-1 flex-none rounded-full bg-[#94fcff]" />
+                  {p.locked ? (
+                    <>
+                      <span
+                        aria-hidden="true"
+                        className="flex select-none items-center gap-2.5 blur-[6px]"
+                      >
+                        <span className="text-white font-[family-name:var(--font-display)]">{p.name}</span>
+                        <span className="text-white/35">·</span>
+                        <span className="text-white/65">{p.desc}</span>
+                      </span>
+                      <span className="sr-only">Upcoming project — to be announced</span>
+                      <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-[2px] text-[#94fcff]/60">
+                        Coming soon
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-white font-[family-name:var(--font-display)]">{p.name}</span>
+                      <span className="text-white/35">·</span>
+                      <span className="text-white/65">{p.desc}</span>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
       {/* ── 2. Three Pillars ── */}
       {/* Mobile: stacked grid */}
       <div className="md:hidden px-5 pb-6">

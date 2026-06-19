@@ -242,7 +242,7 @@ export function InterstitialBreathe({ id }: { id?: string } = {}) {
           <div className="order-1 md:order-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3">
             <Link
               href="/#contact"
-              className="inline-flex items-center justify-center gap-3 px-6 py-3 min-h-[44px] border border-[#94fcff]/40 hover:border-[#94fcff] hover:bg-[#94fcff]/[0.06] transition-colors duration-300 text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]"
+              className="inline-flex items-center justify-center gap-3 rounded-full px-6 py-3 min-h-[44px] border border-[#94fcff]/40 hover:border-[#94fcff] hover:bg-[#94fcff]/[0.06] hover:scale-[1.03] active:scale-[0.97] transition-[transform,background-color,border-color] duration-300 text-[11px] font-mono uppercase tracking-[3px] text-[#94fcff]"
             >
               Start a project
               <svg width="22" height="8" viewBox="0 0 22 8" fill="none" aria-hidden="true">
